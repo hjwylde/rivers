@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_section"></string>
+    <string name="title_content">Description</string>
+    <string name="edit_action_coming_soon">Section editing coming soon</string>
+</resources>
