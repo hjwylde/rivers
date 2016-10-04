@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="expanded_app_bar_height">240dp</dimen>
+    <dimen name="details_card_view_padding_top">32dp</dimen>
+
+    <dimen name="details_text_size">24sp</dimen>
+    <dimen name="details_label_text_size">12sp</dimen>
 </resources>

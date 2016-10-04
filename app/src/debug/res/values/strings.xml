@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<resources>
+    <string name="rivers_url">http://192.168.1.10:8080/</string>
+</resources>
