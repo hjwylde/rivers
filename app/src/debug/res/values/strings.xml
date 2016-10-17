@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rivers (debug)</string>
+
+    <string name="rivers_url">http://rivers-api-debug.hjwylde.com:8080/</string>
+</resources>

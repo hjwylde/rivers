@@ -1,7 +1,7 @@
 .gradle/
 .idea/
 
-app/app.iml
+*.iml
+google_maps_api.xml
 build/
 local.properties
-rivers.iml
