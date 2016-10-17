@@ -2,15 +2,27 @@ package com.hjwylde.rivers.models;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.util.Base64;
 
 import com.google.gson.annotations.SerializedName;
 
-public final class Image {
+import java.io.Serializable;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+public final class Image implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @SerializedName("id")
-    private String mId;
+    private final String mId;
     @SerializedName("data")
-    private String mData;
+    private final String mData;
+
+    public Image(@NonNull String id, @NonNull String data) {
+        mId = checkNotNull(id);
+        mData = checkNotNull(data);
+    }
 
     public String getId() {
         return mId;
@@ -20,12 +32,13 @@ public final class Image {
         return mData;
     }
 
-    public byte[] getDecodedData() { return Base64.decode(mData, Base64.DEFAULT);
-    }
-
     public Bitmap getBitmap() {
         byte[] decodedData = getDecodedData();
 
         return BitmapFactory.decodeByteArray(decodedData, 0, decodedData.length);
+    }
+
+    private byte[] getDecodedData() {
+        return Base64.decode(mData, Base64.DEFAULT);
     }
 }

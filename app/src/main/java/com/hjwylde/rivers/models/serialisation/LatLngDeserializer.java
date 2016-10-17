@@ -1,4 +1,4 @@
-package com.hjwylde.rivers.util;
+package com.hjwylde.rivers.models.serialisation;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -9,7 +9,7 @@ import com.hjwylde.rivers.models.SerializableLatLng;
 
 import java.lang.reflect.Type;
 
-public final class LatLngDeserialiser implements JsonDeserializer<SerializableLatLng> {
+public final class LatLngDeserializer implements JsonDeserializer<SerializableLatLng> {
     @Override
     public SerializableLatLng deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         try {

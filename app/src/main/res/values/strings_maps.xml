@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="title_activity_maps">Rivers</string>
-    <string name="new_action_coming_soon">Section creation coming soon</string>
+
+    <string name="error_onGetSections">Can\'t find any water.</string>
+
+    <string name="newSection_coming_soon">Section creation coming soon</string>
 </resources>

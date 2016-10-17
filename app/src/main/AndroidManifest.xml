@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hjwylde.rivers">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,15 +11,14 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.Rivers">
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".activities.MapsActivity"
+            android:name=".ui.activities.MapsActivity"
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,13 +27,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.SectionActivity"
-            android:label="@string/title_activity_section"
-            android:parentActivityName=".activities.MapsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".ui.activities.SectionActivity"
+            android:parentActivityName=".ui.activities.MapsActivity"
+            android:theme="@style/Theme.Rivers.NoActionBar.Translucent">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hjwylde.rivers.activities.MapsActivity" />
+                android:value="com.hjwylde.rivers.ui.activities.MapsActivity" />
+        </activity>
+        <activity
+            android:name=".ui.activities.EditSectionActivity"
+            android:label="@string/title_activity_editSection"
+            android:parentActivityName=".ui.activities.SectionActivity"
+            android:theme="@style/Theme.Rivers.NoActionBar.Leaf">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.hjwylde.rivers.ui.activities.SectionActivity" />
         </activity>
     </application>
 
