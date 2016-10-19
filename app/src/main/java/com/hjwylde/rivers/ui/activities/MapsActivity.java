@@ -58,18 +58,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     public void onGetSectionsFailure(@NonNull Throwable t) {
         Log.w(TAG, t.getMessage(), t);
 
-        // TODO (hjw): have a background retry task and inform how long until the next retry
-        // TODO (hjw): have a funny image
-        // TODO (hjw): don't make this indefinite
-        final Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onGetSections, Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction(R.string.action_retry, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mPresenter.getSections();
-            }
-        });
-
-        snackbar.show();
+        // TODO (#23)
     }
 
     @Override

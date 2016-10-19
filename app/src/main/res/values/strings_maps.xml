@@ -2,7 +2,5 @@
 <resources>
     <string name="title_activity_maps">Rivers</string>
 
-    <string name="error_onGetSections">Can\'t find any water.</string>
-
-    <string name="newSection_coming_soon">Section creation coming soon</string>
+    <string name="newSection_coming_soon">Section creation coming soon.</string>
 </resources>
