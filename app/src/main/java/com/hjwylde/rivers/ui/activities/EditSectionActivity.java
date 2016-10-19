@@ -76,16 +76,6 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     @Override
     public void onGetImageFailure(@NonNull Throwable t) {
         Log.w(TAG, t.getMessage(), t);
-
-        final Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onGetImage, Snackbar.LENGTH_LONG);
-        snackbar.setAction(R.string.action_retry, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mPresenter.getImage(mSection.getImageId());
-            }
-        });
-
-        snackbar.show();
     }
 
     @Override
@@ -96,7 +86,18 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
 
     @Override
     public void onUpdateSectionFailure(@NonNull Throwable t) {
-        // TODO (hjw)
+        Log.w(TAG, t.getMessage(), t);
+
+        final Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onUpdateSection, Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.action_retry, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.updateSection(buildAction());
+
+            }
+        });
+
+        snackbar.show();
     }
 
     @Override

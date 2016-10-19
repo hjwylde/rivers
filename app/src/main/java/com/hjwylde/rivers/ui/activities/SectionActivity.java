@@ -100,19 +100,6 @@ public final class SectionActivity extends BaseActivity implements SectionContra
     @Override
     public void onGetImageFailure(@NonNull Throwable t) {
         Log.w(TAG, t.getMessage(), t);
-
-        // TODO (hjw): have a background retry task and inform how long until the next retry
-        final Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onGetImage, Snackbar.LENGTH_LONG);
-        snackbar.setAction(R.string.action_retry, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mPresenter.getImage(mSection.getImageId());
-            }
-        });
-        // TODO (hjw): remove this
-        snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.accent));
-
-        snackbar.show();
     }
 
     @Override
