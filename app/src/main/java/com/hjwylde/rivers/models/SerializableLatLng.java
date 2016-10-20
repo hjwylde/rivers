@@ -9,7 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public final class SerializableLatLng implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -17,10 +17,11 @@ public final class SerializableLatLng implements Serializable {
     private transient LatLng mLatLng;
 
     public SerializableLatLng(double lat, double lng) {
-        checkArgument(lat >= -90 && lat <= 90);
-        checkArgument(lng >= -180 && lng <= 180);
+        this(new LatLng(lat, lng));
+    }
 
-        mLatLng = new LatLng(lat, lng);
+    public SerializableLatLng(LatLng latLng) {
+        mLatLng = checkNotNull(latLng);
     }
 
     public LatLng getLatLng() {

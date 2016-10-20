@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
 import com.hjwylde.rivers.models.Section;
@@ -29,8 +32,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     private MapsContract.Presenter mPresenter;
 
-    private Menu mMenu;
-
     private List<Section> mSections = new ArrayList<>();
 
     @Override
@@ -45,30 +46,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
                 onCreateSection(view);
                 break;
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onCancelCreateSection();
-                return true;
-            case R.id.next:
-                startCreateSectionActivity();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        mMenu = menu;
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_maps, menu);
-
-        return true;
     }
 
     @Override
@@ -137,32 +114,58 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     private void onCreateSection(View view) {
-        FloatingActionButton fab = (FloatingActionButton) view;
+        final FloatingActionButton fab = (FloatingActionButton) view;
         fab.hide();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_cross);
+        final View centerMarker = findViewById(R.id.center_marker);
+        centerMarker.setVisibility(View.VISIBLE);
 
-        if (mMenu != null) {
-            mMenu.findItem(R.id.next).setVisible(true);
-        }
+        startActionMode(new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater inflater = mode.getMenuInflater();
+                inflater.inflate(R.menu.menu_maps_action_mode, menu);
 
-        findViewById(R.id.center_marker).setVisibility(View.VISIBLE);
-    }
+                return true;
+            }
 
-    private void onCancelCreateSection() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.show();
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.next:
+                        startCreateSectionActivity();
+                        return true;
+                    }
 
-        if (mMenu != null) {
-            mMenu.findItem(R.id.next).setVisible(false);
-        }
+                return false;
+            }
 
-        findViewById(R.id.center_marker).setVisibility(View.INVISIBLE);
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                fab.show();
+
+                centerMarker.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     private void startCreateSectionActivity() {
+        MapsFragment mapsFragment = (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        if (mapsFragment != null) {
+            mapsFragment.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    Intent intent = new Intent(MapsActivity.this, CreateSectionActivity.class);
+                    intent.putExtra(CreateSectionActivity.INTENT_PUT_IN, googleMap.getCameraPosition().target);
+
+                    startActivity(intent);
+                }
+            });
+        }
     }
 }
