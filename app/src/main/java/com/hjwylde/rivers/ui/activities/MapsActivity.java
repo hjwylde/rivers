@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.hjwylde.rivers.R;
@@ -27,6 +29,8 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     private MapsContract.Presenter mPresenter;
 
+    private Menu mMenu;
+
     private List<Section> mSections = new ArrayList<>();
 
     @Override
@@ -36,7 +40,35 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     @Override
     public void onClick(View view) {
-        Snackbar.make(view, R.string.newSection_coming_soon, Snackbar.LENGTH_LONG).show();
+        switch (view.getId()) {
+            case R.id.fab:
+                onCreateSection(view);
+                break;
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onCancelCreateSection();
+                return true;
+            case R.id.next:
+                startCreateSectionActivity();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        mMenu = menu;
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_maps, menu);
+
+        return true;
     }
 
     @Override
@@ -102,5 +134,35 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         mPresenter.unsubscribe();
 
         super.onPause();
+    }
+
+    private void onCreateSection(View view) {
+        FloatingActionButton fab = (FloatingActionButton) view;
+        fab.hide();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_cross);
+
+        if (mMenu != null) {
+            mMenu.findItem(R.id.next).setVisible(true);
+        }
+
+        findViewById(R.id.center_marker).setVisibility(View.VISIBLE);
+    }
+
+    private void onCancelCreateSection() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.show();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+        if (mMenu != null) {
+            mMenu.findItem(R.id.next).setVisible(false);
+        }
+
+        findViewById(R.id.center_marker).setVisibility(View.INVISIBLE);
+    }
+
+    private void startCreateSectionActivity() {
     }
 }
