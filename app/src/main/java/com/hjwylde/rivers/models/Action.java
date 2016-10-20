@@ -33,7 +33,7 @@ public final class Action implements Serializable {
 
     public Action(@NonNull String action, String targetId, @NonNull String targetCollection, JsonObject data) {
         checkArgument(ACTIONS.contains(action));
-        checkArgument(Arrays.asList(ACTION_UPDATE, ACTION_REMOVE).contains(action) && targetId != null);
+        checkArgument(Arrays.asList(ACTION_UPDATE, ACTION_REMOVE).contains(action) ^ targetId == null);
         checkArgument(Arrays.asList(ACTION_INSERT, ACTION_UPDATE).contains(action) ^ data == null);
         checkArgument(COLLECTIONS.contains(targetCollection));
 

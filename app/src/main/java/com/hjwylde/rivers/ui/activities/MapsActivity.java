@@ -4,10 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
 import com.hjwylde.rivers.models.Section;
@@ -36,7 +41,11 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     @Override
     public void onClick(View view) {
-        Snackbar.make(view, R.string.newSection_coming_soon, Snackbar.LENGTH_LONG).show();
+        switch (view.getId()) {
+            case R.id.fab:
+                onCreateSection(view);
+                break;
+        }
     }
 
     @Override
@@ -102,5 +111,61 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         mPresenter.unsubscribe();
 
         super.onPause();
+    }
+
+    private void onCreateSection(View view) {
+        final FloatingActionButton fab = (FloatingActionButton) view;
+        fab.hide();
+
+        final View centerMarker = findViewById(R.id.center_marker);
+        centerMarker.setVisibility(View.VISIBLE);
+
+        startActionMode(new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater inflater = mode.getMenuInflater();
+                inflater.inflate(R.menu.menu_maps_action_mode, menu);
+
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.next:
+                        startCreateSectionActivity();
+                        return true;
+                    }
+
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                fab.show();
+
+                centerMarker.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
+
+    private void startCreateSectionActivity() {
+        MapsFragment mapsFragment = (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        if (mapsFragment != null) {
+            mapsFragment.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(GoogleMap googleMap) {
+                    Intent intent = new Intent(MapsActivity.this, CreateSectionActivity.class);
+                    intent.putExtra(CreateSectionActivity.INTENT_PUT_IN, googleMap.getCameraPosition().target);
+
+                    startActivity(intent);
+                }
+            });
+        }
     }
 }

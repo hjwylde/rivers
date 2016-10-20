@@ -42,11 +42,15 @@ public final class Section implements Serializable {
     private final String mDuration;
 
     public Section(@NonNull String id, @NonNull String title, String subtitle, String description, @NonNull LatLng putIn, String imageId, String grade, String length, String duration) {
+        this(id, title, subtitle, description, new SerializableLatLng(putIn), imageId, grade, length, duration);
+    }
+
+    public Section(@NonNull String id, @NonNull String title, String subtitle, String description, @NonNull SerializableLatLng putIn, String imageId, String grade, String length, String duration) {
         mId = checkNotNull(id);
         mTitle = checkNotNull(title);
         mSubtitle = subtitle;
         mDescription = description;
-        mPutIn = new SerializableLatLng(putIn.latitude, putIn.longitude);
+        mPutIn = checkNotNull(putIn);
         mImageId = imageId;
         mGrade = grade;
         mLength = length;
@@ -107,12 +111,14 @@ public final class Section implements Serializable {
         return mId.equals(((Section) obj).getId());
     }
 
-    public static final class Builder {
+    public static final class Builder implements Serializable {
+        private static final long serialVersionUID = 1L;
+
         private String mId;
         private String mTitle;
         private String mSubtitle;
         private String mDescription;
-        private LatLng mPutIn;
+        private SerializableLatLng mPutIn;
         private String mImageId;
         private String mGrade;
         private String mLength;
@@ -126,15 +132,63 @@ public final class Section implements Serializable {
             mTitle = section.getTitle();
             mSubtitle = section.getSubtitle();
             mDescription = section.getDescription();
-            mPutIn = section.getPutIn();
+            mPutIn = new SerializableLatLng(section.getPutIn());
             mImageId = section.getImageId();
             mGrade = section.getGrade();
             mLength = section.getLength();
             mDuration = section.getDuration();
         }
 
+        public Builder(Builder builder) {
+            mId = builder.id();
+            mTitle = builder.title();
+            mSubtitle = builder.subtitle();
+            mDescription = builder.description();
+            mPutIn = new SerializableLatLng(builder.putIn());
+            mImageId = builder.imageId();
+            mGrade = builder.grade();
+            mLength = builder.length();
+            mDuration = builder.duration();
+        }
+
         public Section build() {
             return new Section(mId, mTitle, mSubtitle, mDescription, mPutIn, mImageId, mGrade, mLength, mDuration);
+        }
+
+        public String id() {
+            return mId;
+        }
+
+        public String title() {
+            return mTitle;
+        }
+
+        public String subtitle() {
+            return mSubtitle;
+        }
+
+        public String description() {
+            return mDescription;
+        }
+
+        public LatLng putIn() {
+            return mPutIn.getLatLng();
+        }
+
+        public String imageId() {
+            return mImageId;
+        }
+
+        public String grade() {
+            return mGrade;
+        }
+
+        public String length() {
+            return mLength;
+        }
+
+        public String duration() {
+            return mDuration;
         }
 
         public void id(String id) {
@@ -154,7 +208,7 @@ public final class Section implements Serializable {
         }
 
         public void putIn(LatLng putIn) {
-            mPutIn = putIn;
+            mPutIn = new SerializableLatLng(putIn);
         }
 
         public void imageId(String imageId) {

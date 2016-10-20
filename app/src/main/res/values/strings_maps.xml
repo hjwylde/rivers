@@ -2,5 +2,7 @@
 <resources>
     <string name="title_activity_maps">Rivers</string>
 
+    <string name="action_next">NEXT</string>
+
     <string name="newSection_coming_soon">Section creation coming soon.</string>
 </resources>

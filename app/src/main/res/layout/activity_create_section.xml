@@ -6,7 +6,7 @@
     android:id="@+id/root_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hjwylde.rivers.ui.activities.EditSectionActivity">
+    tools:context="com.hjwylde.rivers.ui.activities.CreateSectionActivity">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
