@@ -42,7 +42,7 @@
             android:theme="@style/Theme.Rivers.NoActionBar.Leaf">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hjwylde.rivers.ui.activities.SectionActivity" />
+                android:value="com.hjwylde.rivers.ui.activities.MapsActivity" />
         </activity>
         <activity
             android:name=".ui.activities.EditSectionActivity"
