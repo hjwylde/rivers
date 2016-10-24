@@ -6,7 +6,7 @@
 
     <string name="error_onUpdateSection">Can\'t save updates.</string>
 
-    <string name="hint_title">Section title</string>
+    <string name="hint_title">Title</string>
     <string name="hint_subtitle">Subtitle</string>
     <string name="hint_grade">Grade</string>
     <string name="hint_length">Length</string>
