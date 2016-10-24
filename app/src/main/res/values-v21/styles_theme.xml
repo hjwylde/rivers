@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="Theme.Rivers.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimaryDark">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
-    <style name="Theme.Rivers.NoActionBar.Translucent">
-        <item name="colorPrimaryDark">@android:color/transparent</item>
+    <style name="Theme.Rivers.NoActionBar.BottomSheet">
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.4</item>
         <item name="android:windowBackground">@android:color/transparent</item>
