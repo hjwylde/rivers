@@ -28,7 +28,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public final class MapsActivity extends BaseActivity implements MapsContract.View, View.OnClickListener {
     private static final String TAG = MapsActivity.class.getSimpleName();
 
+    private static final String STATE_ACTION_MODE_ACTIVE = "actionModeActive";
     private static final String STATE_SECTIONS = "sections";
+
+    private boolean mActionModeActive = false;
 
     private MapsContract.Presenter mPresenter;
 
@@ -43,7 +46,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fab:
-                onCreateSection(view);
+                startCreateSectionMode();
                 break;
         }
     }
@@ -74,12 +77,18 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
+        outState.putBoolean(STATE_ACTION_MODE_ACTIVE, mActionModeActive);
         outState.putSerializable(STATE_SECTIONS, new ArrayList<>(mSections));
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+
+        mActionModeActive = savedInstanceState.getBoolean(STATE_ACTION_MODE_ACTIVE);
+        if (mActionModeActive) {
+            startCreateSectionMode();
+        }
 
         mSections = (List<Section>) savedInstanceState.getSerializable(STATE_SECTIONS);
         refreshMap();
@@ -113,45 +122,11 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         super.onPause();
     }
 
-    private void onCreateSection(View view) {
-        final FloatingActionButton fab = (FloatingActionButton) view;
-        fab.hide();
+    private void startCreateSectionMode() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        View centerMarker = findViewById(R.id.center_marker);
 
-        final View centerMarker = findViewById(R.id.center_marker);
-        centerMarker.setVisibility(View.VISIBLE);
-
-        startActionMode(new ActionMode.Callback() {
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                MenuInflater inflater = mode.getMenuInflater();
-                inflater.inflate(R.menu.menu_maps_action_mode, menu);
-
-                return true;
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
-            }
-
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.next:
-                        startCreateSectionActivity();
-                        return true;
-                    }
-
-                return false;
-            }
-
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-                fab.show();
-
-                centerMarker.setVisibility(View.INVISIBLE);
-            }
-        });
+        startActionMode(new CreateSectionMode(fab, centerMarker));
     }
 
     private void startCreateSectionActivity() {
@@ -168,4 +143,51 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
             });
         }
     }
+
+    private final class CreateSectionMode implements ActionMode.Callback {
+        private final FloatingActionButton mFab;
+        private final View mCenterMarker;
+
+        public CreateSectionMode(FloatingActionButton fab, View centerMarker) {
+            mFab = fab;
+            mCenterMarker = centerMarker;
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mFab.hide();
+            mCenterMarker.setVisibility(View.VISIBLE);
+
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.menu_maps_action_mode, menu);
+
+            mActionModeActive = true;
+
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.next:
+                    startCreateSectionActivity();
+                    return true;
+            }
+
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mFab.show();
+            mCenterMarker.setVisibility(View.INVISIBLE);
+
+            mActionModeActive = false;
+        }
+    };
 }
