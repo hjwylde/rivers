@@ -189,5 +189,5 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
             mActionModeActive = false;
         }
-    };
+    }
 }
