@@ -4,7 +4,7 @@
 
     <string name="action_saveSection">SAVE</string>
 
-    <string name="error_onUpdateSection">Can\'t update section.</string>
+    <string name="error_onUpdateSection">Can\'t save updates.</string>
 
     <string name="hint_title">Section title</string>
     <string name="hint_subtitle">Subtitle</string>

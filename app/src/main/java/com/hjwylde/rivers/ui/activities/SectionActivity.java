@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -118,8 +117,6 @@ public final class SectionActivity extends BaseActivity implements SectionContra
                 mPresenter.deleteSection(buildAction());
             }
         });
-        // TODO (hjw): remove this
-        snackbar.setActionTextColor(ContextCompat.getColor(this, R.color.accent));
 
         snackbar.show();
     }

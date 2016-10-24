@@ -30,7 +30,7 @@
             android:name=".ui.activities.SectionActivity"
             android:label="@string/title_activity_section"
             android:parentActivityName=".ui.activities.MapsActivity"
-            android:theme="@style/Theme.Rivers.NoActionBar.Translucent">
+            android:theme="@style/Theme.Rivers.NoActionBar.BottomSheet">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hjwylde.rivers.ui.activities.MapsActivity" />
@@ -39,7 +39,7 @@
             android:name=".ui.activities.CreateSectionActivity"
             android:label="@string/title_activity_createSection"
             android:parentActivityName=".ui.activities.MapsActivity"
-            android:theme="@style/Theme.Rivers.NoActionBar.Leaf">
+            android:theme="@style/Theme.Rivers.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hjwylde.rivers.ui.activities.MapsActivity" />
@@ -48,7 +48,7 @@
             android:name=".ui.activities.EditSectionActivity"
             android:label="@string/title_activity_editSection"
             android:parentActivityName=".ui.activities.SectionActivity"
-            android:theme="@style/Theme.Rivers.NoActionBar.Leaf">
+            android:theme="@style/Theme.Rivers.NoActionBar.Popup">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hjwylde.rivers.ui.activities.SectionActivity" />
