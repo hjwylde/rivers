@@ -20,8 +20,8 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_centerInParent="true"
-            android:visibility="invisible"
             android:tint="@color/accent"
+            android:visibility="invisible"
             app:srcCompat="@drawable/ic_map_marker"
             />
 

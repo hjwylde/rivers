@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/white">
 
-        <include layout="@layout/content_edit_section"/>
+        <include layout="@layout/content_create_section"/>
 
     </android.support.v4.widget.NestedScrollView>
 

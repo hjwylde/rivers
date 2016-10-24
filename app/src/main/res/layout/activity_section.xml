@@ -13,7 +13,7 @@
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="@dimen/anchorPoint"
-        android:background="@android:color/white"
+        android:background="@color/loadingImage"
         android:clickable="true"
         android:scaleType="centerCrop"
         app:behavior_peekHeight="@dimen/titleContainer_height"
