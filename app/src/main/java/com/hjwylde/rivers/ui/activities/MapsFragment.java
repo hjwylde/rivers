@@ -1,4 +1,4 @@
-package com.hjwylde.rivers.ui.widget;
+package com.hjwylde.rivers.ui.activities;
 
 import android.Manifest;
 import android.app.Activity;

@@ -18,7 +18,6 @@ import com.hjwylde.rivers.RiversApplication;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
 import com.hjwylde.rivers.ui.presenters.MapsPresenter;
-import com.hjwylde.rivers.ui.widget.MapsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
