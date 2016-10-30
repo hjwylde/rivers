@@ -130,7 +130,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
     }
 
     private boolean hasAccessFineLocationPermission() {
-        return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PERMISSION_GRANTED;
+        return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PERMISSION_GRANTED;
     }
 
     private void requestAccessFineLocationPermission() {
