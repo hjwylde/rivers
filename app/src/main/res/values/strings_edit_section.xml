@@ -8,8 +8,8 @@
 
     <string name="hint_title">Title</string>
     <string name="hint_subtitle">Subtitle</string>
-    <string name="hint_grade">Grade</string>
-    <string name="hint_length">Length</string>
-    <string name="hint_duration">Duration</string>
+    <string name="hint_grade"></string>
+    <string name="hint_length"></string>
+    <string name="hint_duration"></string>
     <string name="hint_description">Description</string>
 </resources>
