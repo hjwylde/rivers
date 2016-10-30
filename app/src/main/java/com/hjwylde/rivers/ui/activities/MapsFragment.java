@@ -1,4 +1,4 @@
-package com.hjwylde.rivers.ui.widget;
+package com.hjwylde.rivers.ui.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -130,7 +130,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
     }
 
     private boolean hasAccessFineLocationPermission() {
-        return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PERMISSION_GRANTED;
+        return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PERMISSION_GRANTED;
     }
 
     private void requestAccessFineLocationPermission() {
