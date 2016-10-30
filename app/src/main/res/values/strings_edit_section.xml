@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_activity_editSection">Edit section</string>
+    <string name="title_activity_editSection"></string>
 
     <string name="action_saveSection">SAVE</string>
 
