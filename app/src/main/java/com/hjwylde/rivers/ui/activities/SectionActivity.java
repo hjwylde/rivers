@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
@@ -23,7 +24,6 @@ import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.contracts.SectionContract;
 import com.hjwylde.rivers.ui.presenters.SectionPresenter;
-import com.hjwylde.rivers.ui.util.AnchoredBottomSheetBehavior;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -36,7 +36,7 @@ public final class SectionActivity extends BaseActivity implements SectionContra
     private static final String STATE_IMAGE = "image";
     private static final String STATE_BOTTOM_SHEET = "bottomSheet";
 
-    private AnchoredBottomSheetBehavior<NestedScrollView> mAnchoredBottomSheetBehavior;
+    private BottomSheetBehavior<NestedScrollView> mBottomSheetBehavior;
 
     private SectionContract.Presenter mPresenter;
 
@@ -48,12 +48,12 @@ public final class SectionActivity extends BaseActivity implements SectionContra
     }
 
     public void onTitleContainerClick(View view) {
-        if (mAnchoredBottomSheetBehavior == null) {
+        if (mBottomSheetBehavior == null) {
             return;
         }
 
-        if (mAnchoredBottomSheetBehavior.getState() == AnchoredBottomSheetBehavior.STATE_COLLAPSED) {
-            mAnchoredBottomSheetBehavior.setState(AnchoredBottomSheetBehavior.STATE_ANCHORED);
+        if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
     }
 
@@ -134,12 +134,12 @@ public final class SectionActivity extends BaseActivity implements SectionContra
         NestedScrollView bottomSheet = ((NestedScrollView) findViewById(R.id.bottomSheet));
         bottomSheet.setSmoothScrollingEnabled(true);
 
-        mAnchoredBottomSheetBehavior = AnchoredBottomSheetBehavior.from(bottomSheet);
-        mAnchoredBottomSheetBehavior.setBottomSheetCallback(new AnchoredBottomSheetBehavior.BottomSheetCallback() {
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
-                    case AnchoredBottomSheetBehavior.STATE_HIDDEN:
+                    case BottomSheetBehavior.STATE_HIDDEN:
                         finish();
                         break;
                 }
@@ -171,7 +171,7 @@ public final class SectionActivity extends BaseActivity implements SectionContra
 
         NestedScrollView child = (NestedScrollView) findViewById(R.id.bottomSheet);
         CoordinatorLayout parent = (CoordinatorLayout) child.getParent();
-        Parcelable bottomSheetParcelable = mAnchoredBottomSheetBehavior.onSaveInstanceState(parent, child);
+        Parcelable bottomSheetParcelable = mBottomSheetBehavior.onSaveInstanceState(parent, child);
         outState.putParcelable(STATE_BOTTOM_SHEET, bottomSheetParcelable);
 
         outState.putSerializable(STATE_SECTION, mSection);
@@ -185,7 +185,7 @@ public final class SectionActivity extends BaseActivity implements SectionContra
         NestedScrollView child = (NestedScrollView) findViewById(R.id.bottomSheet);
         CoordinatorLayout parent = (CoordinatorLayout) child.getParent();
         Parcelable bottomSheetParcelable = checkNotNull(savedInstanceState.getParcelable(STATE_BOTTOM_SHEET));
-        mAnchoredBottomSheetBehavior.onRestoreInstanceState(parent, child, bottomSheetParcelable);
+        mBottomSheetBehavior.onRestoreInstanceState(parent, child, bottomSheetParcelable);
 
         mSection = (Section) savedInstanceState.getSerializable(STATE_SECTION);
         refreshSection();

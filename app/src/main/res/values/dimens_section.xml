@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="anchorPoint">240dp</dimen>
+    <dimen name="imageHeight">240dp</dimen>
 
     <!-- TODO (hjw): don't hard-code this -->
     <dimen name="titleContainer_height">108dp</dimen>

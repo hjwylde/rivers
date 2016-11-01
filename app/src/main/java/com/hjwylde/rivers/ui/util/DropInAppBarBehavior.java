@@ -31,12 +31,9 @@ public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Beha
             init(child);
         }
 
-        AnchoredBottomSheetBehavior<View> anchoredBottomSheetBehavior = AnchoredBottomSheetBehavior.from(dependency);
-        int anchorPointY = anchoredBottomSheetBehavior.getAnchorPoint();
-
-        if (!isVisible(child) && dependency.getY() <= anchorPointY) {
+        if (!isVisible(child) && dependency.getY() <= 0) {
             showAppBar(child);
-        } else if (isVisible(child) && dependency.getY() > anchorPointY) {
+        } else if (isVisible(child) && dependency.getY() > 0) {
             hideAppBar(child);
         }
 
