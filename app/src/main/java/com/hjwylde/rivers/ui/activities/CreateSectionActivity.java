@@ -34,6 +34,10 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     private Section.Builder mSectionBuilder = new Section.Builder();
     private Image mImage;
 
+    public void onCameraClick(View view) {
+        // TODO (hjw)
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
