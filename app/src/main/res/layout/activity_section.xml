@@ -13,9 +13,9 @@
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
+        android:fillViewport="true"
         app:behavior_hideable="true"
-        app:behavior_peekHeight="@dimen/titleContainer_height"
+        app:behavior_peekHeight="@dimen/titleContainer_peekHeight"
         app:behavior_skipCollapsed="true"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 

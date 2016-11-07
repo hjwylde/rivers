@@ -3,7 +3,7 @@
     <dimen name="imageHeight">240dp</dimen>
 
     <!-- TODO (hjw): don't hard-code this -->
-    <dimen name="titleContainer_height">108dp</dimen>
+    <dimen name="titleContainer_peekHeight">348dp</dimen>
     <!-- TODO (hjw): don't hard-code this -->
     <dimen name="statusBar_height">24dp</dimen>
 </resources>

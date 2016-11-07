@@ -136,17 +136,25 @@ public final class SectionActivity extends BaseActivity implements SectionContra
 
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            private final View mImage = findViewById(R.id.image);
+            private final float mExpandedHeight = getResources().getDimension(R.dimen.imageHeight);
+
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_HIDDEN:
-                        finish();
-                        break;
+                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    finish();
                 }
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                float collapsedY = getResources().getDisplayMetrics().heightPixels - mBottomSheetBehavior.getPeekHeight();
+                float expandedRatio = (collapsedY - bottomSheet.getY()) / collapsedY;
+
+                int imageHeight = (int) Math.max(mExpandedHeight * expandedRatio, 0);
+
+                mImage.getLayoutParams().height = (int) imageHeight;
+                mImage.requestLayout();
             }
         });
 
@@ -192,6 +200,8 @@ public final class SectionActivity extends BaseActivity implements SectionContra
 
         mImage = (Image) savedInstanceState.getSerializable(STATE_IMAGE);
         refreshImage();
+
+        refreshImageView();
     }
 
     @Override
@@ -199,6 +209,15 @@ public final class SectionActivity extends BaseActivity implements SectionContra
         mPresenter.unsubscribe();
 
         super.onPause();
+    }
+
+    private void refreshImageView() {
+        View imageView = findViewById(R.id.image);
+
+        if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            imageView.getLayoutParams().height = (int) getResources().getDimension(R.dimen.imageHeight);
+            imageView.requestLayout();
+        }
     }
 
     private void refreshSection() {
