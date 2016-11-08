@@ -1,9 +1,13 @@
 package com.hjwylde.rivers.ui.activities;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -29,13 +33,49 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     private static final String STATE_SECTION_BUILDER = "sectionBuilder";
     private static final String STATE_IMAGE = "image";
 
+    private static final int REQUEST_CODE_PHOTO_TAKEN = 0;
+    private static final int REQUEST_CODE_PHOTO_SELECTED = 1;
+
     private CreateSectionContract.Presenter mPresenter;
 
     private Section.Builder mSectionBuilder = new Section.Builder();
     private Image mImage;
 
     public void onCameraClick(View view) {
-        // TODO (hjw)
+        // TODO (hjw): don't hardcode the strings
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select section photo");
+        builder.setItems(new String[] {"Take photo", "Select photo"}, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                startActivityForResult(intent, REQUEST_CODE_PHOTO_TAKEN);
+                                break;
+                            case 1:
+                                intent = new Intent(Intent.ACTION_GET_CONTENT);
+                                intent.setType("image/*");
+                                startActivityForResult(intent, REQUEST_CODE_PHOTO_SELECTED);
+                        }
+                    }
+                });
+
+        builder.create().show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        switch (requestCode) {
+            case REQUEST_CODE_PHOTO_TAKEN:
+                break;
+            case REQUEST_CODE_PHOTO_SELECTED:
+        }
     }
 
     @Override
