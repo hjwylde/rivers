@@ -1,13 +1,10 @@
 package com.hjwylde.rivers.ui.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -23,7 +20,11 @@ import com.hjwylde.rivers.models.Action;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.contracts.CreateSectionContract;
+import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
 import com.hjwylde.rivers.ui.presenters.CreateSectionPresenter;
+
+import static com.hjwylde.rivers.ui.dialogs.SelectImageDialog.REQUEST_CODE_PHOTO_SELECTED;
+import static com.hjwylde.rivers.ui.dialogs.SelectImageDialog.REQUEST_CODE_PHOTO_TAKEN;
 
 public final class CreateSectionActivity extends BaseActivity implements CreateSectionContract.View {
     public static final String INTENT_PUT_IN = "putIn";
@@ -33,33 +34,13 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     private static final String STATE_SECTION_BUILDER = "sectionBuilder";
     private static final String STATE_IMAGE = "image";
 
-    private static final int REQUEST_CODE_PHOTO_TAKEN = 0;
-    private static final int REQUEST_CODE_PHOTO_SELECTED = 1;
-
     private CreateSectionContract.Presenter mPresenter;
 
     private Section.Builder mSectionBuilder = new Section.Builder();
     private Image mImage;
 
     public void onCameraClick(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.title_dialog_selectImage));
-        builder.setItems(getResources().getStringArray(R.array.options_dialog_selectImage), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                startActivityForResult(intent, REQUEST_CODE_PHOTO_TAKEN);
-                                break;
-                            case 1:
-                                intent = new Intent(Intent.ACTION_GET_CONTENT);
-                                intent.setType("image/*");
-                                startActivityForResult(intent, REQUEST_CODE_PHOTO_SELECTED);
-                        }
-                    }
-                });
-
-        builder.create().show();
+        new SelectImageDialog.Builder(this).create().show();
     }
 
     @Override
