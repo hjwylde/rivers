@@ -1,5 +1,6 @@
 package com.hjwylde.rivers.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -19,9 +20,12 @@ import com.hjwylde.rivers.models.Action;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.contracts.EditSectionContract;
+import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
 import com.hjwylde.rivers.ui.presenters.EditSectionPresenter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.hjwylde.rivers.ui.dialogs.SelectImageDialog.REQUEST_CODE_PHOTO_SELECTED;
+import static com.hjwylde.rivers.ui.dialogs.SelectImageDialog.REQUEST_CODE_PHOTO_TAKEN;
 
 public final class EditSectionActivity extends BaseActivity implements EditSectionContract.View {
     public static final String INTENT_SECTION = "section";
@@ -35,6 +39,10 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
 
     private Section mSection;
     private Image mImage;
+
+    public void onCameraClick(View view) {
+        new SelectImageDialog.Builder(this).create().show();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -98,6 +106,23 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
         });
 
         snackbar.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        switch (requestCode) {
+            case REQUEST_CODE_PHOTO_TAKEN:
+                // TODO (hjw)
+                break;
+            case REQUEST_CODE_PHOTO_SELECTED:
+                // TODO (hjw)
+        }
     }
 
     @Override
