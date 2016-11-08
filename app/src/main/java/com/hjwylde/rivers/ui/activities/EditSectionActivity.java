@@ -36,6 +36,10 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     private Section mSection;
     private Image mImage;
 
+    public void onCameraClick(View view) {
+        // TODO (hjw)
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
