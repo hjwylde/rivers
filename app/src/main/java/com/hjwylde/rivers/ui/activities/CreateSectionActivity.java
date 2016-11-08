@@ -44,21 +44,6 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode != RESULT_OK) {
-            return;
-        }
-
-        switch (requestCode) {
-            case REQUEST_CODE_PHOTO_TAKEN:
-                break;
-            case REQUEST_CODE_PHOTO_SELECTED:
-        }
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -101,6 +86,23 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         });
 
         snackbar.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        switch (requestCode) {
+            case REQUEST_CODE_PHOTO_TAKEN:
+                // TODO (hjw)
+                break;
+            case REQUEST_CODE_PHOTO_SELECTED:
+                // TODO (hjw)
+        }
     }
 
     @Override

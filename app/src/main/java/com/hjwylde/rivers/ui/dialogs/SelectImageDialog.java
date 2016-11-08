@@ -15,7 +15,8 @@ public final class SelectImageDialog {
     public static final int REQUEST_CODE_PHOTO_TAKEN = 0;
     public static final int REQUEST_CODE_PHOTO_SELECTED = 1;
 
-    private SelectImageDialog() {}
+    private SelectImageDialog() {
+    }
 
     public static final class Builder extends AlertDialog.Builder {
         private final Activity mActivity;
