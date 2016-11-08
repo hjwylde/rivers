@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_dialog_selectImage">Select section photo</string>
+
+    <array name="options_dialog_selectImage">
+        <item>Take photo</item>
+        <item>Select photo</item>
+    </array>
+</resources>

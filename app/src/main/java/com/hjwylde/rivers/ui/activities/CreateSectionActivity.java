@@ -42,10 +42,9 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     private Image mImage;
 
     public void onCameraClick(View view) {
-        // TODO (hjw): don't hardcode the strings
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select section photo");
-        builder.setItems(new String[] {"Take photo", "Select photo"}, new DialogInterface.OnClickListener() {
+        builder.setTitle(getString(R.string.title_dialog_selectImage));
+        builder.setItems(getResources().getStringArray(R.array.options_dialog_selectImage), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
