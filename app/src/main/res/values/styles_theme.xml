@@ -8,16 +8,14 @@
         <item name="colorAccent">@color/accent</item>
     </style>
 
+    <style name="Theme.Rivers.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
     <style name="Theme.Rivers.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/accent</item>
         <item name="windowActionModeOverlay">true</item>
-    </style>
-
-    <style name="Theme.Rivers.NoActionBar.Popup">
-        <item name="android:homeAsUpIndicator">@drawable/ic_cross</item>
     </style>
 
     <style name="Theme.Rivers.NoActionBar.BottomSheet">
@@ -28,7 +26,9 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
-    <style name="Theme.Rivers.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="Theme.Rivers.NoActionBar.Popup">
+        <item name="android:homeAsUpIndicator">@drawable/ic_cross</item>
+    </style>
 
     <style name="Theme.Rivers.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
