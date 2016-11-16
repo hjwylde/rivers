@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -89,11 +91,7 @@ public final class SectionActivity extends BaseActivity implements SectionContra
 
     @Override
     public void refreshImage() {
-        if (mImage == null) {
-            return;
-        }
-
-        ((ImageView) findViewById(R.id.image)).setImageBitmap(mImage.getBitmap());
+        refreshImage(true);
     }
 
     @Override
@@ -199,7 +197,7 @@ public final class SectionActivity extends BaseActivity implements SectionContra
         refreshSection();
 
         mImage = (Image) savedInstanceState.getSerializable(STATE_IMAGE);
-        refreshImage();
+        refreshImage(false);
 
         refreshImageView();
     }
@@ -209,6 +207,25 @@ public final class SectionActivity extends BaseActivity implements SectionContra
         mPresenter.unsubscribe();
 
         super.onPause();
+    }
+
+    private void refreshImage(boolean animate) {
+        if (mImage == null) {
+            return;
+        }
+
+        ImageView imageView = (ImageView) findViewById(R.id.image);
+        imageView.setImageBitmap(mImage.getBitmap());
+
+        if (animate) {
+            animateImageIn(imageView);
+        }
+    }
+
+    private void animateImageIn(View imageView) {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
+
+        imageView.startAnimation(animation);
     }
 
     private void refreshImageView() {

@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -74,11 +76,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
 
     @Override
     public void refreshImage() {
-        if (mImage == null) {
-            return;
-        }
-
-        getImageView().setImageBitmap(mImage.getBitmap());
+        refreshImage(true);
     }
 
     @Override
@@ -174,6 +172,25 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
         mPresenter.unsubscribe();
 
         super.onPause();
+    }
+
+    private void refreshImage(boolean animate) {
+        if (mImage == null) {
+            return;
+        }
+
+        ImageView imageView = getImageView();
+        imageView.setImageBitmap(mImage.getBitmap());
+
+        if (animate) {
+            animateImageIn(imageView);
+        }
+    }
+
+    private void animateImageIn(View imageView) {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
+
+        imageView.startAnimation(animation);
     }
 
     private void refreshSection() {
