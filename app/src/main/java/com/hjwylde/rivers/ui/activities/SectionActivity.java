@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,7 +35,6 @@ public final class SectionActivity extends BaseActivity implements SectionContra
     private static final String TAG = SectionActivity.class.getSimpleName();
 
     private static final String STATE_SECTION = "section";
-    private static final String STATE_IMAGE = "image";
     private static final String STATE_BOTTOM_SHEET = "bottomSheet";
 
     private BottomSheetBehavior<NestedScrollView> mBottomSheetBehavior;
@@ -93,7 +94,10 @@ public final class SectionActivity extends BaseActivity implements SectionContra
             return;
         }
 
-        ((ImageView) findViewById(R.id.image)).setImageBitmap(mImage.getBitmap());
+        ImageView imageView = (ImageView) findViewById(R.id.image);
+        imageView.setImageBitmap(mImage.getBitmap());
+
+        animateImageIn(imageView);
     }
 
     @Override
@@ -183,7 +187,6 @@ public final class SectionActivity extends BaseActivity implements SectionContra
         outState.putParcelable(STATE_BOTTOM_SHEET, bottomSheetParcelable);
 
         outState.putSerializable(STATE_SECTION, mSection);
-        outState.putSerializable(STATE_IMAGE, mImage);
     }
 
     @Override
@@ -198,9 +201,6 @@ public final class SectionActivity extends BaseActivity implements SectionContra
         mSection = (Section) savedInstanceState.getSerializable(STATE_SECTION);
         refreshSection();
 
-        mImage = (Image) savedInstanceState.getSerializable(STATE_IMAGE);
-        refreshImage();
-
         refreshImageView();
     }
 
@@ -209,6 +209,12 @@ public final class SectionActivity extends BaseActivity implements SectionContra
         mPresenter.unsubscribe();
 
         super.onPause();
+    }
+
+    private void animateImageIn(View imageView) {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
+
+        imageView.startAnimation(animation);
     }
 
     private void refreshImageView() {
