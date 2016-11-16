@@ -15,6 +15,8 @@ public interface MapsContract {
         void onGetSectionsFailure(@NonNull Throwable t);
 
         void startSectionActivity(@NonNull Section section);
+
+        void onCreateSectionClick();
     }
 
     interface Presenter extends BaseContract.Presenter {
