@@ -35,7 +35,6 @@ public final class SectionActivity extends BaseActivity implements SectionContra
     private static final String TAG = SectionActivity.class.getSimpleName();
 
     private static final String STATE_SECTION = "section";
-    private static final String STATE_IMAGE = "image";
     private static final String STATE_BOTTOM_SHEET = "bottomSheet";
 
     private BottomSheetBehavior<NestedScrollView> mBottomSheetBehavior;
@@ -91,7 +90,14 @@ public final class SectionActivity extends BaseActivity implements SectionContra
 
     @Override
     public void refreshImage() {
-        refreshImage(true);
+        if (mImage == null) {
+            return;
+        }
+
+        ImageView imageView = (ImageView) findViewById(R.id.image);
+        imageView.setImageBitmap(mImage.getBitmap());
+
+        animateImageIn(imageView);
     }
 
     @Override
@@ -181,7 +187,6 @@ public final class SectionActivity extends BaseActivity implements SectionContra
         outState.putParcelable(STATE_BOTTOM_SHEET, bottomSheetParcelable);
 
         outState.putSerializable(STATE_SECTION, mSection);
-        outState.putSerializable(STATE_IMAGE, mImage);
     }
 
     @Override
@@ -196,9 +201,6 @@ public final class SectionActivity extends BaseActivity implements SectionContra
         mSection = (Section) savedInstanceState.getSerializable(STATE_SECTION);
         refreshSection();
 
-        mImage = (Image) savedInstanceState.getSerializable(STATE_IMAGE);
-        refreshImage(false);
-
         refreshImageView();
     }
 
@@ -207,19 +209,6 @@ public final class SectionActivity extends BaseActivity implements SectionContra
         mPresenter.unsubscribe();
 
         super.onPause();
-    }
-
-    private void refreshImage(boolean animate) {
-        if (mImage == null) {
-            return;
-        }
-
-        ImageView imageView = (ImageView) findViewById(R.id.image);
-        imageView.setImageBitmap(mImage.getBitmap());
-
-        if (animate) {
-            animateImageIn(imageView);
-        }
     }
 
     private void animateImageIn(View imageView) {
