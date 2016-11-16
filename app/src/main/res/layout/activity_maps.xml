@@ -6,14 +6,15 @@
     android:id="@+id/root_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.hjwylde.rivers.ui.activities.MapsActivity">
+
+    <include layout="@layout/content_maps"/>
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <include layout="@layout/content_maps"/>
 
         <View
             android:id="@+id/center_marker_anchor"
@@ -43,5 +44,17 @@
         app:layout_anchor="@id/content_container"
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@drawable/ic_plus"/>
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"/>
+    </android.support.design.widget.AppBarLayout>
 
 </android.support.design.widget.CoordinatorLayout>

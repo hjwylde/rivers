@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -95,11 +96,14 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.Theme_Rivers);
+        setTheme(R.style.Theme_Rivers_Dark_NoActionBar);
 
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_maps);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
