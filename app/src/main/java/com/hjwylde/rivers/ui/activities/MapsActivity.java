@@ -10,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -159,12 +161,13 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mFab.hide();
-            mCenterMarker.setVisibility(View.VISIBLE);
-            mMapsFragment.disableOnMarkerClickListener();
-
             MenuInflater inflater = mode.getMenuInflater();
             inflater.inflate(R.menu.menu_maps_action_mode, menu);
+
+            mFab.hide();
+            animateCenterMarkerIn();
+
+            mMapsFragment.disableOnMarkerClickListener();
 
             mActionModeActive = true;
 
@@ -190,10 +193,51 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             mFab.show();
-            mCenterMarker.setVisibility(View.INVISIBLE);
+            animateCenterMarkerOut();
+
             mMapsFragment.enableOnMarkerClickListener();
 
             mActionModeActive = false;
+        }
+
+        private void animateCenterMarkerIn() {
+            Animation animation = AnimationUtils.loadAnimation(MapsActivity.this, R.anim.scale_map_marker_up);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    mCenterMarker.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
+
+            mCenterMarker.startAnimation(animation);
+        }
+
+        private void animateCenterMarkerOut() {
+            Animation animation = AnimationUtils.loadAnimation(MapsActivity.this, R.anim.scale_map_marker_down);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    mCenterMarker.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
+
+            mCenterMarker.startAnimation(animation);
         }
     }
 }
