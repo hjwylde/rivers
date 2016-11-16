@@ -14,6 +14,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
@@ -33,8 +34,17 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
     private GoogleMap mMap;
     private UiSettings mUiSettings;
     private ClusterManager<SectionMarker> mClusterManager;
+    private OnMarkerClickListener mOnMarkerClickListener = new OnMarkerClickListener();
 
     private MapsContract.View mView;
+
+    public void disableOnMarkerClickListener() {
+        mOnMarkerClickListener.disable();
+    }
+
+    public void enableOnMarkerClickListener() {
+        mOnMarkerClickListener.enable();
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -64,7 +74,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         mClusterManager.setOnClusterClickListener(this);
 
         mMap.setOnCameraIdleListener(mClusterManager);
-        mMap.setOnMarkerClickListener(mClusterManager);
+        mMap.setOnMarkerClickListener(mOnMarkerClickListener);
 
         if (hasAccessFineLocationPermission()) {
             enableMyLocation();
@@ -140,5 +150,26 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
     private void enableMyLocation() {
         mMap.setMyLocationEnabled(true);
         mUiSettings.setMyLocationButtonEnabled(true);
+    }
+
+    private class OnMarkerClickListener implements GoogleMap.OnMarkerClickListener {
+        private boolean mEnabled = true;
+
+        public void disable() {
+            mEnabled = false;
+        }
+
+        public void enable() {
+            mEnabled = true;
+        }
+
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            if (mEnabled && mClusterManager != null) {
+                return mClusterManager.onMarkerClick(marker);
+            }
+
+            return true;
+        }
     }
 }
