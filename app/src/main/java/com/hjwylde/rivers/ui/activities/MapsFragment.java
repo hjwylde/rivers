@@ -36,6 +36,18 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
 
     private MapsContract.View mView;
 
+    public void disableOnMarkerClickListener() {
+        if (mMap != null) {
+            mMap.setOnMarkerClickListener(null);
+        }
+    }
+
+    public void enableOnMarkerClickListener() {
+        if (mMap != null) {
+            mMap.setOnMarkerClickListener(mClusterManager);
+        }
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

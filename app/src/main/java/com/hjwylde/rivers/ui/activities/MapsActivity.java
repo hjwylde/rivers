@@ -59,10 +59,8 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     public void refreshMap() {
-        MapsFragment mapsFragment = (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        if (mapsFragment != null) {
-            mapsFragment.refreshMap(mSections);
-        }
+        MapsFragment mapsFragment = getMapsFragment();
+        mapsFragment.refreshMap(mSections);
     }
 
     @Override
@@ -126,38 +124,44 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     private void startCreateSectionMode() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         View centerMarker = findViewById(R.id.center_marker);
+        MapsFragment mapsFragment = getMapsFragment();
 
-        startActionMode(new CreateSectionMode(fab, centerMarker));
+        startActionMode(new CreateSectionMode(fab, centerMarker, mapsFragment));
+    }
+
+    private MapsFragment getMapsFragment() {
+        return (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.map);
     }
 
     private void startCreateSectionActivity() {
-        MapsFragment mapsFragment = (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        if (mapsFragment != null) {
-            mapsFragment.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap googleMap) {
-                    Intent intent = new Intent(MapsActivity.this, CreateSectionActivity.class);
-                    intent.putExtra(CreateSectionActivity.INTENT_PUT_IN, googleMap.getCameraPosition().target);
+        MapsFragment mapsFragment = getMapsFragment();
+        mapsFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                Intent intent = new Intent(MapsActivity.this, CreateSectionActivity.class);
+                intent.putExtra(CreateSectionActivity.INTENT_PUT_IN, googleMap.getCameraPosition().target);
 
-                    startActivity(intent);
-                }
-            });
-        }
+                startActivity(intent);
+            }
+        });
     }
 
     private final class CreateSectionMode implements ActionMode.Callback {
         private final FloatingActionButton mFab;
         private final View mCenterMarker;
+        private final MapsFragment mMapsFragment;
 
-        public CreateSectionMode(FloatingActionButton fab, View centerMarker) {
+        public CreateSectionMode(FloatingActionButton fab, View centerMarker, MapsFragment mapsFragment) {
             mFab = fab;
             mCenterMarker = centerMarker;
+            mMapsFragment = mapsFragment;
         }
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mFab.hide();
             mCenterMarker.setVisibility(View.VISIBLE);
+            mMapsFragment.disableOnMarkerClickListener();
 
             MenuInflater inflater = mode.getMenuInflater();
             inflater.inflate(R.menu.menu_maps_action_mode, menu);
@@ -187,6 +191,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         public void onDestroyActionMode(ActionMode mode) {
             mFab.show();
             mCenterMarker.setVisibility(View.INVISIBLE);
+            mMapsFragment.enableOnMarkerClickListener();
 
             mActionModeActive = false;
         }
