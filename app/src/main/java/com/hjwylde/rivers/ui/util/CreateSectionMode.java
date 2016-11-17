@@ -85,7 +85,7 @@ public final class CreateSectionMode implements ActionMode.Callback {
     }
 
     private void animateCenterMarkerIn() {
-        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.scale_map_marker_up);
+        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.scale_map_marker_in);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -105,7 +105,7 @@ public final class CreateSectionMode implements ActionMode.Callback {
     }
 
     private void animateCenterMarkerOut() {
-        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.scale_map_marker_down);
+        Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.scale_map_marker_out);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {

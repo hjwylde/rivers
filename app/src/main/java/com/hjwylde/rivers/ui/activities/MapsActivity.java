@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -72,7 +73,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     @Override
     public void refreshImage() {
-        ImageView imageView = (ImageView) findViewById(R.id.image);
+        ImageView imageView = getImage();
 
         if (mImage != null) {
             imageView.setImageBitmap(mImage.getBitmap());
@@ -165,7 +166,8 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         CoordinatorLayout parent = (CoordinatorLayout) child.getParent();
         Parcelable bottomSheetParcelable = checkNotNull(savedInstanceState.getParcelable(STATE_BOTTOM_SHEET));
         mBottomSheetBehavior.onRestoreInstanceState(parent, child, bottomSheetParcelable);
-        mBottomSheetBehavior.setState(mBottomSheetBehavior.getState());
+
+        refreshFloatingActionButton();
 
         boolean createSectionModeActive = savedInstanceState.getBoolean(STATE_CREATE_SECTION_MODE_ACTIVE);
         if (createSectionModeActive) {
@@ -174,7 +176,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
         mSection = (Section) savedInstanceState.getSerializable(STATE_SECTION);
         refreshSection();
-        refreshImageView();
+        refreshImageContainer();
 
         mSections = (List<Section>) savedInstanceState.getSerializable(STATE_SECTIONS);
         refreshMap();
@@ -227,15 +229,33 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            private final View mImageContainer = findViewById(R.id.image_container);
+            private final FloatingActionButton mFab = getFloatingActionButton();
+            private final View mImageContainer = getImageContainer();
             private final float mExpandedHeight = getResources().getDimension(R.dimen.imageHeight);
 
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        float height = mFab.getHeight();
+                        float margin = ((ViewGroup.MarginLayoutParams) mFab.getLayoutParams()).bottomMargin;
+                        mFab.setY(bottomSheet.getHeight() - height - margin);
+
+                        mFab.show();
+                        break;
+                    default:
+                        mFab.hide();
+                }
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                float halfHeight = mFab.getHeight() / 2;
+                float margin = ((ViewGroup.MarginLayoutParams) mFab.getLayoutParams()).bottomMargin;
+                if (bottomSheet.getY() <= bottomSheet.getHeight() - halfHeight - margin) {
+                    mFab.setY(bottomSheet.getY() - halfHeight);
+                }
+
                 float collapsedY = bottomSheet.getHeight() - mBottomSheetBehavior.getPeekHeight();
                 float expandedRatio = (collapsedY - bottomSheet.getY()) / collapsedY;
 
@@ -310,13 +330,23 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         ((TextView) findViewById(R.id.description)).setText(mSection.getDescription());
     }
 
-    private void refreshImageView() {
-        View imageContainer = findViewById(R.id.image_container);
-
-        if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            imageContainer.getLayoutParams().height = (int) getResources().getDimension(R.dimen.imageHeight);
-            imageContainer.requestLayout();
+    private void refreshFloatingActionButton() {
+        if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+            return;
         }
+
+        FloatingActionButton fab = getFloatingActionButton();
+        fab.hide();
+    }
+
+    private void refreshImageContainer() {
+        if (mBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+            return;
+        }
+
+        View imageContainer = getImageContainer();
+        imageContainer.getLayoutParams().height = (int) getResources().getDimension(R.dimen.imageHeight);
+        imageContainer.requestLayout();
     }
 
     private void onEditSectionClick() {
@@ -329,13 +359,25 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     private void startCreateSectionMode() {
         if (mCreateSectionMode == null) {
             FloatingActionButton fab = getFloatingActionButton();
-            View centerMarker = findViewById(R.id.center_marker);
+            ImageView centerMarker = getCenterMarker();
             MapsFragment mapsFragment = getMapsFragment();
 
             mCreateSectionMode = new CreateSectionMode(this, fab, centerMarker, mapsFragment, this);
         }
 
         startActionMode(mCreateSectionMode);
+    }
+
+    private View getImageContainer() {
+        return findViewById(R.id.image_container);
+    }
+
+    private ImageView getImage() {
+        return (ImageView) findViewById(R.id.image);
+    }
+
+    private ImageView getCenterMarker() {
+        return (ImageView) findViewById(R.id.center_marker);
     }
 
     private FloatingActionButton getFloatingActionButton() {
