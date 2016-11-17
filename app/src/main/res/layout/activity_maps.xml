@@ -6,7 +6,6 @@
     android:id="@+id/root_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context="com.hjwylde.rivers.ui.activities.MapsActivity">
 
     <include layout="@layout/content_maps"/>
@@ -30,5 +29,18 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"/>
     </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/bottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:elevation="16dp"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="@dimen/titleContainer_peekHeight"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+        <include layout="@layout/content_section"/>
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

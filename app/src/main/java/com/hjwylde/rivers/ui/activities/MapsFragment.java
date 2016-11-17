@@ -120,7 +120,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
 
     @Override
     public boolean onClusterItemClick(SectionMarker sectionMarker) {
-        mView.startSectionActivity(sectionMarker.getSection());
+        mView.onSectionClick(sectionMarker.getSection());
 
         return true;
     }

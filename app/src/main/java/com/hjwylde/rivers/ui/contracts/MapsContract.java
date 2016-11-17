@@ -2,6 +2,7 @@ package com.hjwylde.rivers.ui.contracts;
 
 import android.support.annotation.NonNull;
 
+import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 
 import java.util.List;
@@ -14,12 +15,20 @@ public interface MapsContract {
 
         void onGetSectionsFailure(@NonNull Throwable t);
 
-        void startSectionActivity(@NonNull Section section);
+        void onSectionClick(@NonNull Section section);
 
         void onCreateSectionClick();
+
+        void setImage(@NonNull Image image);
+
+        void refreshImage();
+
+        void onGetImageFailure(@NonNull Throwable t);
     }
 
     interface Presenter extends BaseContract.Presenter {
         void getSections();
+
+        void getImage(@NonNull String id);
     }
 }

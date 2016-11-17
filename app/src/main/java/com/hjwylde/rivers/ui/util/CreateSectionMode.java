@@ -2,6 +2,7 @@ package com.hjwylde.rivers.ui.util;
 
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -28,7 +29,7 @@ public final class CreateSectionMode implements ActionMode.Callback {
 
     private boolean mActive = false;
 
-    public CreateSectionMode(Context context, FloatingActionButton fab, View centerMarker, MapsFragment mapsFragment, MapsContract.View view) {
+    public CreateSectionMode(@NonNull Context context, @NonNull FloatingActionButton fab, @NonNull View centerMarker, @NonNull MapsFragment mapsFragment, @NonNull MapsContract.View view) {
         mContext = checkNotNull(context);
 
         mFab = checkNotNull(fab);

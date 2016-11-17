@@ -29,10 +29,10 @@ import com.hjwylde.rivers.ui.presenters.SectionPresenter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public final class SectionActivity extends BaseActivity implements SectionContract.View {
+public final class SectionFragment extends BaseActivity implements SectionContract.View {
     public static final String INTENT_SECTION = "section";
 
-    private static final String TAG = SectionActivity.class.getSimpleName();
+    private static final String TAG = SectionFragment.class.getSimpleName();
 
     private static final String STATE_SECTION = "section";
     private static final String STATE_BOTTOM_SHEET = "bottomSheet";

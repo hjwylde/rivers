@@ -29,15 +29,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.SectionActivity"
-            android:label="@string/title_activity_section"
-            android:parentActivityName=".ui.activities.MapsActivity"
-            android:theme="@style/Theme.Rivers.Light.NoActionBar.BottomSheet">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hjwylde.rivers.ui.activities.MapsActivity" />
-        </activity>
-        <activity
             android:name=".ui.activities.CreateSectionActivity"
             android:label="@string/title_activity_createSection"
             android:parentActivityName=".ui.activities.MapsActivity"
@@ -49,11 +40,11 @@
         <activity
             android:name=".ui.activities.EditSectionActivity"
             android:label="@string/title_activity_editSection"
-            android:parentActivityName=".ui.activities.SectionActivity"
+            android:parentActivityName=".ui.activities.MapsActivity"
             android:theme="@style/Theme.Rivers.Light.NoActionBar.Popup">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hjwylde.rivers.ui.activities.SectionActivity" />
+                android:value="com.hjwylde.rivers.ui.activities.MapsActivity" />
         </activity>
     </application>
 
