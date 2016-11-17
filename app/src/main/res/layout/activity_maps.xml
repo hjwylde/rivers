@@ -34,8 +34,8 @@
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:elevation="6dp"
         android:fillViewport="true"
-        android:elevation="16dp"
         app:behavior_hideable="true"
         app:behavior_peekHeight="@dimen/titleContainer_peekHeight"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
@@ -43,4 +43,18 @@
         <include layout="@layout/content_section"/>
     </android.support.v4.widget.NestedScrollView>
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/sectionAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:layout_behavior="com.hjwylde.rivers.ui.util.DropInAppBarBehavior">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/sectionToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@drawable/scrim_gradient"
+            app:popupTheme="@style/Theme.Rivers.PopupOverlay"/>
+    </android.support.design.widget.AppBarLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.hjwylde.rivers.R;
@@ -84,5 +85,7 @@ public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Beha
 
         mAnimator = ObjectAnimator.ofFloat(child, "y", -child.getHeight(), 0.0f);
         mAnimator.start();
+
+        Log.d("foo", "shown");
     }
 }

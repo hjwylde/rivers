@@ -7,9 +7,11 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -71,12 +73,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         }
     }
 
-    private void animateImageIn(View imageView) {
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
-
-        imageView.startAnimation(animation);
-    }
-
     @Override
     public void onGetImageFailure(@NonNull Throwable t) {
         Log.w(TAG, t.getMessage(), t);
@@ -88,14 +84,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
             case R.id.fab:
                 startCreateSectionMode();
                 break;
-        }
-    }
-
-    private void setSection(@NonNull Section section) {
-        mSection = checkNotNull(section);
-
-        if (mImage != null && !mSection.getImageId().equals(mImage.getId())) {
-            mImage = null;
         }
     }
 
@@ -111,33 +99,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         }
 
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-    }
-
-    private void refreshSection() {
-        if (mSection == null) {
-            return;
-        }
-
-        ((TextView) findViewById(R.id.title)).setText(mSection.getTitle());
-        ((TextView) findViewById(R.id.subtitle)).setText(mSection.getSubtitle());
-
-        if (mSection.getGrade() != null && !mSection.getGrade().isEmpty()) {
-            ((TextView) findViewById(R.id.grade)).setText(mSection.getGrade());
-        } else {
-            findViewById(R.id.grade_container).setVisibility(View.GONE);
-        }
-        if (mSection.getLength() != null && !mSection.getLength().isEmpty()) {
-            ((TextView) findViewById(R.id.length)).setText(mSection.getLength());
-        } else {
-            findViewById(R.id.length_container).setVisibility(View.GONE);
-        }
-        if (mSection.getDuration() != null && !mSection.getDuration().isEmpty()) {
-            ((TextView) findViewById(R.id.duration)).setText(mSection.getDuration());
-        } else {
-            findViewById(R.id.duration_container).setVisibility(View.GONE);
-        }
-
-        ((TextView) findViewById(R.id.description)).setText(mSection.getDescription());
     }
 
     @Override
@@ -166,6 +127,12 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         // TODO (#23)
     }
 
+    public void onTitleContainerClick(View view) {
+        if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -188,6 +155,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         CoordinatorLayout parent = (CoordinatorLayout) child.getParent();
         Parcelable bottomSheetParcelable = checkNotNull(savedInstanceState.getParcelable(STATE_BOTTOM_SHEET));
         mBottomSheetBehavior.onRestoreInstanceState(parent, child, bottomSheetParcelable);
+        mBottomSheetBehavior.setState(mBottomSheetBehavior.getState());
 
         boolean createSectionModeActive = savedInstanceState.getBoolean(STATE_CREATE_SECTION_MODE_ACTIVE);
         if (createSectionModeActive) {
@@ -202,15 +170,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         refreshMap();
     }
 
-    private void refreshImageView() {
-        View imageContainer = findViewById(R.id.image_container);
-
-        if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            imageContainer.getLayoutParams().height = (int) getResources().getDimension(R.dimen.imageHeight);
-            imageContainer.requestLayout();
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_Rivers_Dark_NoActionBar);
@@ -221,6 +180,33 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Toolbar sectionToolbar = (Toolbar) findViewById(R.id.sectionToolbar);
+        sectionToolbar.inflateMenu(R.menu.menu_section);
+        sectionToolbar.setNavigationIcon(R.drawable.ic_arrow_left);
+        sectionToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            }
+        });
+        sectionToolbar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.ic_dots_vertical));
+        sectionToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.editSection:
+                        onEditSectionClick();
+                        return true;
+                    case R.id.deleteSection:
+                        // TODO (#14)
+                        // mPresenter.deleteSection(buildAction());
+                        return true;
+                }
+
+                return false;
+            }
+        });
 
         FloatingActionButton fab = getFloatingActionButton();
         fab.setOnClickListener(this);
@@ -236,6 +222,20 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        fab.show();
+                        bottomSheet.setElevation(getResources().getDimension(R.dimen.fab_elevation));
+                        break;
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        fab.hide();
+                        bottomSheet.setElevation(getResources().getDimension(R.dimen.toolbar_elevation));
+                        break;
+                    default:
+                        fab.hide();
+                }
             }
 
             @Override
@@ -273,10 +273,61 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         super.onPause();
     }
 
-    public void onTitleContainerClick(View view) {
-        if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
-            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    private void animateImageIn(View imageView) {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
+
+        imageView.startAnimation(animation);
+    }
+
+    private void setSection(@NonNull Section section) {
+        mSection = checkNotNull(section);
+
+        if (mImage != null && !mSection.getImageId().equals(mImage.getId())) {
+            mImage = null;
         }
+    }
+
+    private void refreshSection() {
+        if (mSection == null) {
+            return;
+        }
+
+        ((TextView) findViewById(R.id.title)).setText(mSection.getTitle());
+        ((TextView) findViewById(R.id.subtitle)).setText(mSection.getSubtitle());
+
+        if (mSection.getGrade() != null && !mSection.getGrade().isEmpty()) {
+            ((TextView) findViewById(R.id.grade)).setText(mSection.getGrade());
+        } else {
+            findViewById(R.id.grade_container).setVisibility(View.GONE);
+        }
+        if (mSection.getLength() != null && !mSection.getLength().isEmpty()) {
+            ((TextView) findViewById(R.id.length)).setText(mSection.getLength());
+        } else {
+            findViewById(R.id.length_container).setVisibility(View.GONE);
+        }
+        if (mSection.getDuration() != null && !mSection.getDuration().isEmpty()) {
+            ((TextView) findViewById(R.id.duration)).setText(mSection.getDuration());
+        } else {
+            findViewById(R.id.duration_container).setVisibility(View.GONE);
+        }
+
+        ((TextView) findViewById(R.id.description)).setText(mSection.getDescription());
+    }
+
+    private void refreshImageView() {
+        View imageContainer = findViewById(R.id.image_container);
+
+        if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            imageContainer.getLayoutParams().height = (int) getResources().getDimension(R.dimen.imageHeight);
+            imageContainer.requestLayout();
+        }
+    }
+
+    private void onEditSectionClick() {
+        Intent intent = new Intent(this, EditSectionActivity.class);
+        intent.putExtra(EditSectionActivity.INTENT_SECTION, mSection);
+
+        startActivity(intent);
     }
 
     private void startCreateSectionMode() {
