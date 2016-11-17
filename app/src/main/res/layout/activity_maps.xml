@@ -10,14 +10,6 @@
 
     <include layout="@layout/content_maps"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_plus"/>
-
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
@@ -34,7 +26,7 @@
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="6dp"
+        android:elevation="@dimen/toolbar_elevation"
         android:fillViewport="true"
         app:behavior_hideable="true"
         app:behavior_peekHeight="@dimen/titleContainer_peekHeight"
@@ -42,6 +34,16 @@
 
         <include layout="@layout/content_section"/>
     </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_anchor="@id/bottomSheet"
+        app:layout_anchorGravity="top|end"
+        app:srcCompat="@drawable/ic_plus"
+        app:layout_behavior="com.hjwylde.rivers.ui.util.BottomSheetAwareBehavior"/>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/sectionAppBar"

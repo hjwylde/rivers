@@ -61,6 +61,16 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     @Override
+    public void onBackPressed() {
+        if (mBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            return;
+        }
+
+        super.onBackPressed();
+    }
+
+    @Override
     public void refreshImage() {
         ImageView imageView = (ImageView) findViewById(R.id.image);
 
@@ -222,20 +232,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_HIDDEN:
-                        fab.show();
-                        bottomSheet.setElevation(getResources().getDimension(R.dimen.fab_elevation));
-                        break;
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                        fab.hide();
-                        bottomSheet.setElevation(getResources().getDimension(R.dimen.toolbar_elevation));
-                        break;
-                    default:
-                        fab.hide();
-                }
             }
 
             @Override

@@ -25,14 +25,6 @@
         <item name="windowActionModeOverlay">true</item>
     </style>
 
-    <style name="Theme.Rivers.Light.NoActionBar.BottomSheet">
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.4</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
-
     <style name="Theme.Rivers.Light.NoActionBar.Popup">
         <item name="android:homeAsUpIndicator">@drawable/ic_cross</item>
     </style>

@@ -4,5 +4,4 @@
 
     <dimen name="markerSize">40dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="fab_elevation">6dp</dimen>
 </resources>
