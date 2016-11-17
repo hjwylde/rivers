@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="imageHeight">240dp</dimen>
+    <dimen name="imageHeight">300dp</dimen>
 
     <!-- TODO (hjw): don't hard-code this -->
-    <dimen name="titleContainer_peekHeight">348dp</dimen>
-    <!-- TODO (hjw): don't hard-code this -->
-    <dimen name="statusBar_height">24dp</dimen>
+    <dimen name="titleContainer_peekHeight">108dp</dimen>
 </resources>

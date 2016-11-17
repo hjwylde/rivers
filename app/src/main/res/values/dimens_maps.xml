@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="toolbar_elevation">4dp</dimen>
+
     <dimen name="markerSize">40dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 </resources>

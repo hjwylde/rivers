@@ -2,7 +2,6 @@
 <resources>
 
     <style name="Theme.Rivers" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:actionModeBackground">@color/primary</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/accent</item>
@@ -10,7 +9,15 @@
 
     <style name="Theme.Rivers.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-    <style name="Theme.Rivers.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.Rivers.Dark.NoActionBar" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:actionModeBackground">@color/primary</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+
+    <style name="Theme.Rivers.Light.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
@@ -18,15 +25,7 @@
         <item name="windowActionModeOverlay">true</item>
     </style>
 
-    <style name="Theme.Rivers.NoActionBar.BottomSheet">
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.4</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
-
-    <style name="Theme.Rivers.NoActionBar.Popup">
+    <style name="Theme.Rivers.Light.NoActionBar.Popup">
         <item name="android:homeAsUpIndicator">@drawable/ic_cross</item>
     </style>
 
