@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.rivers.R;
@@ -32,7 +31,6 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     private static final String TAG = CreateSectionActivity.class.getSimpleName();
 
     private static final String STATE_SECTION_BUILDER = "sectionBuilder";
-    private static final String STATE_IMAGE = "image";
 
     private CreateSectionContract.Presenter mPresenter;
 
@@ -51,7 +49,8 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
                 finish();
                 return true;
             case R.id.createSection:
-                mPresenter.createSection(buildAction());
+                // TODO (#61)
+                // mPresenter.createSection(buildAction());
                 return true;
         }
 
@@ -80,8 +79,8 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         snackbar.setAction(R.string.action_retry, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPresenter.createSection(buildAction());
-
+                // TODO (#61)
+                // mPresenter.createSection(buildAction());
             }
         });
 
@@ -111,7 +110,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
 
         setContentView(R.layout.activity_create_section);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findToolbarById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -120,6 +119,8 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         LatLng putIn = getIntent().getParcelableExtra(INTENT_PUT_IN);
         mSectionBuilder.putIn(putIn);
         refreshSection();
+
+        refreshFocus();
     }
 
     @Override
@@ -127,7 +128,6 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         super.onSaveInstanceState(outState);
 
         outState.putSerializable(STATE_SECTION_BUILDER, buildSectionBuilder());
-        outState.putSerializable(STATE_IMAGE, buildImage());
     }
 
     @Override
@@ -137,7 +137,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         mSectionBuilder = (Section.Builder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
         refreshSection();
 
-        mImage = (Image) savedInstanceState.getSerializable(STATE_IMAGE);
+        refreshFocus();
     }
 
     @Override
@@ -148,13 +148,15 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     }
 
     private void refreshSection() {
-        getTitleTextView().setText(mSectionBuilder.title());
-        getSubtitleTextView().setText(mSectionBuilder.subtitle());
-        getGradeTextView().setText(mSectionBuilder.grade());
-        getLengthTextView().setText(mSectionBuilder.length());
-        getDurationTextView().setText(mSectionBuilder.duration());
-        getDescriptionTextView().setText(mSectionBuilder.description());
+        findTextViewById(R.id.title).setText(mSectionBuilder.title());
+        findTextViewById(R.id.subtitle).setText(mSectionBuilder.subtitle());
+        findTextViewById(R.id.grade).setText(mSectionBuilder.grade());
+        findTextViewById(R.id.length).setText(mSectionBuilder.length());
+        findTextViewById(R.id.duration).setText(mSectionBuilder.duration());
+        findTextViewById(R.id.description).setText(mSectionBuilder.description());
+    }
 
+    private void refreshFocus() {
         View view = getCurrentFocus();
         if (view == null) {
             findViewById(R.id.title).requestFocus();
@@ -166,80 +168,37 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
 
     private Section.Builder buildSectionBuilder() {
         Section.Builder builder = new Section.Builder(mSectionBuilder);
-        builder.title(getTitleString());
-        builder.subtitle(getSubtitleString());
-        builder.grade(getGradeString());
-        builder.length(getLengthString());
-        builder.duration(getDurationString());
-        builder.description(getDescriptionString());
+        builder.title(getTitle_());
+        builder.subtitle(getSubtitle());
+        builder.grade(getGrade());
+        builder.length(getLength());
+        builder.duration(getDuration());
+        builder.description(getDescription());
 
         return builder;
     }
 
-    private Image buildImage() {
-        return mImage;
+    private String getTitle_() {
+        return findTextViewById(R.id.title).getText().toString();
     }
 
-    private Action buildAction() {
-        Action.Builder builder = new Action.Builder();
-        builder.action(Action.ACTION_INSERT);
-        builder.targetCollection(Section.getCollection());
-
-        builder.datum(Section.PROPERTY_TITLE, getTitleString());
-        builder.datum(Section.PROPERTY_SUBTITLE, getSubtitleString());
-        builder.datum(Section.PROPERTY_GRADE, getGradeString());
-        builder.datum(Section.PROPERTY_LENGTH, getLengthString());
-        builder.datum(Section.PROPERTY_DURATION, getDurationString());
-        builder.datum(Section.PROPERTY_DESCRIPTION, getDescriptionString());
-
-        return builder.build();
+    private String getSubtitle() {
+        return findTextViewById(R.id.subtitle).getText().toString();
     }
 
-    private String getTitleString() {
-        return getTitleTextView().getText().toString();
+    private String getGrade() {
+        return findTextViewById(R.id.grade).getText().toString();
     }
 
-    private String getSubtitleString() {
-        return getSubtitleTextView().getText().toString();
+    private String getLength() {
+        return findTextViewById(R.id.length).getText().toString();
     }
 
-    private String getGradeString() {
-        return getGradeTextView().getText().toString();
+    private String getDuration() {
+        return findTextViewById(R.id.duration).getText().toString();
     }
 
-    private String getLengthString() {
-        return getLengthTextView().getText().toString();
-    }
-
-    private String getDurationString() {
-        return getDurationTextView().getText().toString();
-    }
-
-    private String getDescriptionString() {
-        return getDescriptionTextView().getText().toString();
-    }
-
-    private TextView getTitleTextView() {
-        return (TextView) findViewById(R.id.title);
-    }
-
-    private TextView getSubtitleTextView() {
-        return (TextView) findViewById(R.id.subtitle);
-    }
-
-    private TextView getGradeTextView() {
-        return (TextView) findViewById(R.id.grade);
-    }
-
-    private TextView getLengthTextView() {
-        return (TextView) findViewById(R.id.length);
-    }
-
-    private TextView getDurationTextView() {
-        return (TextView) findViewById(R.id.duration);
-    }
-
-    private TextView getDescriptionTextView() {
-        return (TextView) findViewById(R.id.description);
+    private String getDescription() {
+        return findTextViewById(R.id.description).getText().toString();
     }
 }
