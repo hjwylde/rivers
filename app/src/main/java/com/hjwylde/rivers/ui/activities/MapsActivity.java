@@ -63,9 +63,24 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     @Override
     public void onBackPressed() {
-        if (mBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
-            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-            return;
+        switch (mBottomSheetBehavior.getState()) {
+            case BottomSheetBehavior.STATE_COLLAPSED:
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                return;
+            case BottomSheetBehavior.STATE_DRAGGING:
+                return;
+            case BottomSheetBehavior.STATE_EXPANDED:
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                return;
+            case BottomSheetBehavior.STATE_SETTLING:
+                int y = (int) findViewById(R.id.bottomSheet).getY();
+                if (y < mBottomSheetBehavior.getPeekHeight()) {
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                } else {
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
+
+                return;
         }
 
         super.onBackPressed();
