@@ -35,7 +35,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/scrim_gradient"
             app:popupTheme="@style/Theme.Rivers.PopupOverlay"/>
     </android.support.design.widget.AppBarLayout>
 </android.support.design.widget.CoordinatorLayout>

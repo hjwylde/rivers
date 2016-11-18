@@ -11,7 +11,6 @@ android {
         versionCode 1
         versionName "1.0"
 
-        multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -32,7 +31,7 @@ dependencies {
     compile 'com.actinarium.aligned:aligned:0.1'
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:design:25.0.1'
-    compile 'com.google.android.gms:play-services:9.8.0'
+    compile 'com.google.android.gms:play-services-maps:9.8.0'
     compile 'com.google.maps.android:android-maps-utils:0.4.4'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
