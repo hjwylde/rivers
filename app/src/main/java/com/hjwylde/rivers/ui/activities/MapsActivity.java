@@ -115,6 +115,11 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     @Override
     public void onSectionClick(@NonNull Section section) {
+        if (mSection != null && mSection.getId().equals(section.getId())) {
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            return;
+        }
+
         setSection(section);
 
         refreshSection();
@@ -252,6 +257,9 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
                     case BottomSheetBehavior.STATE_HIDDEN:
+                        mSection = null;
+                        mImage = null;
+
                         float height = mFab.getHeight();
                         float margin = ((ViewGroup.MarginLayoutParams) mFab.getLayoutParams()).bottomMargin;
                         mFab.setY(bottomSheet.getHeight() - height - margin);

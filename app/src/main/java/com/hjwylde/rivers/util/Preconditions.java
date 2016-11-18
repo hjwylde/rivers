@@ -1,7 +1,8 @@
 package com.hjwylde.rivers.util;
 
 public final class Preconditions {
-    private Preconditions() {}
+    private Preconditions() {
+    }
 
     public static void checkArgument(boolean condition) {
         if (!condition) {
