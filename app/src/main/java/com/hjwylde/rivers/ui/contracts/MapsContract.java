@@ -24,6 +24,8 @@ public interface MapsContract {
         void refreshImage();
 
         void onGetImageFailure(@NonNull Throwable t);
+
+        void onMapClick();
     }
 
     interface Presenter extends BaseContract.Presenter {

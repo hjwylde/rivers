@@ -105,6 +105,11 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     @Override
+    public void onMapClick() {
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fab:
