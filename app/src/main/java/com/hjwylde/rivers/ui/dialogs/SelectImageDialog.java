@@ -9,7 +9,7 @@ import android.support.v7.app.AlertDialog;
 
 import com.hjwylde.rivers.R;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
 public final class SelectImageDialog {
     public static final int REQUEST_CODE_PHOTO_TAKEN = 0;

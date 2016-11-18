@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
 public final class SectionMarker implements ClusterItem {
     private final Section mSection;

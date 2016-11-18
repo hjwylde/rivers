@@ -16,7 +16,7 @@ import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.ui.activities.MapsFragment;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
 public final class CreateSectionMode implements ActionMode.Callback {
     private final Context mContext;

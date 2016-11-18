@@ -24,9 +24,9 @@ import com.hjwylde.rivers.ui.contracts.EditSectionContract;
 import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
 import com.hjwylde.rivers.ui.presenters.EditSectionPresenter;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.hjwylde.rivers.ui.dialogs.SelectImageDialog.REQUEST_CODE_PHOTO_SELECTED;
 import static com.hjwylde.rivers.ui.dialogs.SelectImageDialog.REQUEST_CODE_PHOTO_TAKEN;
+import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
 public final class EditSectionActivity extends BaseActivity implements EditSectionContract.View {
     public static final String INTENT_SECTION = "section";

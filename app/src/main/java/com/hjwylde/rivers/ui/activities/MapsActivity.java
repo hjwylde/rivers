@@ -32,7 +32,7 @@ import com.hjwylde.rivers.ui.util.CreateSectionMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
 public final class MapsActivity extends BaseActivity implements MapsContract.View, View.OnClickListener {
     private static final String TAG = MapsActivity.class.getSimpleName();
