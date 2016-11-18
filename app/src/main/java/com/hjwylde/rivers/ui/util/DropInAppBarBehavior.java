@@ -1,23 +1,27 @@
 package com.hjwylde.rivers.ui.util;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.hjwylde.rivers.R;
 
-public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Behavior<AppBarLayout> {
-    private boolean mInit = false;
+import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
-    private ObjectAnimator mAnimator;
+public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Behavior<AppBarLayout> {
+    private final Context mContext;
 
     public DropInAppBarBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        mContext = checkNotNull(context);
     }
 
     @Override
@@ -27,62 +31,46 @@ public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Beha
 
     @Override
     public boolean onDependentViewChanged(CoordinatorLayout parent, AppBarLayout child, View dependency) {
-        if (!mInit) {
-            init(child);
-        }
-
-        if (!isVisible(child) && dependency.getY() <= 0) {
+        if (dependency.getY() <= 0) {
             showAppBar(child);
-        } else if (isVisible(child) && dependency.getY() > 0) {
+        } else if (dependency.getY() > 0) {
             hideAppBar(child);
         }
 
         return true;
     }
 
-    private boolean isVisible(AppBarLayout view) {
-        return view.getY() > -view.getHeight() && view.getVisibility() == View.VISIBLE;
-    }
-
-    private void init(AppBarLayout child) {
-        child.setY(-child.getHeight());
-
-        mInit = true;
-    }
-
     private void hideAppBar(final AppBarLayout child) {
-        if (child.getAlpha() < 1.0f) {
+        if (child.getAlpha() < 1f) {
             return;
-        } else if (mAnimator != null) {
-            mAnimator.cancel();
         }
 
-        mAnimator = ObjectAnimator.ofFloat(child, "alpha", 1.0f, 0.0f);
-        mAnimator.addListener(new AnimatorListenerAdapter() {
-            private boolean mCancelled = false;
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if (!mCancelled) {
-                    child.setAlpha(1.0f);
-                    child.setY(-child.getHeight());
-                }
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-                mCancelled = true;
-            }
-        });
-        mAnimator.start();
+        Animator alphaAnimator = ObjectAnimator.ofFloat(child, "alpha", 1, 0);
+        alphaAnimator.setDuration(195);
+        alphaAnimator.setInterpolator(new FastOutLinearInInterpolator());
+        alphaAnimator.start();
     }
 
     private void showAppBar(AppBarLayout child) {
-        if (mAnimator != null) {
-            mAnimator.cancel();
+        if (child.getAlpha() > 0f) {
+            return;
         }
 
-        mAnimator = ObjectAnimator.ofFloat(child, "y", -child.getHeight(), 0.0f);
-        mAnimator.start();
+        Animator alphaAnimator = ObjectAnimator.ofFloat(child, "alpha", 0, 1);
+        Animator yAnimator = ObjectAnimator.ofFloat(child, "y", -getStatusBarHeight(), 0);
+
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(alphaAnimator, yAnimator);
+        set.setDuration(225);
+        set.start();
+    }
+
+    private int getStatusBarHeight() {
+        int id = mContext.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (id > 0) {
+            return (int) mContext.getResources().getDimension(id);
+        }
+
+        return (int) mContext.getResources().getDimension(R.dimen.statusBarHeight_fallback);
     }
 }

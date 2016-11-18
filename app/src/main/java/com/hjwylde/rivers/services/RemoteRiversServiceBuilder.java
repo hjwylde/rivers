@@ -14,7 +14,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.schedulers.Schedulers;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
 public final class RemoteRiversServiceBuilder {
     private Context mContext;

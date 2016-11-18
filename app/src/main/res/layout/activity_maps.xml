@@ -8,32 +8,64 @@
     android:layout_height="match_parent"
     tools:context="com.hjwylde.rivers.ui.activities.MapsActivity">
 
-    <include layout="@layout/content_maps"/>
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primary">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"/>
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/bottomSheet"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="@dimen/toolbar_elevation"
-        android:fillViewport="true"
-        app:behavior_hideable="true"
-        app:behavior_peekHeight="@dimen/titleContainer_peekHeight"
-        app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+        android:fitsSystemWindows="true">
 
-        <include layout="@layout/content_section"/>
-    </android.support.v4.widget.NestedScrollView>
+        <include layout="@layout/content_maps"/>
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"/>
+        </android.support.design.widget.AppBarLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="@dimen/toolbar_elevation">
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/bottomSheet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:behavior_hideable="true"
+            app:behavior_peekHeight="@dimen/titleContainer_peekHeight"
+            app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+            <include layout="@layout/content_section"/>
+        </android.support.v4.widget.NestedScrollView>
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/sectionAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:elevation="0dp"
+            app:layout_behavior="com.hjwylde.rivers.ui.util.DropInAppBarBehavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/sectionToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:popupTheme="@style/Theme.Rivers.PopupOverlay"/>
+            </LinearLayout>
+        </android.support.design.widget.AppBarLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -42,19 +74,4 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_plus"/>
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/sectionAppBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        app:layout_behavior="com.hjwylde.rivers.ui.util.DropInAppBarBehavior">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/sectionToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/scrim_gradient"
-            app:popupTheme="@style/Theme.Rivers.PopupOverlay"/>
-    </android.support.design.widget.AppBarLayout>
 </android.support.design.widget.CoordinatorLayout>
