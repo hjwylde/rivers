@@ -12,6 +12,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
@@ -75,6 +76,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
 
         mMap.setOnCameraIdleListener(mClusterManager);
         mMap.setOnMarkerClickListener(mOnMarkerClickListener);
+        mMap.setOnMapClickListener(new OnMapClickListener());
 
         if (hasAccessFineLocationPermission()) {
             enableMyLocation();
@@ -170,6 +172,13 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
             }
 
             return true;
+        }
+    }
+
+    private class OnMapClickListener implements GoogleMap.OnMapClickListener {
+        @Override
+        public void onMapClick(LatLng latLng) {
+            mView.onMapClick();
         }
     }
 }
