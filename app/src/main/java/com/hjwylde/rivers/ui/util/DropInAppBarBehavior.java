@@ -9,6 +9,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.hjwylde.rivers.R;
@@ -16,6 +17,8 @@ import com.hjwylde.rivers.R;
 import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
 public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Behavior<AppBarLayout> {
+    private static final String TAG = DropInAppBarBehavior.class.getSimpleName();
+
     private final Context mContext;
 
     public DropInAppBarBehavior(@NonNull Context context, AttributeSet attrs) {
@@ -46,6 +49,8 @@ public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Beha
             return (int) mContext.getResources().getDimension(id);
         }
 
+        Log.w(TAG, "Unable to accurately determine the status bar height");
+
         return (int) mContext.getResources().getDimension(R.dimen.statusBarHeight_fallback);
     }
 
@@ -66,7 +71,7 @@ public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Beha
         }
 
         Animator alphaAnimator = ObjectAnimator.ofFloat(child, "alpha", 0, 1);
-        Animator yAnimator = ObjectAnimator.ofFloat(child, "y", -getStatusBarHeight(), 0);
+        Animator yAnimator = ObjectAnimator.ofFloat(child, "y", 0, getStatusBarHeight());
 
         AnimatorSet set = new AnimatorSet();
         set.playTogether(alphaAnimator, yAnimator);
