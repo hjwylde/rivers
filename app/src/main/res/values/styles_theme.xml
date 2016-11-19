@@ -10,7 +10,6 @@
     <style name="Theme.Rivers.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Rivers.Dark.NoActionBar" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:actionModeBackground">@color/primary</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="colorPrimary">@color/primary</item>
         <!-- TODO (hjw): this should be primaryDark -->
