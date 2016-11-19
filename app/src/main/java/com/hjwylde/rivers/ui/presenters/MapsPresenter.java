@@ -28,6 +28,30 @@ public final class MapsPresenter implements MapsContract.Presenter {
     }
 
     @Override
+    public void getImage(@NonNull String id) {
+        Subscription subscription = mRiversApi.getImage(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Image>() {
+                    @Override
+                    public void onCompleted() {
+                        mView.refreshImage();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.onGetImageFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(Image image) {
+                        mView.setImage(image);
+                    }
+                });
+
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
     public void getSections() {
         Subscription subscription = mRiversApi.getSections()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -54,29 +78,5 @@ public final class MapsPresenter implements MapsContract.Presenter {
     @Override
     public void unsubscribe() {
         mSubscriptions.clear();
-    }
-
-    @Override
-    public void getImage(@NonNull String id) {
-        Subscription subscription = mRiversApi.getImage(id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Image>() {
-                    @Override
-                    public void onCompleted() {
-                        mView.refreshImage();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.onGetImageFailure(e);
-                    }
-
-                    @Override
-                    public void onNext(Image image) {
-                        mView.setImage(image);
-                    }
-                });
-
-        mSubscriptions.add(subscription);
     }
 }

@@ -14,12 +14,12 @@ public final class SectionMarker implements ClusterItem {
         mSection = checkNotNull(section);
     }
 
-    public Section getSection() {
-        return mSection;
-    }
-
     @Override
     public LatLng getPosition() {
         return mSection.getPutIn();
+    }
+
+    public Section getSection() {
+        return mSection;
     }
 }

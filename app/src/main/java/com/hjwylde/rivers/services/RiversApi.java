@@ -15,14 +15,14 @@ import retrofit2.http.Path;
 import rx.Observable;
 
 public interface RiversApi {
-    @GET("sections")
-    Observable<List<Section>> getSections();
+    @GET("images/{id}")
+    Observable<Image> getImage(@Path("id") @NonNull String id);
 
     @GET("sections/{id}")
     Observable<Section> getSection(@Path("id") @NonNull String id);
 
-    @GET("images/{id}")
-    Observable<Image> getImage(@Path("id") @NonNull String id);
+    @GET("sections")
+    Observable<List<Section>> getSections();
 
     @POST("actions")
     Observable<Action> postAction(@Body @NonNull Action action);

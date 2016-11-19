@@ -42,33 +42,11 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                setResult(RESULT_CANCELED);
-                finish();
-                return true;
-            case R.id.createSection:
-                // TODO (#61)
-                // mPresenter.createSection(buildAction());
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_create_section, menu);
 
         return true;
-    }
-
-    @Override
-    public void onCreateSectionSuccess(@NonNull Action action) {
-        setResult(RESULT_OK);
-        finish();
     }
 
     @Override
@@ -85,6 +63,28 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         });
 
         snackbar.show();
+    }
+
+    @Override
+    public void onCreateSectionSuccess(@NonNull Action action) {
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                setResult(RESULT_CANCELED);
+                finish();
+                return true;
+            case R.id.createSection:
+                // TODO (#61)
+                // mPresenter.createSection(buildAction());
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -124,10 +124,10 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    protected void onPause() {
+        mPresenter.unsubscribe();
 
-        outState.putSerializable(STATE_SECTION_BUILDER, buildSectionBuilder());
+        super.onPause();
     }
 
     @Override
@@ -141,29 +141,10 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     }
 
     @Override
-    protected void onPause() {
-        mPresenter.unsubscribe();
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-        super.onPause();
-    }
-
-    private void refreshSection() {
-        findTextViewById(R.id.title).setText(mSectionBuilder.title());
-        findTextViewById(R.id.subtitle).setText(mSectionBuilder.subtitle());
-        findTextViewById(R.id.grade).setText(mSectionBuilder.grade());
-        findTextViewById(R.id.length).setText(mSectionBuilder.length());
-        findTextViewById(R.id.duration).setText(mSectionBuilder.duration());
-        findTextViewById(R.id.description).setText(mSectionBuilder.description());
-    }
-
-    private void refreshFocus() {
-        View view = getCurrentFocus();
-        if (view == null) {
-            findViewById(R.id.title).requestFocus();
-        } else if (view instanceof TextInputEditText) {
-            TextInputEditText editText = (TextInputEditText) view;
-            editText.setSelection(editText.getText().length());
-        }
+        outState.putSerializable(STATE_SECTION_BUILDER, buildSectionBuilder());
     }
 
     private Section.Builder buildSectionBuilder() {
@@ -178,12 +159,12 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         return builder;
     }
 
-    private String getTitle_() {
-        return findTextViewById(R.id.title).getText().toString();
+    private String getDescription() {
+        return findTextViewById(R.id.description).getText().toString();
     }
 
-    private String getSubtitle() {
-        return findTextViewById(R.id.subtitle).getText().toString();
+    private String getDuration() {
+        return findTextViewById(R.id.duration).getText().toString();
     }
 
     private String getGrade() {
@@ -194,11 +175,30 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         return findTextViewById(R.id.length).getText().toString();
     }
 
-    private String getDuration() {
-        return findTextViewById(R.id.duration).getText().toString();
+    private String getSubtitle() {
+        return findTextViewById(R.id.subtitle).getText().toString();
     }
 
-    private String getDescription() {
-        return findTextViewById(R.id.description).getText().toString();
+    private String getTitle_() {
+        return findTextViewById(R.id.title).getText().toString();
+    }
+
+    private void refreshFocus() {
+        View view = getCurrentFocus();
+        if (view == null) {
+            findViewById(R.id.title).requestFocus();
+        } else if (view instanceof TextInputEditText) {
+            TextInputEditText editText = (TextInputEditText) view;
+            editText.setSelection(editText.getText().length());
+        }
+    }
+
+    private void refreshSection() {
+        findTextViewById(R.id.title).setText(mSectionBuilder.title());
+        findTextViewById(R.id.subtitle).setText(mSectionBuilder.subtitle());
+        findTextViewById(R.id.grade).setText(mSectionBuilder.grade());
+        findTextViewById(R.id.length).setText(mSectionBuilder.length());
+        findTextViewById(R.id.duration).setText(mSectionBuilder.duration());
+        findTextViewById(R.id.description).setText(mSectionBuilder.description());
     }
 }

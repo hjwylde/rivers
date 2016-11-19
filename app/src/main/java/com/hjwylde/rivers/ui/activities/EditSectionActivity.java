@@ -45,6 +45,19 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_edit_section, menu);
+
+        return true;
+    }
+
+    @Override
+    public void onGetImageFailure(@NonNull Throwable t) {
+        Log.w(TAG, t.getMessage(), t);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -61,35 +74,6 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_edit_section, menu);
-
-        return true;
-    }
-
-    @Override
-    public void setImage(@NonNull Image image) {
-        mImage = checkNotNull(image);
-    }
-
-    @Override
-    public void refreshImage() {
-        refreshImage(true);
-    }
-
-    @Override
-    public void onGetImageFailure(@NonNull Throwable t) {
-        Log.w(TAG, t.getMessage(), t);
-    }
-
-    @Override
-    public void onUpdateSectionSuccess(@NonNull Action action) {
-        setResult(RESULT_OK);
-        finish();
-    }
-
-    @Override
     public void onUpdateSectionFailure(@NonNull Throwable t) {
         Log.w(TAG, t.getMessage(), t);
 
@@ -103,6 +87,22 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
         });
 
         snackbar.show();
+    }
+
+    @Override
+    public void onUpdateSectionSuccess(@NonNull Action action) {
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void refreshImage() {
+        refreshImage(true);
+    }
+
+    @Override
+    public void setImage(@NonNull Image image) {
+        mImage = checkNotNull(image);
     }
 
     @Override
@@ -141,6 +141,23 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     }
 
     @Override
+    protected void onPause() {
+        mPresenter.unsubscribe();
+
+        super.onPause();
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        mSection = (Section) savedInstanceState.getSerializable(STATE_SECTION);
+        refreshSection();
+
+        refreshFocus();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -156,21 +173,56 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
         outState.putSerializable(STATE_SECTION, buildSection());
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
+    private void animateImageIn(View imageView) {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
 
-        mSection = (Section) savedInstanceState.getSerializable(STATE_SECTION);
-        refreshSection();
-
-        refreshFocus();
+        imageView.startAnimation(animation);
     }
 
-    @Override
-    protected void onPause() {
-        mPresenter.unsubscribe();
+    private Section buildSection() {
+        Section.Builder builder = new Section.Builder(mSection);
+        builder.title(getTitle_());
+        builder.subtitle(getSubtitle());
+        builder.grade(getGrade());
+        builder.length(getLength());
+        builder.duration(getDuration());
+        builder.description(getDescription());
 
-        super.onPause();
+        return builder.build();
+    }
+
+    private String getDescription() {
+        return findTextViewById(R.id.description).getText().toString();
+    }
+
+    private String getDuration() {
+        return findTextViewById(R.id.duration).getText().toString();
+    }
+
+    private String getGrade() {
+        return findTextViewById(R.id.grade).getText().toString();
+    }
+
+    private String getLength() {
+        return findTextViewById(R.id.length).getText().toString();
+    }
+
+    private String getSubtitle() {
+        return findTextViewById(R.id.subtitle).getText().toString();
+    }
+
+    private String getTitle_() {
+        return findTextViewById(R.id.title).getText().toString();
+    }
+
+    private void refreshFocus() {
+        View view = getCurrentFocus();
+        if (view == null) {
+            findViewById(R.id.title).requestFocus();
+        } else if (view instanceof TextInputEditText) {
+            TextInputEditText editText = (TextInputEditText) view;
+            editText.setSelection(editText.getText().length());
+        }
     }
 
     private void refreshImage(boolean animate) {
@@ -186,12 +238,6 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
         }
     }
 
-    private void animateImageIn(View imageView) {
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
-
-        imageView.startAnimation(animation);
-    }
-
     private void refreshSection() {
         findTextViewById(R.id.title).setText(mSection.getTitle());
         findTextViewById(R.id.subtitle).setText(mSection.getSubtitle());
@@ -199,51 +245,5 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
         findTextViewById(R.id.length).setText(mSection.getLength());
         findTextViewById(R.id.duration).setText(mSection.getDuration());
         findTextViewById(R.id.description).setText(mSection.getDescription());
-    }
-
-    private void refreshFocus() {
-        View view = getCurrentFocus();
-        if (view == null) {
-            findViewById(R.id.title).requestFocus();
-        } else if (view instanceof TextInputEditText) {
-            TextInputEditText editText = (TextInputEditText) view;
-            editText.setSelection(editText.getText().length());
-        }
-    }
-
-    private Section buildSection() {
-        Section.Builder builder = new Section.Builder(mSection);
-        builder.title(getTitle_());
-        builder.subtitle(getSubtitle());
-        builder.grade(getGrade());
-        builder.length(getLength());
-        builder.duration(getDuration());
-        builder.description(getDescription());
-
-        return builder.build();
-    }
-
-    private String getTitle_() {
-        return findTextViewById(R.id.title).getText().toString();
-    }
-
-    private String getSubtitle() {
-        return findTextViewById(R.id.subtitle).getText().toString();
-    }
-
-    private String getGrade() {
-        return findTextViewById(R.id.grade).getText().toString();
-    }
-
-    private String getLength() {
-        return findTextViewById(R.id.length).getText().toString();
-    }
-
-    private String getDuration() {
-        return findTextViewById(R.id.duration).getText().toString();
-    }
-
-    private String getDescription() {
-        return findTextViewById(R.id.description).getText().toString();
     }
 }

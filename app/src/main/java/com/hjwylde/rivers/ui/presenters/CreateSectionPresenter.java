@@ -25,11 +25,6 @@ public final class CreateSectionPresenter implements CreateSectionContract.Prese
     }
 
     @Override
-    public void unsubscribe() {
-        mSubscriptions.clear();
-    }
-
-    @Override
     public void createSection(@NonNull Action action) {
         Subscription subscription = mRiversApi.postAction(action)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -50,5 +45,10 @@ public final class CreateSectionPresenter implements CreateSectionContract.Prese
                 });
 
         mSubscriptions.add(subscription);
+    }
+
+    @Override
+    public void unsubscribe() {
+        mSubscriptions.clear();
     }
 }

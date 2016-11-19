@@ -28,16 +28,16 @@ public final class SerializableLatLng implements Serializable {
         return mLatLng;
     }
 
+    private void readObject(@NonNull ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+
+        mLatLng = new LatLng(in.readDouble(), in.readDouble());
+    }
+
     private void writeObject(@NonNull ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
 
         out.writeDouble(mLatLng.latitude);
         out.writeDouble(mLatLng.longitude);
-    }
-
-    private void readObject(@NonNull ObjectInputStream in) throws IOException, ClassNotFoundException {
-        in.defaultReadObject();
-
-        mLatLng = new LatLng(in.readDouble(), in.readDouble());
     }
 }

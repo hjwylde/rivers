@@ -19,18 +19,20 @@ import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 public final class RemoteRiversServiceBuilder {
     private Context mContext;
 
+    public RiversApi build() {
+        return getRetrofit().create(RiversApi.class);
+    }
+
     public RemoteRiversServiceBuilder context(@NonNull Context context) {
         mContext = checkNotNull(context);
 
         return this;
     }
 
-    public RiversApi build() {
-        return getRetrofit().create(RiversApi.class);
-    }
-
-    private RxJavaCallAdapterFactory getRxAdapter() {
-        return RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io());
+    private Gson getGson() {
+        return new GsonBuilder()
+                .registerTypeAdapter(SerializableLatLng.class, new LatLngDeserializer())
+                .create();
     }
 
     private Retrofit getRetrofit() {
@@ -41,10 +43,8 @@ public final class RemoteRiversServiceBuilder {
                 .build();
     }
 
-    private Gson getGson() {
-        return new GsonBuilder()
-                .registerTypeAdapter(SerializableLatLng.class, new LatLngDeserializer())
-                .create();
+    private RxJavaCallAdapterFactory getRxAdapter() {
+        return RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io());
     }
 
     private String getUrl() {

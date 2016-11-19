@@ -6,9 +6,9 @@ import com.hjwylde.rivers.models.Action;
 
 public interface CreateSectionContract {
     interface View extends BaseContract.View {
-        void onCreateSectionSuccess(@NonNull Action action);
-
         void onCreateSectionFailure(@NonNull Throwable t);
+
+        void onCreateSectionSuccess(@NonNull Action action);
     }
 
     interface Presenter extends BaseContract.Presenter {

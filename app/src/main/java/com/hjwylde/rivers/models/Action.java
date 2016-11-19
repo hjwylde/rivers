@@ -47,16 +47,16 @@ public final class Action implements Serializable {
         return mAction;
     }
 
-    public String getTargetId() {
-        return mTargetId;
+    public JsonObject getData() {
+        return mData;
     }
 
     public String getTargetCollection() {
         return mTargetCollection;
     }
 
-    public JsonObject getData() {
-        return mData;
+    public String getTargetId() {
+        return mTargetId;
     }
 
     public static final class Builder {
@@ -68,20 +68,12 @@ public final class Action implements Serializable {
         public Builder() {
         }
 
-        public Action build() {
-            return new Action(mAction, mTargetId, mTargetCollection, mData);
-        }
-
         public void action(String action) {
             mAction = action;
         }
 
-        public void targetId(String targetId) {
-            mTargetId = targetId;
-        }
-
-        public void targetCollection(String targetCollection) {
-            mTargetCollection = targetCollection;
+        public Action build() {
+            return new Action(mAction, mTargetId, mTargetCollection, mData);
         }
 
         public void data(JsonObject data) {
@@ -118,6 +110,14 @@ public final class Action implements Serializable {
             }
 
             mData.addProperty(key, value);
+        }
+
+        public void targetCollection(String targetCollection) {
+            mTargetCollection = targetCollection;
+        }
+
+        public void targetId(String targetId) {
+            mTargetId = targetId;
         }
     }
 }

@@ -55,6 +55,27 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
     }
 
     @Override
+    public boolean onClusterClick(Cluster<SectionMarker> cluster) {
+        LatLngBounds.Builder builder = LatLngBounds.builder();
+        for (ClusterItem item : cluster.getItems()) {
+            builder.include(item.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+
+        int padding = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? 250 : 100;
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
+
+        return true;
+    }
+
+    @Override
+    public boolean onClusterItemClick(SectionMarker sectionMarker) {
+        mView.onSectionClick(sectionMarker.getSection());
+
+        return true;
+    }
+
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
 
@@ -120,25 +141,9 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         mClusterManager.cluster();
     }
 
-    @Override
-    public boolean onClusterItemClick(SectionMarker sectionMarker) {
-        mView.onSectionClick(sectionMarker.getSection());
-
-        return true;
-    }
-
-    @Override
-    public boolean onClusterClick(Cluster<SectionMarker> cluster) {
-        LatLngBounds.Builder builder = LatLngBounds.builder();
-        for (ClusterItem item : cluster.getItems()) {
-            builder.include(item.getPosition());
-        }
-        LatLngBounds bounds = builder.build();
-
-        int padding = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? 250 : 100;
-        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
-
-        return true;
+    private void enableMyLocation() {
+        mMap.setMyLocationEnabled(true);
+        mUiSettings.setMyLocationButtonEnabled(true);
     }
 
     private boolean hasAccessFineLocationPermission() {
@@ -149,9 +154,11 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_PERMISSION_REQUEST_CODE);
     }
 
-    private void enableMyLocation() {
-        mMap.setMyLocationEnabled(true);
-        mUiSettings.setMyLocationButtonEnabled(true);
+    private class OnMapClickListener implements GoogleMap.OnMapClickListener {
+        @Override
+        public void onMapClick(LatLng latLng) {
+            mView.onMapClick();
+        }
     }
 
     private class OnMarkerClickListener implements GoogleMap.OnMarkerClickListener {
@@ -172,13 +179,6 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
             }
 
             return true;
-        }
-    }
-
-    private class OnMapClickListener implements GoogleMap.OnMapClickListener {
-        @Override
-        public void onMapClick(LatLng latLng) {
-            mView.onMapClick();
         }
     }
 }

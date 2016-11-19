@@ -44,6 +44,17 @@ public final class CreateSectionMode implements ActionMode.Callback {
     }
 
     @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.next:
+                mView.onCreateSectionClick();
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         MenuInflater inflater = mode.getMenuInflater();
         inflater.inflate(R.menu.menu_maps_action_mode, menu);
@@ -59,22 +70,6 @@ public final class CreateSectionMode implements ActionMode.Callback {
     }
 
     @Override
-    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        return false;
-    }
-
-    @Override
-    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.next:
-                mView.onCreateSectionClick();
-                return true;
-        }
-
-        return false;
-    }
-
-    @Override
     public void onDestroyActionMode(ActionMode mode) {
         mFab.show();
         animateCenterMarkerOut();
@@ -84,20 +79,25 @@ public final class CreateSectionMode implements ActionMode.Callback {
         mActive = false;
     }
 
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
     private void animateCenterMarkerIn() {
         Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.scale_map_marker_in);
         animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                mCenterMarker.setVisibility(View.VISIBLE);
-            }
-
             @Override
             public void onAnimationEnd(Animation animation) {
             }
 
             @Override
             public void onAnimationRepeat(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+                mCenterMarker.setVisibility(View.VISIBLE);
             }
         });
 
@@ -108,16 +108,16 @@ public final class CreateSectionMode implements ActionMode.Callback {
         Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.scale_map_marker_out);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
             public void onAnimationEnd(Animation animation) {
                 mCenterMarker.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onAnimationRepeat(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationStart(Animation animation) {
             }
         });
 

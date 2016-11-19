@@ -18,12 +18,20 @@ public class RiversApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        mRemoteRiversService = new RemoteRiversServiceBuilder().context(getApplicationContext()).build();
+        setUpCalligraphy();
 
+        setUpRemoteRiversService();
+    }
+
+    private void setUpCalligraphy() {
         CalligraphyConfig.initDefault(
                 new CalligraphyConfig.Builder()
                         .setFontAttrId(R.attr.fontPath)
                         .build()
         );
+    }
+
+    private void setUpRemoteRiversService() {
+        mRemoteRiversService = new RemoteRiversServiceBuilder().context(getApplicationContext()).build();
     }
 }

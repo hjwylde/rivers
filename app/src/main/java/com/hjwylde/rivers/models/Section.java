@@ -61,47 +61,6 @@ public final class Section implements Serializable {
         return Action.COLLECTION_SECTIONS;
     }
 
-    public String getImageId() {
-        return mImageId;
-    }
-
-    public String getGrade() {
-        return mGrade;
-    }
-
-    public String getLength() {
-        return mLength;
-    }
-
-    public String getDuration() {
-        return mDuration;
-    }
-
-    public String getId() {
-        return mId;
-    }
-
-    public String getTitle() {
-        return mTitle;
-    }
-
-    public String getSubtitle() {
-        return mSubtitle;
-    }
-
-    public String getDescription() {
-        return mDescription;
-    }
-
-    public LatLng getPutIn() {
-        return mPutIn.getLatLng();
-    }
-
-    @Override
-    public int hashCode() {
-        return mId.hashCode();
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Section)) {
@@ -109,6 +68,47 @@ public final class Section implements Serializable {
         }
 
         return mId.equals(((Section) obj).getId());
+    }
+
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public String getDuration() {
+        return mDuration;
+    }
+
+    public String getGrade() {
+        return mGrade;
+    }
+
+    public String getId() {
+        return mId;
+    }
+
+    public String getImageId() {
+        return mImageId;
+    }
+
+    public String getLength() {
+        return mLength;
+    }
+
+    public LatLng getPutIn() {
+        return mPutIn.getLatLng();
+    }
+
+    public String getSubtitle() {
+        return mSubtitle;
+    }
+
+    public String getTitle() {
+        return mTitle;
+    }
+
+    @Override
+    public int hashCode() {
+        return mId.hashCode();
     }
 
     public static final class Builder implements Serializable {
@@ -155,76 +155,76 @@ public final class Section implements Serializable {
             return new Section(mId, mTitle, mSubtitle, mDescription, mPutIn, mImageId, mGrade, mLength, mDuration);
         }
 
-        public String id() {
-            return mId;
-        }
-
-        public String title() {
-            return mTitle;
-        }
-
-        public String subtitle() {
-            return mSubtitle;
-        }
-
         public String description() {
             return mDescription;
-        }
-
-        public LatLng putIn() {
-            return mPutIn.getLatLng();
-        }
-
-        public String imageId() {
-            return mImageId;
-        }
-
-        public String grade() {
-            return mGrade;
-        }
-
-        public String length() {
-            return mLength;
-        }
-
-        public String duration() {
-            return mDuration;
-        }
-
-        public void id(String id) {
-            mId = id;
-        }
-
-        public void title(String title) {
-            mTitle = title;
-        }
-
-        public void subtitle(String subtitle) {
-            mSubtitle = subtitle;
         }
 
         public void description(String description) {
             mDescription = description;
         }
 
-        public void putIn(LatLng putIn) {
-            mPutIn = new SerializableLatLng(putIn);
+        public String duration() {
+            return mDuration;
         }
 
-        public void imageId(String imageId) {
-            mImageId = imageId;
+        public void duration(String duration) {
+            mDuration = duration;
+        }
+
+        public String grade() {
+            return mGrade;
         }
 
         public void grade(String grade) {
             mGrade = grade;
         }
 
+        public String id() {
+            return mId;
+        }
+
+        public void id(String id) {
+            mId = id;
+        }
+
+        public String imageId() {
+            return mImageId;
+        }
+
+        public void imageId(String imageId) {
+            mImageId = imageId;
+        }
+
+        public String length() {
+            return mLength;
+        }
+
         public void length(String length) {
             mLength = length;
         }
 
-        public void duration(String duration) {
-            mDuration = duration;
+        public LatLng putIn() {
+            return mPutIn.getLatLng();
+        }
+
+        public void putIn(LatLng putIn) {
+            mPutIn = new SerializableLatLng(putIn);
+        }
+
+        public String subtitle() {
+            return mSubtitle;
+        }
+
+        public void subtitle(String subtitle) {
+            mSubtitle = subtitle;
+        }
+
+        public String title() {
+            return mTitle;
+        }
+
+        public void title(String title) {
+            mTitle = title;
         }
     }
 }

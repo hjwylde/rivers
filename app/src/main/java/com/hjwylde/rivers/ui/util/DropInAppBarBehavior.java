@@ -39,6 +39,15 @@ public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Beha
         return true;
     }
 
+    private int getStatusBarHeight() {
+        int id = mContext.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (id > 0) {
+            return (int) mContext.getResources().getDimension(id);
+        }
+
+        return (int) mContext.getResources().getDimension(R.dimen.statusBarHeight_fallback);
+    }
+
     private void hideAppBar(final AppBarLayout child) {
         if (child.getAlpha() < 1f) {
             return;
@@ -62,14 +71,5 @@ public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Beha
         set.playTogether(alphaAnimator, yAnimator);
         set.setDuration(225);
         set.start();
-    }
-
-    private int getStatusBarHeight() {
-        int id = mContext.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (id > 0) {
-            return (int) mContext.getResources().getDimension(id);
-        }
-
-        return (int) mContext.getResources().getDimension(R.dimen.statusBarHeight_fallback);
     }
 }

@@ -24,18 +24,18 @@ public final class Image implements Serializable {
         mData = checkNotNull(data);
     }
 
-    public String getId() {
-        return mId;
+    public Bitmap getBitmap() {
+        byte[] decodedData = getDecodedData();
+
+        return BitmapFactory.decodeByteArray(decodedData, 0, decodedData.length);
     }
 
     public String getData() {
         return mData;
     }
 
-    public Bitmap getBitmap() {
-        byte[] decodedData = getDecodedData();
-
-        return BitmapFactory.decodeByteArray(decodedData, 0, decodedData.length);
+    public String getId() {
+        return mId;
     }
 
     private byte[] getDecodedData() {

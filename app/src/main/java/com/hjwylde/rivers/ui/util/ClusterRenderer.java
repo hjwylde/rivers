@@ -40,18 +40,6 @@ public final class ClusterRenderer<T extends ClusterItem> extends DefaultCluster
         return cluster.getSize() > 1;
     }
 
-    private Drawable getMarkerDrawable() {
-        return ContextCompat.getDrawable(mContext, R.drawable.ic_map_marker);
-    }
-
-    private float getMarkerSize() {
-        return mContext.getResources().getDimension(R.dimen.markerSize);
-    }
-
-    private int getMarkerColor() {
-        return ContextCompat.getColor(mContext, R.color.accent);
-    }
-
     private Bitmap createMarkerBitmap() {
         Drawable drawable = getMarkerDrawable();
         int size = (int) getMarkerSize();
@@ -76,5 +64,17 @@ public final class ClusterRenderer<T extends ClusterItem> extends DefaultCluster
         }
 
         return mIcon;
+    }
+
+    private int getMarkerColor() {
+        return ContextCompat.getColor(mContext, R.color.accent);
+    }
+
+    private Drawable getMarkerDrawable() {
+        return ContextCompat.getDrawable(mContext, R.drawable.ic_map_marker);
+    }
+
+    private float getMarkerSize() {
+        return mContext.getResources().getDimension(R.dimen.markerSize);
     }
 }
