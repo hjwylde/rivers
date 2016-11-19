@@ -47,7 +47,7 @@ public final class CreateSectionMode implements ActionMode.Callback {
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.next:
-                mView.onCreateSectionClick();
+                mView.createSection();
                 return true;
         }
 
@@ -86,15 +86,7 @@ public final class CreateSectionMode implements ActionMode.Callback {
 
     private void animateCenterMarkerIn() {
         Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.scale_map_marker_in);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationEnd(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-
+        animation.setAnimationListener(new NullAnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 mCenterMarker.setVisibility(View.VISIBLE);
@@ -106,18 +98,10 @@ public final class CreateSectionMode implements ActionMode.Callback {
 
     private void animateCenterMarkerOut() {
         Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.scale_map_marker_out);
-        animation.setAnimationListener(new Animation.AnimationListener() {
+        animation.setAnimationListener(new NullAnimationListener() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 mCenterMarker.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationStart(Animation animation) {
             }
         });
 

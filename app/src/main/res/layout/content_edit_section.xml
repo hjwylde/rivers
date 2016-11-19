@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -14,8 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/loadingImage"
-            android:scaleType="centerCrop">
-        </ImageView>
+            android:scaleType="centerCrop" />
 
         <FrameLayout
             android:layout_width="@dimen/cameraSize"
@@ -27,13 +25,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:onClick="onCameraClick"
-                android:src="@drawable/scrim_circle"/>
+                android:src="@drawable/scrim_circle" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_camera"/>
+                android:src="@drawable/ic_camera" />
         </FrameLayout>
 
     </FrameLayout>
@@ -56,7 +54,7 @@
             android:hint="@string/hint_title"
             android:inputType="text|textCapWords"
             android:textColor="@color/text_primaryDark"
-            android:theme="@style/Widget.Rivers.TextInputLayout.Dark"/>
+            android:theme="@style/Widget.Rivers.TextInputLayout.Dark" />
 
         <EditText
             android:id="@+id/subtitle"
@@ -67,7 +65,7 @@
             android:inputType="text|textCapSentences"
             android:nextFocusDown="@+id/grade"
             android:textColor="@color/text_primaryDark"
-            android:theme="@style/Widget.Rivers.TextInputLayout.Dark"/>
+            android:theme="@style/Widget.Rivers.TextInputLayout.Dark" />
 
     </LinearLayout>
 
@@ -95,14 +93,14 @@
                 android:gravity="center_horizontal"
                 android:hint="@string/hint_grade"
                 android:inputType="text|textNoSuggestions"
-                android:nextFocusDown="@+id/length"/>
+                android:nextFocusDown="@+id/length" />
 
             <com.actinarium.aligned.TextView
                 style="@style/TextAppearance.Rivers.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFeatureSettings="smcp"
-                android:text="@string/label_grade"/>
+                android:text="@string/label_grade" />
         </LinearLayout>
 
         <LinearLayout
@@ -121,14 +119,14 @@
                 android:gravity="center_horizontal"
                 android:hint="@string/hint_length"
                 android:inputType="text|textNoSuggestions"
-                android:nextFocusDown="@+id/duration"/>
+                android:nextFocusDown="@+id/duration" />
 
             <com.actinarium.aligned.TextView
                 style="@style/TextAppearance.Rivers.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFeatureSettings="smcp"
-                android:text="@string/label_length"/>
+                android:text="@string/label_length" />
         </LinearLayout>
 
         <LinearLayout
@@ -146,18 +144,18 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:hint="@string/hint_duration"
-                android:inputType="text|textNoSuggestions"/>
+                android:inputType="text|textNoSuggestions" />
 
             <com.actinarium.aligned.TextView
                 style="@style/TextAppearance.Rivers.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFeatureSettings="smcp"
-                android:text="@string/label_duration"/>
+                android:text="@string/label_duration" />
         </LinearLayout>
     </LinearLayout>
 
-    <include layout="@layout/divider"/>
+    <include layout="@layout/divider" />
 
     <EditText
         android:id="@+id/description"
@@ -169,6 +167,6 @@
         android:layout_marginRight="@dimen/text_marginHorizontal"
         android:layout_marginTop="@dimen/text_marginVertical"
         android:hint="@string/hint_description"
-        android:inputType="textMultiLine|textCapSentences"/>
+        android:inputType="textMultiLine|textCapSentences" />
 
 </LinearLayout>

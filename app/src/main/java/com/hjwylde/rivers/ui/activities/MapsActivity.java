@@ -52,6 +52,25 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     private List<Section> mSections = new ArrayList<>();
 
     @Override
+    public void clearSelection() {
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+    }
+
+    @Override
+    public void createSection() {
+        MapsFragment mapsFragment = getMapsFragment();
+        mapsFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                Intent intent = new Intent(MapsActivity.this, CreateSectionActivity.class);
+                intent.putExtra(CreateSectionActivity.INTENT_PUT_IN, googleMap.getCameraPosition().target);
+
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
     public void onBackPressed() {
         switch (mBottomSheetBehavior.getState()) {
             case BottomSheetBehavior.STATE_COLLAPSED:
@@ -86,20 +105,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     @Override
-    public void onCreateSectionClick() {
-        MapsFragment mapsFragment = getMapsFragment();
-        mapsFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                Intent intent = new Intent(MapsActivity.this, CreateSectionActivity.class);
-                intent.putExtra(CreateSectionActivity.INTENT_PUT_IN, googleMap.getCameraPosition().target);
-
-                startActivity(intent);
-            }
-        });
-    }
-
-    @Override
     public void onGetImageFailure(@NonNull Throwable t) {
         Log.w(TAG, t.getMessage(), t);
     }
@@ -109,30 +114,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         Log.w(TAG, t.getMessage(), t);
 
         // TODO (#23)
-    }
-
-    @Override
-    public void onMapClick() {
-        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-    }
-
-    @Override
-    public void onSectionClick(@NonNull Section section) {
-        if (mSection != null && mSection.getId().equals(section.getId())) {
-            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            return;
-        }
-
-        setSection(section);
-
-        refreshSection();
-        refreshImage();
-
-        if (mImage == null) {
-            mPresenter.getImage(mSection.getImageId());
-        }
-
-        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
     public void onTitleContainerClick(View view) {
@@ -157,6 +138,25 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     public void refreshMap() {
         MapsFragment mapsFragment = getMapsFragment();
         mapsFragment.refreshMap(mSections);
+    }
+
+    @Override
+    public void selectSection(@NonNull Section section) {
+        if (mSection != null && mSection.getId().equals(section.getId())) {
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            return;
+        }
+
+        setSection(section);
+
+        refreshSection();
+        refreshImage();
+
+        if (mImage == null) {
+            mPresenter.getImage(mSection.getImageId());
+        }
+
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
     @Override

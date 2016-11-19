@@ -17,7 +17,6 @@ import android.widget.ImageView;
 
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
-import com.hjwylde.rivers.models.Action;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.contracts.EditSectionContract;
@@ -90,7 +89,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     }
 
     @Override
-    public void onUpdateSectionSuccess(@NonNull Action action) {
+    public void onUpdateSectionSuccess() {
         setResult(RESULT_OK);
         finish();
     }

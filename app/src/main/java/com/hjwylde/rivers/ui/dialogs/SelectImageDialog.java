@@ -19,27 +19,33 @@ public final class SelectImageDialog {
     }
 
     public static final class Builder extends AlertDialog.Builder {
-        private final Activity mActivity;
-
         public Builder(@NonNull Activity activity) {
             super(activity);
 
-            mActivity = checkNotNull(activity);
             setTitle(R.string.title_dialog_selectImage);
-            setItems(R.array.options_dialog_selectImage, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    switch (which) {
-                        case 0:
-                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            mActivity.startActivityForResult(intent, REQUEST_CODE_PHOTO_TAKEN);
-                            break;
-                        case 1:
-                            intent = new Intent(Intent.ACTION_GET_CONTENT);
-                            intent.setType("image/*");
-                            mActivity.startActivityForResult(intent, REQUEST_CODE_PHOTO_SELECTED);
-                    }
-                }
-            });
+            setItems(R.array.options_dialog_selectImage, new DefaultOnClickListener(activity));
+        }
+    }
+
+    private static final class DefaultOnClickListener implements DialogInterface.OnClickListener {
+        private final Activity mActivity;
+
+        public DefaultOnClickListener(@NonNull Activity activity) {
+            mActivity = checkNotNull(activity);
+        }
+
+        @Override
+        public void onClick(DialogInterface dialogInterface, int which) {
+            switch (which) {
+                case 0:
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    mActivity.startActivityForResult(intent, REQUEST_CODE_PHOTO_TAKEN);
+                    break;
+                case 1:
+                    intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                    mActivity.startActivityForResult(intent, REQUEST_CODE_PHOTO_SELECTED);
+            }
         }
     }
 }

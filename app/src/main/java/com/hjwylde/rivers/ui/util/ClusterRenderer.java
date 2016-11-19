@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -17,15 +18,17 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.hjwylde.rivers.R;
 
+import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
+
 public final class ClusterRenderer<T extends ClusterItem> extends DefaultClusterRenderer<T> {
     private Context mContext;
 
     private BitmapDescriptor mIcon;
 
-    public ClusterRenderer(Context context, GoogleMap map, ClusterManager<T> clusterManager) {
+    public ClusterRenderer(@NonNull Context context, @NonNull GoogleMap map, @NonNull ClusterManager<T> clusterManager) {
         super(context, map, clusterManager);
 
-        mContext = context;
+        mContext = checkNotNull(context);
     }
 
     @Override

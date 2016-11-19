@@ -35,7 +35,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
     private GoogleMap mMap;
     private UiSettings mUiSettings;
     private ClusterManager<SectionMarker> mClusterManager;
-    private OnMarkerClickListener mOnMarkerClickListener = new OnMarkerClickListener();
+    private DefaultOnMarkerClickListener mOnMarkerClickListener = new DefaultOnMarkerClickListener();
 
     private MapsContract.View mView;
 
@@ -70,7 +70,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
 
     @Override
     public boolean onClusterItemClick(SectionMarker sectionMarker) {
-        mView.onSectionClick(sectionMarker.getSection());
+        mView.selectSection(sectionMarker.getSection());
 
         return true;
     }
@@ -97,7 +97,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
 
         mMap.setOnCameraIdleListener(mClusterManager);
         mMap.setOnMarkerClickListener(mOnMarkerClickListener);
-        mMap.setOnMapClickListener(new OnMapClickListener());
+        mMap.setOnMapClickListener(new DefaultOnMapClickListener());
 
         if (hasAccessFineLocationPermission()) {
             enableMyLocation();
@@ -154,14 +154,14 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_PERMISSION_REQUEST_CODE);
     }
 
-    private class OnMapClickListener implements GoogleMap.OnMapClickListener {
+    private class DefaultOnMapClickListener implements GoogleMap.OnMapClickListener {
         @Override
         public void onMapClick(LatLng latLng) {
-            mView.onMapClick();
+            mView.clearSelection();
         }
     }
 
-    private class OnMarkerClickListener implements GoogleMap.OnMarkerClickListener {
+    private class DefaultOnMarkerClickListener implements GoogleMap.OnMarkerClickListener {
         private boolean mEnabled = true;
 
         public void disable() {

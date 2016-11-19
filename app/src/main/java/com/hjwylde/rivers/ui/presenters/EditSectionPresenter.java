@@ -2,7 +2,6 @@ package com.hjwylde.rivers.ui.presenters;
 
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.models.Action;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.services.RiversApi;
 import com.hjwylde.rivers.ui.contracts.EditSectionContract;
@@ -55,25 +54,7 @@ public final class EditSectionPresenter implements EditSectionContract.Presenter
     }
 
     @Override
-    public void updateSection(@NonNull Action action) {
-        Subscription subscription = mRiversApi.postAction(action)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Action>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.onUpdateSectionFailure(e);
-                    }
-
-                    @Override
-                    public void onNext(Action action) {
-                        mView.onUpdateSectionSuccess(action);
-                    }
-                });
-
-        mSubscriptions.add(subscription);
+    public void updateSection() {
+        // TODO (#13)
     }
 }

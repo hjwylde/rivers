@@ -2,7 +2,7 @@ package com.hjwylde.rivers;
 
 import android.app.Application;
 
-import com.hjwylde.rivers.services.RemoteRiversServiceBuilder;
+import com.hjwylde.rivers.services.RemoteRiversService;
 import com.hjwylde.rivers.services.RiversApi;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -32,6 +32,6 @@ public class RiversApplication extends Application {
     }
 
     private void setUpRemoteRiversService() {
-        mRemoteRiversService = new RemoteRiversServiceBuilder().context(getApplicationContext()).build();
+        mRemoteRiversService = new RemoteRiversService.Builder().context(getApplicationContext()).build();
     }
 }

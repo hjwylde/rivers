@@ -7,7 +7,7 @@
         <item name="colorAccent">@color/accent</item>
     </style>
 
-    <style name="Theme.Rivers.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="Theme.Rivers.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Rivers.Dark.NoActionBar" parent="Theme.AppCompat.NoActionBar">
         <item name="android:actionModeBackground">@color/primary</item>
@@ -31,7 +31,7 @@
         <item name="android:homeAsUpIndicator">@drawable/ic_cross</item>
     </style>
 
-    <style name="Theme.Rivers.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="Theme.Rivers.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="Theme.Rivers.SplashScreen">
         <item name="android:windowBackground">@drawable/splash_screen</item>

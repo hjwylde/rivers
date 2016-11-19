@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_container"
@@ -13,7 +12,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/white">
 
-        <include layout="@layout/content_edit_section"/>
+        <include layout="@layout/content_edit_section" />
 
     </android.support.v4.widget.NestedScrollView>
 
@@ -25,16 +24,15 @@
         android:theme="@style/Theme.Rivers.AppBarOverlay"
         app:elevation="0dp">
 
-        <View
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <View xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="@dimen/statusBar_height"
-            android:background="@color/scrim40"/>
+            android:background="@color/scrim40" />
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/Theme.Rivers.PopupOverlay"/>
+            app:popupTheme="@style/Theme.Rivers.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
 </android.support.design.widget.CoordinatorLayout>

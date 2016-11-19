@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_container"
@@ -42,7 +41,7 @@
             app:behavior_peekHeight="@dimen/titleContainer_peekHeight"
             app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
-            <include layout="@layout/content_section"/>
+            <include layout="@layout/content_section" />
         </android.support.v4.widget.NestedScrollView>
 
         <android.support.design.widget.AppBarLayout
@@ -73,5 +72,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_plus"/>
+        app:srcCompat="@drawable/ic_plus" />
 </android.support.design.widget.CoordinatorLayout>

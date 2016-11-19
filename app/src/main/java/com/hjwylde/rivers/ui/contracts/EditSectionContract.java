@@ -2,7 +2,6 @@ package com.hjwylde.rivers.ui.contracts;
 
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.models.Action;
 import com.hjwylde.rivers.models.Image;
 
 public interface EditSectionContract {
@@ -11,7 +10,7 @@ public interface EditSectionContract {
 
         void onUpdateSectionFailure(@NonNull Throwable t);
 
-        void onUpdateSectionSuccess(@NonNull Action action);
+        void onUpdateSectionSuccess();
 
         void refreshImage();
 
@@ -21,6 +20,6 @@ public interface EditSectionContract {
     interface Presenter extends BaseContract.Presenter {
         void getImage(@NonNull String id);
 
-        void updateSection(@NonNull Action action);
+        void updateSection();
     }
 }

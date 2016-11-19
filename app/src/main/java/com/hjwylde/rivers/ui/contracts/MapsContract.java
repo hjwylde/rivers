@@ -9,19 +9,19 @@ import java.util.List;
 
 public interface MapsContract {
     interface View extends BaseContract.View {
-        void onCreateSectionClick();
+        void clearSelection();
+
+        void createSection();
 
         void onGetImageFailure(@NonNull Throwable t);
 
         void onGetSectionsFailure(@NonNull Throwable t);
 
-        void onMapClick();
-
-        void onSectionClick(@NonNull Section section);
-
         void refreshImage();
 
         void refreshMap();
+
+        void selectSection(@NonNull Section section);
 
         void setImage(@NonNull Image image);
 

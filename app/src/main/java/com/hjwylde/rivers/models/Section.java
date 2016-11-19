@@ -57,10 +57,6 @@ public final class Section implements Serializable {
         mDuration = duration;
     }
 
-    public static String getCollection() {
-        return Action.COLLECTION_SECTIONS;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Section)) {

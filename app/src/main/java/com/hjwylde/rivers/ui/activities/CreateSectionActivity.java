@@ -15,8 +15,6 @@ import android.view.View;
 import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
-import com.hjwylde.rivers.models.Action;
-import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.contracts.CreateSectionContract;
 import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
@@ -35,7 +33,6 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     private CreateSectionContract.Presenter mPresenter;
 
     private Section.Builder mSectionBuilder = new Section.Builder();
-    private Image mImage;
 
     public void onCameraClick(View view) {
         new SelectImageDialog.Builder(this).create().show();
@@ -58,7 +55,6 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
             @Override
             public void onClick(View view) {
                 // TODO (#61)
-                // mPresenter.createSection(buildAction());
             }
         });
 
@@ -66,7 +62,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     }
 
     @Override
-    public void onCreateSectionSuccess(@NonNull Action action) {
+    public void onCreateSectionSuccess() {
         setResult(RESULT_OK);
         finish();
     }

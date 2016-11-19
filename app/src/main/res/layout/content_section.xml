@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -15,12 +14,10 @@
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop">
-        </ImageView>
+            android:scaleType="centerCrop"></ImageView>
     </LinearLayout>
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -44,14 +41,14 @@
                 style="@style/TextAppearance.Rivers.Display"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_secondaryDark"/>
+                android:textColor="@color/text_secondaryDark" />
 
             <com.actinarium.aligned.TextView
                 android:id="@+id/subtitle"
                 style="@style/TextAppearance.Rivers.Subheading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_primaryDark"/>
+                android:textColor="@color/text_primaryDark" />
 
         </LinearLayout>
 
@@ -77,7 +74,7 @@
                     style="@style/TextAppearance.Rivers.Headline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/text_primaryLight"/>
+                    android:textColor="@color/text_primaryLight" />
 
                 <com.actinarium.aligned.TextView
                     style="@style/TextAppearance.Rivers.Caption"
@@ -85,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:fontFeatureSettings="smcp"
                     android:text="@string/label_grade"
-                    android:textColor="@color/text_primaryLight"/>
+                    android:textColor="@color/text_primaryLight" />
             </LinearLayout>
 
             <LinearLayout
@@ -101,7 +98,7 @@
                     style="@style/TextAppearance.Rivers.Headline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/text_primaryLight"/>
+                    android:textColor="@color/text_primaryLight" />
 
                 <com.actinarium.aligned.TextView
                     style="@style/TextAppearance.Rivers.Caption"
@@ -109,7 +106,7 @@
                     android:layout_height="wrap_content"
                     android:fontFeatureSettings="smcp"
                     android:text="@string/label_length"
-                    android:textColor="@color/text_primaryLight"/>
+                    android:textColor="@color/text_primaryLight" />
             </LinearLayout>
 
             <LinearLayout
@@ -125,7 +122,7 @@
                     style="@style/TextAppearance.Rivers.Headline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/text_primaryLight"/>
+                    android:textColor="@color/text_primaryLight" />
 
                 <com.actinarium.aligned.TextView
                     style="@style/TextAppearance.Rivers.Caption"
@@ -133,11 +130,11 @@
                     android:layout_height="wrap_content"
                     android:fontFeatureSettings="smcp"
                     android:text="@string/label_duration"
-                    android:textColor="@color/text_primaryLight"/>
+                    android:textColor="@color/text_primaryLight" />
             </LinearLayout>
         </LinearLayout>
 
-        <include layout="@layout/divider"/>
+        <include layout="@layout/divider" />
 
         <com.actinarium.aligned.TextView
             android:id="@+id/description"
@@ -148,6 +145,6 @@
             android:layout_marginLeft="@dimen/text_marginHorizontal"
             android:layout_marginRight="@dimen/text_marginHorizontal"
             android:layout_marginTop="@dimen/text_marginVertical"
-            android:textColor="@color/text_primaryLight"/>
+            android:textColor="@color/text_primaryLight" />
     </LinearLayout>
 </LinearLayout>
