@@ -54,7 +54,7 @@ public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Beha
         return (int) mContext.getResources().getDimension(R.dimen.statusBarHeight_fallback);
     }
 
-    private void hideAppBar(AppBarLayout child) {
+    private void hideAppBar(final AppBarLayout child) {
         if (child.getAlpha() < 1f) {
             return;
         }
@@ -62,11 +62,18 @@ public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Beha
         Animator alphaAnimator = ObjectAnimator.ofFloat(child, "alpha", 1, 0);
         alphaAnimator.setDuration(195);
         alphaAnimator.setInterpolator(new FastOutLinearInInterpolator());
+        alphaAnimator.addListener(new NullAnimatorListener() {
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                child.setVisibility(View.INVISIBLE);
+            }
+        });
+
         alphaAnimator.start();
     }
 
-    private void showAppBar(AppBarLayout child) {
-        if (child.getAlpha() > 0f) {
+    private void showAppBar(final AppBarLayout child) {
+        if (child.getVisibility() == View.VISIBLE) {
             return;
         }
 
@@ -76,6 +83,13 @@ public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Beha
         AnimatorSet set = new AnimatorSet();
         set.playTogether(alphaAnimator, yAnimator);
         set.setDuration(225);
+        set.addListener(new NullAnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+                child.setVisibility(View.VISIBLE);
+            }
+        });
+
         set.start();
     }
 }
