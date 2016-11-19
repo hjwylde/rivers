@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -251,6 +252,13 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
             }
         });
 
+        getTitleContainer().post(new Runnable() {
+            @Override
+            public void run() {
+                mBottomSheetBehavior.setPeekHeight(getTitleContainer().getHeight());
+            }
+        });
+
         mPresenter = new MapsPresenter(this, RiversApplication.getRiversService());
     }
 
@@ -341,6 +349,10 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     private MapsFragment getMapsFragment() {
         return (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+    }
+
+    private LinearLayout getTitleContainer() {
+        return (LinearLayout) findViewById(R.id.title_container);
     }
 
     private void onEditSectionClick() {
