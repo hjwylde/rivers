@@ -56,7 +56,7 @@
                 android:id="@+id/sectionToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/Theme.Rivers.PopupOverlay" />
+                app:popupTheme="@style/Theme.Rivers.Light.PopupOverlay" />
         </android.support.design.widget.AppBarLayout>
     </android.support.design.widget.CoordinatorLayout>
 

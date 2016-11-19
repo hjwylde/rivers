@@ -2,7 +2,4 @@
 <resources>
     <dimen name="cameraSize">48dp</dimen>
     <dimen name="camera_margin">16dp</dimen>
-
-    <!-- TODO (hjw): don't hardcode this -->
-    <dimen name="statusBar_height">24dp</dimen>
 </resources>
