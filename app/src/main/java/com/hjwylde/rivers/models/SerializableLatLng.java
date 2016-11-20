@@ -20,10 +20,11 @@ public final class SerializableLatLng implements Serializable {
         this(new LatLng(lat, lng));
     }
 
-    public SerializableLatLng(LatLng latLng) {
+    public SerializableLatLng(@NonNull LatLng latLng) {
         mLatLng = checkNotNull(latLng);
     }
 
+    @NonNull
     public LatLng getLatLng() {
         return mLatLng;
     }

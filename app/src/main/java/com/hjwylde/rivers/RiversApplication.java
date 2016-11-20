@@ -1,6 +1,7 @@
 package com.hjwylde.rivers;
 
 import android.app.Application;
+import android.support.annotation.NonNull;
 
 import com.hjwylde.rivers.services.RemoteRiversService;
 import com.hjwylde.rivers.services.RiversApi;
@@ -10,6 +11,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 public class RiversApplication extends Application {
     private static RiversApi mRemoteRiversService;
 
+    @NonNull
     public static RiversApi getRiversService() {
         return mRemoteRiversService;
     }

@@ -2,6 +2,7 @@ package com.hjwylde.rivers.ui.contracts;
 
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 
@@ -11,7 +12,7 @@ public interface MapsContract {
     interface View extends BaseContract.View {
         void clearSelection();
 
-        void createSection();
+        void createSection(@NonNull LatLng putIn);
 
         void onGetImageFailure(@NonNull Throwable t);
 

@@ -39,7 +39,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     private Section mSection;
     private Image mImage;
 
-    public void onCameraClick(View view) {
+    public void onCameraClick(@NonNull View view) {
         new SelectImageDialog.Builder(this).create().show();
     }
 
@@ -65,7 +65,6 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
                 return true;
             case R.id.saveSection:
                 // TODO (#13)
-                // mPresenter.updateSection(buildAction());
                 return true;
         }
 
@@ -81,7 +80,6 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
             @Override
             public void onClick(View view) {
                 // TODO (#13)
-                // mPresenter.updateSection(buildAction());
             }
         });
 
@@ -114,10 +112,10 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
 
         switch (requestCode) {
             case REQUEST_CODE_PHOTO_TAKEN:
-                // TODO (hjw)
+                // TODO (#11)
                 break;
             case REQUEST_CODE_PHOTO_SELECTED:
-                // TODO (hjw)
+                // TODO (#11)
         }
     }
 
@@ -127,7 +125,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
 
         setContentView(R.layout.activity_edit_section);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findTById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -172,12 +170,13 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
         outState.putSerializable(STATE_SECTION, buildSection());
     }
 
-    private void animateImageIn(View imageView) {
+    private void animateImageIn(@NonNull View imageView) {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
 
         imageView.startAnimation(animation);
     }
 
+    @NonNull
     private Section buildSection() {
         Section.Builder builder = new Section.Builder(mSection);
         builder.title(getTitle_());
@@ -190,26 +189,32 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
         return builder.build();
     }
 
+    @NonNull
     private String getDescription() {
         return findTextViewById(R.id.description).getText().toString();
     }
 
+    @NonNull
     private String getDuration() {
         return findTextViewById(R.id.duration).getText().toString();
     }
 
+    @NonNull
     private String getGrade() {
         return findTextViewById(R.id.grade).getText().toString();
     }
 
+    @NonNull
     private String getLength() {
         return findTextViewById(R.id.length).getText().toString();
     }
 
+    @NonNull
     private String getSubtitle() {
         return findTextViewById(R.id.subtitle).getText().toString();
     }
 
+    @NonNull
     private String getTitle_() {
         return findTextViewById(R.id.title).getText().toString();
     }
@@ -229,7 +234,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
             return;
         }
 
-        ImageView imageView = findImageViewById(R.id.image);
+        ImageView imageView = findTById(R.id.image);
         imageView.setImageBitmap(mImage.getBitmap());
 
         if (animate) {

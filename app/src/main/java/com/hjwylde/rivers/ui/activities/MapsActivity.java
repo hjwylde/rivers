@@ -18,10 +18,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
 import com.hjwylde.rivers.models.Image;
@@ -38,19 +36,19 @@ import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 public final class MapsActivity extends BaseActivity implements MapsContract.View, View.OnClickListener {
     private static final String TAG = MapsActivity.class.getSimpleName();
 
-    private static final String STATE_BOTTOM_SHEET = "bottomSheet";
-    private static final String STATE_CREATE_SECTION_MODE_ACTIVE = "createSectionModeActive";
-    private static final String STATE_SECTION = "section";
     private static final String STATE_SECTIONS = "sections";
+    private static final String STATE_BOTTOM_SHEET = "bottomSheet";
+    private static final String STATE_SECTION = "section";
+    private static final String STATE_CREATE_SECTION_MODE_ACTIVE = "createSectionModeActive";
 
     private BottomSheetBehavior<NestedScrollView> mBottomSheetBehavior;
     private CreateSectionMode mCreateSectionMode;
 
     private MapsContract.Presenter mPresenter;
 
-    private Image mImage;
-    private Section mSection;
     private List<Section> mSections = new ArrayList<>();
+    private Section mSection;
+    private Image mImage;
 
     @Override
     public void clearSelection() {
@@ -58,17 +56,11 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     @Override
-    public void createSection() {
-        MapsFragment mapsFragment = getMapsFragment();
-        mapsFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                Intent intent = new Intent(MapsActivity.this, CreateSectionActivity.class);
-                intent.putExtra(CreateSectionActivity.INTENT_PUT_IN, googleMap.getCameraPosition().target);
+    public void createSection(@NonNull LatLng putIn) {
+        Intent intent = new Intent(MapsActivity.this, CreateSectionActivity.class);
+        intent.putExtra(CreateSectionActivity.INTENT_PUT_IN, putIn);
 
-                startActivity(intent);
-            }
-        });
+        startActivity(intent);
     }
 
     @Override
@@ -97,7 +89,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(@NonNull View view) {
         switch (view.getId()) {
             case R.id.fab:
                 startCreateSectionMode();
@@ -117,7 +109,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         // TODO (#23)
     }
 
-    public void onTitleContainerClick(View view) {
+    public void onTitleContainerClick(@NonNull View view) {
         if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
             mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
@@ -173,10 +165,10 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
         setContentView(R.layout.activity_maps);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findTById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Toolbar sectionToolbar = (Toolbar) findViewById(R.id.sectionToolbar);
+        Toolbar sectionToolbar = findTById(R.id.sectionToolbar);
         sectionToolbar.inflateMenu(R.menu.menu_section);
         sectionToolbar.setNavigationIcon(R.drawable.ic_arrow_left);
         sectionToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -195,7 +187,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
                         return true;
                     case R.id.deleteSection:
                         // TODO (#14)
-                        // mPresenter.deleteSection(buildAction());
                         return true;
                 }
 
@@ -206,7 +197,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         FloatingActionButton fab = getFloatingActionButton();
         fab.setOnClickListener(this);
 
-        NestedScrollView bottomSheet = (NestedScrollView) findViewById(R.id.bottomSheet);
+        NestedScrollView bottomSheet = findTById(R.id.bottomSheet);
         bottomSheet.setSmoothScrollingEnabled(true);
 
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -273,7 +264,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        NestedScrollView child = (NestedScrollView) findViewById(R.id.bottomSheet);
+        NestedScrollView child = findTById(R.id.bottomSheet);
         CoordinatorLayout parent = (CoordinatorLayout) child.getParent();
         Parcelable bottomSheetParcelable = checkNotNull(savedInstanceState.getParcelable(STATE_BOTTOM_SHEET));
         mBottomSheetBehavior.onRestoreInstanceState(parent, child, bottomSheetParcelable);
@@ -310,7 +301,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        NestedScrollView child = (NestedScrollView) findViewById(R.id.bottomSheet);
+        NestedScrollView child = findTById(R.id.bottomSheet);
         CoordinatorLayout parent = (CoordinatorLayout) child.getParent();
         Parcelable bottomSheetParcelable = mBottomSheetBehavior.onSaveInstanceState(parent, child);
         outState.putParcelable(STATE_BOTTOM_SHEET, bottomSheetParcelable);
@@ -326,16 +317,13 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         imageView.startAnimation(animation);
     }
 
-    private ImageView getCenterMarker() {
-        return (ImageView) findViewById(R.id.center_marker);
-    }
-
     private FloatingActionButton getFloatingActionButton() {
-        return (FloatingActionButton) findViewById(R.id.fab);
+        return findTById(R.id.fab);
     }
 
+    @NonNull
     private ImageView getImage() {
-        return (ImageView) findViewById(R.id.image);
+        return findTById(R.id.image);
     }
 
     @Override
@@ -343,16 +331,19 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         mImage = checkNotNull(image);
     }
 
+    @NonNull
     private View getImageContainer() {
         return findViewById(R.id.image_container);
     }
 
+    @NonNull
     private MapsFragment getMapsFragment() {
         return (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.map);
     }
 
+    @NonNull
     private LinearLayout getTitleContainer() {
-        return (LinearLayout) findViewById(R.id.title_container);
+        return findTById(R.id.title_container);
     }
 
     private void onEditSectionClick() {
@@ -386,26 +377,26 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
             return;
         }
 
-        ((TextView) findViewById(R.id.title)).setText(mSection.getTitle());
-        ((TextView) findViewById(R.id.subtitle)).setText(mSection.getSubtitle());
+        findTextViewById(R.id.title).setText(mSection.getTitle());
+        findTextViewById(R.id.subtitle).setText(mSection.getSubtitle());
 
         if (mSection.getGrade() != null && !mSection.getGrade().isEmpty()) {
-            ((TextView) findViewById(R.id.grade)).setText(mSection.getGrade());
+            findTextViewById(R.id.grade).setText(mSection.getGrade());
         } else {
             findViewById(R.id.grade_container).setVisibility(View.GONE);
         }
         if (mSection.getLength() != null && !mSection.getLength().isEmpty()) {
-            ((TextView) findViewById(R.id.length)).setText(mSection.getLength());
+            findTextViewById(R.id.length).setText(mSection.getLength());
         } else {
             findViewById(R.id.length_container).setVisibility(View.GONE);
         }
         if (mSection.getDuration() != null && !mSection.getDuration().isEmpty()) {
-            ((TextView) findViewById(R.id.duration)).setText(mSection.getDuration());
+            findTextViewById(R.id.duration).setText(mSection.getDuration());
         } else {
             findViewById(R.id.duration_container).setVisibility(View.GONE);
         }
 
-        ((TextView) findViewById(R.id.description)).setText(mSection.getDescription());
+        findTextViewById(R.id.description).setText(mSection.getDescription());
     }
 
     private void setSection(@NonNull Section section) {
@@ -418,11 +409,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     private void startCreateSectionMode() {
         if (mCreateSectionMode == null) {
-            FloatingActionButton fab = getFloatingActionButton();
-            ImageView centerMarker = getCenterMarker();
-            MapsFragment mapsFragment = getMapsFragment();
-
-            mCreateSectionMode = new CreateSectionMode(this, fab, centerMarker, mapsFragment, this);
+            mCreateSectionMode = new CreateSectionMode(this, getMapsFragment());
         }
 
         startActionMode(mCreateSectionMode);

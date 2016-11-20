@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.support.annotation.Dimension;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -21,7 +22,7 @@ public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Beha
 
     private final Context mContext;
 
-    public DropInAppBarBehavior(@NonNull Context context, AttributeSet attrs) {
+    public DropInAppBarBehavior(@NonNull Context context, @NonNull AttributeSet attrs) {
         super(context, attrs);
 
         mContext = checkNotNull(context);
@@ -43,18 +44,19 @@ public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Beha
         return true;
     }
 
-    private int getStatusBarHeight() {
+    @Dimension
+    private float getStatusBarHeight() {
         int id = mContext.getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (id > 0) {
-            return (int) mContext.getResources().getDimension(id);
+            return mContext.getResources().getDimension(id);
         }
 
         Log.w(TAG, "Unable to accurately determine the status bar height");
 
-        return (int) mContext.getResources().getDimension(R.dimen.statusBarHeight_fallback);
+        return mContext.getResources().getDimension(R.dimen.statusBarHeight_fallback);
     }
 
-    private void hideAppBar(final AppBarLayout child) {
+    private void hideAppBar(@NonNull final AppBarLayout child) {
         if (child.getAlpha() < 1f) {
             return;
         }
@@ -72,7 +74,7 @@ public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Beha
         alphaAnimator.start();
     }
 
-    private void showAppBar(final AppBarLayout child) {
+    private void showAppBar(@NonNull final AppBarLayout child) {
         if (child.getVisibility() == View.VISIBLE) {
             return;
         }

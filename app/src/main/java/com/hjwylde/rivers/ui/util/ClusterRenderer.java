@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
+import android.support.annotation.Dimension;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 
@@ -43,6 +45,7 @@ public final class ClusterRenderer<T extends ClusterItem> extends DefaultCluster
         return cluster.getSize() > 1;
     }
 
+    @NonNull
     private Bitmap createMarkerBitmap() {
         Drawable drawable = getMarkerDrawable();
         int size = (int) getMarkerSize();
@@ -57,10 +60,12 @@ public final class ClusterRenderer<T extends ClusterItem> extends DefaultCluster
         return bitmap;
     }
 
+    @NonNull
     private BitmapDescriptor createMarkerIcon() {
         return BitmapDescriptorFactory.fromBitmap(createMarkerBitmap());
     }
 
+    @NonNull
     private BitmapDescriptor getIcon() {
         if (mIcon == null) {
             mIcon = createMarkerIcon();
@@ -69,14 +74,17 @@ public final class ClusterRenderer<T extends ClusterItem> extends DefaultCluster
         return mIcon;
     }
 
+    @ColorInt
     private int getMarkerColor() {
         return ContextCompat.getColor(mContext, R.color.accent);
     }
 
+    @NonNull
     private Drawable getMarkerDrawable() {
         return ContextCompat.getDrawable(mContext, R.drawable.ic_map_marker);
     }
 
+    @Dimension
     private float getMarkerSize() {
         return mContext.getResources().getDimension(R.dimen.markerSize);
     }

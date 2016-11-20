@@ -30,7 +30,7 @@ import java.util.Collection;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public final class MapsFragment extends SupportMapFragment implements OnMapReadyCallback, ClusterManager.OnClusterItemClickListener<SectionMarker>, ClusterManager.OnClusterClickListener<SectionMarker> {
-    private static final int ACCESS_FINE_LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private static final int ACCESS_LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     private GoogleMap mMap;
     private UiSettings mUiSettings;
@@ -45,6 +45,10 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
 
     public void enableOnMarkerClickListener() {
         mOnMarkerClickListener.enable();
+    }
+
+    public GoogleMap getMap() {
+        return mMap;
     }
 
     @Override
@@ -89,6 +93,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
 
         mUiSettings = mMap.getUiSettings();
         mUiSettings.setMapToolbarEnabled(false);
+        mUiSettings.setMyLocationButtonEnabled(true);
 
         mClusterManager = new ClusterManager<>(getContext(), mMap);
         mClusterManager.setRenderer(new ClusterRenderer<>(getContext(), mMap, mClusterManager));
@@ -99,10 +104,10 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         mMap.setOnMarkerClickListener(mOnMarkerClickListener);
         mMap.setOnMapClickListener(new DefaultOnMapClickListener());
 
-        if (hasAccessFineLocationPermission()) {
-            enableMyLocation();
+        if (checkAccessLocationPermission()) {
+            mMap.setMyLocationEnabled(true);
         } else {
-            requestAccessFineLocationPermission();
+            requestAccessLocationPermissions();
         }
 
         mView.refreshMap();
@@ -110,10 +115,8 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == ACCESS_FINE_LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults[0] == PERMISSION_GRANTED) {
-                enableMyLocation();
-            }
+        if (checkAccessLocationPermission()) {
+            mMap.setMyLocationEnabled(true);
         }
     }
 
@@ -141,17 +144,25 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         mClusterManager.cluster();
     }
 
-    private void enableMyLocation() {
-        mMap.setMyLocationEnabled(true);
-        mUiSettings.setMyLocationButtonEnabled(true);
+    private boolean checkAccessCoarseLocationPermission() {
+        return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PERMISSION_GRANTED;
     }
 
-    private boolean hasAccessFineLocationPermission() {
+    private boolean checkAccessFineLocationPermission() {
         return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PERMISSION_GRANTED;
     }
 
-    private void requestAccessFineLocationPermission() {
-        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_PERMISSION_REQUEST_CODE);
+    private boolean checkAccessLocationPermission() {
+        return checkAccessCoarseLocationPermission() && checkAccessFineLocationPermission();
+    }
+
+    private void requestAccessLocationPermissions() {
+        String[] locationPermissions = new String[]{
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+        };
+
+        ActivityCompat.requestPermissions(getActivity(), locationPermissions, ACCESS_LOCATION_PERMISSION_REQUEST_CODE);
     }
 
     private class DefaultOnMapClickListener implements GoogleMap.OnMapClickListener {

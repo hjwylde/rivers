@@ -1,5 +1,7 @@
 package com.hjwylde.rivers.models.serialisation;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -11,7 +13,7 @@ import java.lang.reflect.Type;
 
 public final class LatLngDeserializer implements JsonDeserializer<SerializableLatLng> {
     @Override
-    public SerializableLatLng deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public SerializableLatLng deserialize(@NonNull JsonElement json, @NonNull Type typeOfT, @NonNull JsonDeserializationContext context) throws JsonParseException {
         try {
             JsonObject jobj = json.getAsJsonObject();
 
@@ -19,7 +21,7 @@ public final class LatLngDeserializer implements JsonDeserializer<SerializableLa
             double lng = jobj.get("lng").getAsDouble();
 
             return new SerializableLatLng(lat, lng);
-        } catch (IllegalStateException e) {
+        } catch (NullPointerException | IllegalStateException e) {
             throw new JsonParseException(e);
         }
     }

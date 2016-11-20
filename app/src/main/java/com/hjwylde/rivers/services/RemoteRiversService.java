@@ -23,22 +23,26 @@ public final class RemoteRiversService {
     public static final class Builder {
         private Context mContext;
 
+        @NonNull
         public RiversApi build() {
             return getRetrofit().create(RiversApi.class);
         }
 
+        @NonNull
         public RemoteRiversService.Builder context(@NonNull Context context) {
             mContext = checkNotNull(context);
 
             return this;
         }
 
+        @NonNull
         private Gson getGson() {
             return new GsonBuilder()
                     .registerTypeAdapter(SerializableLatLng.class, new LatLngDeserializer())
                     .create();
         }
 
+        @NonNull
         private Retrofit getRetrofit() {
             return new Retrofit.Builder()
                     .baseUrl(getUrl())
@@ -47,10 +51,12 @@ public final class RemoteRiversService {
                     .build();
         }
 
+        @NonNull
         private RxJavaCallAdapterFactory getRxAdapter() {
             return RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io());
         }
 
+        @NonNull
         private String getUrl() {
             return mContext.getString(R.string.rivers_url);
         }

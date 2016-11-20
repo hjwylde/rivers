@@ -10,26 +10,38 @@ import java.io.Serializable;
 import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
 public final class Section implements Serializable {
+    @NonNull
     public static final String PROPERTY_ID = "id";
+    @NonNull
     public static final String PROPERTY_TITLE = "title";
+    @NonNull
     public static final String PROPERTY_SUBTITLE = "subtitle";
+    @NonNull
     public static final String PROPERTY_DESCRIPTION = "description";
+    @NonNull
     public static final String PROPERTY_PUT_IN = "putIn";
+    @NonNull
     public static final String PROPERTY_IMAGE_ID = "imageId";
+    @NonNull
     public static final String PROPERTY_GRADE = "grade";
+    @NonNull
     public static final String PROPERTY_LENGTH = "length";
+    @NonNull
     public static final String PROPERTY_DURATION = "duration";
 
     private static final long serialVersionUID = 1L;
 
+    @NonNull
     @SerializedName(PROPERTY_ID)
     private final String mId;
+    @NonNull
     @SerializedName(PROPERTY_TITLE)
     private final String mTitle;
     @SerializedName(PROPERTY_SUBTITLE)
     private final String mSubtitle;
     @SerializedName(PROPERTY_DESCRIPTION)
     private final String mDescription;
+    @NonNull
     @SerializedName(PROPERTY_PUT_IN)
     private final SerializableLatLng mPutIn;
     @SerializedName(PROPERTY_IMAGE_ID)
@@ -78,6 +90,7 @@ public final class Section implements Serializable {
         return mGrade;
     }
 
+    @NonNull
     public String getId() {
         return mId;
     }
@@ -90,6 +103,7 @@ public final class Section implements Serializable {
         return mLength;
     }
 
+    @NonNull
     public LatLng getPutIn() {
         return mPutIn.getLatLng();
     }
@@ -98,6 +112,7 @@ public final class Section implements Serializable {
         return mSubtitle;
     }
 
+    @NonNull
     public String getTitle() {
         return mTitle;
     }
@@ -123,7 +138,7 @@ public final class Section implements Serializable {
         public Builder() {
         }
 
-        public Builder(Section section) {
+        public Builder(@NonNull Section section) {
             mId = section.getId();
             mTitle = section.getTitle();
             mSubtitle = section.getSubtitle();
@@ -135,7 +150,7 @@ public final class Section implements Serializable {
             mDuration = section.getDuration();
         }
 
-        public Builder(Builder builder) {
+        public Builder(@NonNull Builder builder) {
             mId = builder.id();
             mTitle = builder.title();
             mSubtitle = builder.subtitle();

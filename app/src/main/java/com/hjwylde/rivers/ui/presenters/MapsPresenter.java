@@ -22,9 +22,9 @@ public final class MapsPresenter implements MapsContract.Presenter {
 
     private final CompositeSubscription mSubscriptions = new CompositeSubscription();
 
-    public MapsPresenter(@NonNull MapsContract.View mView, @NonNull RiversApi mRiversApi) {
-        this.mView = checkNotNull(mView);
-        this.mRiversApi = checkNotNull(mRiversApi);
+    public MapsPresenter(@NonNull MapsContract.View view, @NonNull RiversApi riversApi) {
+        mView = checkNotNull(view);
+        mRiversApi = checkNotNull(riversApi);
     }
 
     @Override

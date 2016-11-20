@@ -8,7 +8,7 @@ import com.google.maps.android.clustering.ClusterItem;
 import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
 public final class SectionMarker implements ClusterItem {
-    private final Section mSection;
+    @NonNull private final Section mSection;
 
     public SectionMarker(@NonNull Section section) {
         mSection = checkNotNull(section);
@@ -19,6 +19,7 @@ public final class SectionMarker implements ClusterItem {
         return mSection.getPutIn();
     }
 
+    @NonNull
     public Section getSection() {
         return mSection;
     }

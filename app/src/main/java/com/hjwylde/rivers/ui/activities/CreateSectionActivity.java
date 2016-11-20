@@ -34,7 +34,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
 
     private Section.Builder mSectionBuilder = new Section.Builder();
 
-    public void onCameraClick(View view) {
+    public void onCameraClick(@NonNull View view) {
         new SelectImageDialog.Builder(this).create().show();
     }
 
@@ -76,7 +76,6 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
                 return true;
             case R.id.createSection:
                 // TODO (#61)
-                // mPresenter.createSection(buildAction());
                 return true;
         }
 
@@ -93,10 +92,10 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
 
         switch (requestCode) {
             case REQUEST_CODE_PHOTO_TAKEN:
-                // TODO (hjw)
+                // TODO (#11)
                 break;
             case REQUEST_CODE_PHOTO_SELECTED:
-                // TODO (hjw)
+                // TODO (#11)
         }
     }
 
@@ -106,7 +105,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
 
         setContentView(R.layout.activity_create_section);
 
-        Toolbar toolbar = findToolbarById(R.id.toolbar);
+        Toolbar toolbar = findTById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -143,6 +142,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         outState.putSerializable(STATE_SECTION_BUILDER, buildSectionBuilder());
     }
 
+    @NonNull
     private Section.Builder buildSectionBuilder() {
         Section.Builder builder = new Section.Builder(mSectionBuilder);
         builder.title(getTitle_());
@@ -155,26 +155,32 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         return builder;
     }
 
+    @NonNull
     private String getDescription() {
         return findTextViewById(R.id.description).getText().toString();
     }
 
+    @NonNull
     private String getDuration() {
         return findTextViewById(R.id.duration).getText().toString();
     }
 
+    @NonNull
     private String getGrade() {
         return findTextViewById(R.id.grade).getText().toString();
     }
 
+    @NonNull
     private String getLength() {
         return findTextViewById(R.id.length).getText().toString();
     }
 
+    @NonNull
     private String getSubtitle() {
         return findTextViewById(R.id.subtitle).getText().toString();
     }
 
+    @NonNull
     private String getTitle_() {
         return findTextViewById(R.id.title).getText().toString();
     }

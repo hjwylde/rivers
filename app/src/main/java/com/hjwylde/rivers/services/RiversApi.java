@@ -12,9 +12,11 @@ import retrofit2.http.Path;
 import rx.Observable;
 
 public interface RiversApi {
+    @NonNull
     @GET("images/{id}")
     Observable<Image> getImage(@Path("id") @NonNull String id);
 
+    @NonNull
     @GET("sections")
     Observable<List<Section>> getSections();
 }
