@@ -3,10 +3,8 @@ package com.hjwylde.rivers.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,8 +24,6 @@ import static com.hjwylde.rivers.ui.dialogs.SelectImageDialog.REQUEST_CODE_PHOTO
 public final class CreateSectionActivity extends BaseActivity implements CreateSectionContract.View {
     public static final String INTENT_PUT_IN = "putIn";
 
-    private static final String TAG = CreateSectionActivity.class.getSimpleName();
-
     private static final String STATE_SECTION_BUILDER = "sectionBuilder";
 
     private CreateSectionContract.Presenter mPresenter;
@@ -44,27 +40,6 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         inflater.inflate(R.menu.menu_create_section, menu);
 
         return true;
-    }
-
-    @Override
-    public void onCreateSectionFailure(@NonNull Throwable t) {
-        Log.w(TAG, t.getMessage(), t);
-
-        final Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onCreateSection, Snackbar.LENGTH_LONG);
-        snackbar.setAction(R.string.action_retry, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO (#61)
-            }
-        });
-
-        snackbar.show();
-    }
-
-    @Override
-    public void onCreateSectionSuccess() {
-        setResult(RESULT_OK);
-        finish();
     }
 
     @Override

@@ -100,6 +100,8 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     @Override
     public void onGetImageFailure(@NonNull Throwable t) {
         Log.w(TAG, t.getMessage(), t);
+
+        // TODO (#74)
     }
 
     @Override

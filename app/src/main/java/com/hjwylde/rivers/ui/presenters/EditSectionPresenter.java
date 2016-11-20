@@ -52,9 +52,4 @@ public final class EditSectionPresenter implements EditSectionContract.Presenter
     public void unsubscribe() {
         mSubscriptions.clear();
     }
-
-    @Override
-    public void updateSection() {
-        // TODO (#13)
-    }
 }

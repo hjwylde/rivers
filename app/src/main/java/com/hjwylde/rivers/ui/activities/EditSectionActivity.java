@@ -3,7 +3,6 @@ package com.hjwylde.rivers.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -54,6 +53,8 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     @Override
     public void onGetImageFailure(@NonNull Throwable t) {
         Log.w(TAG, t.getMessage(), t);
+
+        // TODO (#74)
     }
 
     @Override
@@ -69,27 +70,6 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onUpdateSectionFailure(@NonNull Throwable t) {
-        Log.w(TAG, t.getMessage(), t);
-
-        final Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onUpdateSection, Snackbar.LENGTH_LONG);
-        snackbar.setAction(R.string.action_retry, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO (#13)
-            }
-        });
-
-        snackbar.show();
-    }
-
-    @Override
-    public void onUpdateSectionSuccess() {
-        setResult(RESULT_OK);
-        finish();
     }
 
     @Override

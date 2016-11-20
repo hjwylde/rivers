@@ -10,7 +10,9 @@ import rx.subscriptions.CompositeSubscription;
 import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
 public final class CreateSectionPresenter implements CreateSectionContract.Presenter {
+    @SuppressWarnings("unused")
     private final CreateSectionContract.View mView;
+    @SuppressWarnings("unused")
     private final RiversApi mRiversApi;
 
     private final CompositeSubscription mSubscriptions = new CompositeSubscription();
@@ -18,11 +20,6 @@ public final class CreateSectionPresenter implements CreateSectionContract.Prese
     public CreateSectionPresenter(@NonNull CreateSectionContract.View view, @NonNull RiversApi riversApi) {
         mView = checkNotNull(view);
         mRiversApi = checkNotNull(riversApi);
-    }
-
-    @Override
-    public void createSection() {
-        // TODO (#61)
     }
 
     @Override
