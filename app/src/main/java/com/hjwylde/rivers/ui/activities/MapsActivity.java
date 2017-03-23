@@ -36,6 +36,8 @@ import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 public final class MapsActivity extends BaseActivity implements MapsContract.View, View.OnClickListener {
     private static final String TAG = MapsActivity.class.getSimpleName();
 
+    private static final int REQUEST_CODE_SECTION_CREATED = 0;
+
     private static final String STATE_SECTIONS = "sections";
     private static final String STATE_BOTTOM_SHEET = "bottomSheet";
     private static final String STATE_SECTION = "section";
@@ -60,7 +62,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         Intent intent = new Intent(MapsActivity.this, CreateSectionActivity.class);
         intent.putExtra(CreateSectionActivity.INTENT_PUT_IN, putIn);
 
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE_SECTION_CREATED);
     }
 
     @Override
@@ -102,13 +104,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         Log.w(TAG, t.getMessage(), t);
 
         // TODO (#74)
-    }
-
-    @Override
-    public void onGetSectionsFailure(@NonNull Throwable t) {
-        Log.w(TAG, t.getMessage(), t);
-
-        // TODO (#23)
     }
 
     public void onTitleContainerClick(@NonNull View view) {
@@ -157,6 +152,20 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     @Override
     public void setSections(@NonNull List<Section> sections) {
         mSections = checkNotNull(sections);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        switch (requestCode) {
+            case REQUEST_CODE_SECTION_CREATED:
+                mCreateSectionMode.finish();
+        }
     }
 
     @Override
@@ -294,9 +303,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
             mPresenter.getImage(mSection.getImageId());
         }
 
-        if (mSections.isEmpty()) {
-            mPresenter.getSections();
-        }
+        mPresenter.streamSections();
     }
 
     @Override

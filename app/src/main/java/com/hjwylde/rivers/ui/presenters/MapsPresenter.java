@@ -52,23 +52,22 @@ public final class MapsPresenter implements MapsContract.Presenter {
     }
 
     @Override
-    public void getSections() {
-        Subscription subscription = mRiversApi.getSections()
+    public void streamSections() {
+        Subscription subscription = mRiversApi.streamSections()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Section>>() {
                     @Override
                     public void onCompleted() {
-                        mView.refreshMap();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.onGetSectionsFailure(e);
                     }
 
                     @Override
                     public void onNext(List<Section> sections) {
                         mView.setSections(sections);
+                        mView.refreshMap();
                     }
                 });
 

@@ -28,6 +28,8 @@ public final class CreateSectionMode implements ActionMode.Callback {
 
     private MapsContract.View mView;
 
+    private ActionMode mActionMode;
+
     private boolean mActive = false;
 
     public CreateSectionMode(@NonNull MapsActivity activity, @NonNull MapsFragment mapsFragment) {
@@ -35,6 +37,12 @@ public final class CreateSectionMode implements ActionMode.Callback {
         mMapsFragment = checkNotNull(mapsFragment);
 
         mView = activity;
+    }
+
+    public void finish() {
+        if (mActionMode != null) {
+            mActionMode.finish();
+        }
     }
 
     public boolean isActive() {
@@ -68,6 +76,8 @@ public final class CreateSectionMode implements ActionMode.Callback {
 
         mMapsFragment.disableOnMarkerClickListener();
 
+        mActionMode = mode;
+
         mActive = true;
 
         return true;
@@ -79,6 +89,8 @@ public final class CreateSectionMode implements ActionMode.Callback {
         animateCenterMarkerOut();
 
         mMapsFragment.enableOnMarkerClickListener();
+
+        mActionMode = null;
 
         mActive = false;
     }

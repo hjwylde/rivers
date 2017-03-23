@@ -3,17 +3,26 @@ package com.hjwylde.rivers;
 import android.app.Application;
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.services.RemoteRiversService;
+import com.couchbase.lite.CouchbaseLiteException;
+import com.couchbase.lite.Database;
+import com.couchbase.lite.DatabaseOptions;
+import com.couchbase.lite.Manager;
+import com.couchbase.lite.android.AndroidContext;
+import com.hjwylde.rivers.services.LocalRiversService;
 import com.hjwylde.rivers.services.RiversApi;
+
+import java.io.IOException;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class RiversApplication extends Application {
-    private static RiversApi mRemoteRiversService;
+    private static Database mDatabase;
+
+    private static RiversApi mLocalRiversService;
 
     @NonNull
     public static RiversApi getRiversService() {
-        return mRemoteRiversService;
+        return mLocalRiversService;
     }
 
     @Override
@@ -22,7 +31,9 @@ public class RiversApplication extends Application {
 
         setUpCalligraphy();
 
-        setUpRemoteRiversService();
+        setUpDatabase();
+
+        setUpLocalRiversService();
     }
 
     private void setUpCalligraphy() {
@@ -33,7 +44,24 @@ public class RiversApplication extends Application {
         );
     }
 
-    private void setUpRemoteRiversService() {
-        mRemoteRiversService = new RemoteRiversService.Builder().context(getApplicationContext()).build();
+    private void setUpDatabase() {
+        try {
+            Manager manager = new Manager(new AndroidContext(getApplicationContext()), Manager.DEFAULT_OPTIONS);
+
+            DatabaseOptions options = new DatabaseOptions();
+            options.setCreate(true);
+
+            mDatabase = manager.openDatabase("rivers", options);
+        } catch (IOException e) {
+            e.printStackTrace();
+            // TODO (hjw): panic
+        } catch (CouchbaseLiteException e) {
+            e.printStackTrace();
+            // TODO (hjw): panic
+        }
+    }
+
+    private void setUpLocalRiversService() {
+        mLocalRiversService = new LocalRiversService.Builder().database(mDatabase).build();
     }
 }

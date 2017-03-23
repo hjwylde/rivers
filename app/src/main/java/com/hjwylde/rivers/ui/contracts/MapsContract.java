@@ -16,8 +16,6 @@ public interface MapsContract {
 
         void onGetImageFailure(@NonNull Throwable t);
 
-        void onGetSectionsFailure(@NonNull Throwable t);
-
         void refreshImage();
 
         void refreshMap();
@@ -32,6 +30,6 @@ public interface MapsContract {
     interface Presenter extends BaseContract.Presenter {
         void getImage(@NonNull String id);
 
-        void getSections();
+        void streamSections();
     }
 }

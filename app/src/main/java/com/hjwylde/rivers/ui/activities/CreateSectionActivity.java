@@ -43,6 +43,17 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     }
 
     @Override
+    public void onCreateSectionSuccess(@NonNull Section section) {
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void onCreateSectionFailure(@NonNull Throwable t) {
+        // TODO (hjw)
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -50,7 +61,8 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
                 finish();
                 return true;
             case R.id.createSection:
-                // TODO (#61)
+//                mPresenter.createImage(buildImageBuilder());
+                mPresenter.createSection(buildSectionBuilder());
                 return true;
         }
 
