@@ -7,16 +7,15 @@ import com.hjwylde.rivers.models.Section;
 
 import java.util.List;
 
-import retrofit2.http.GET;
-import retrofit2.http.Path;
 import rx.Observable;
 
 public interface RiversApi {
     @NonNull
-    @GET("images/{id}")
-    Observable<Image> getImage(@Path("id") @NonNull String id);
+    Observable<Image> getImage(@NonNull String id);
 
     @NonNull
-    @GET("sections")
-    Observable<List<Section>> getSections();
+    Observable<List<Section>> streamSections();
+
+    @NonNull
+    Observable<Section> createSection(@NonNull Section.Builder builder);
 }
