@@ -19,14 +19,19 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".ui.activities.MapsActivity"
-            android:label="@string/title_activity_maps"
-            android:theme="@style/Theme.Rivers.SplashScreen">
+            android:name=".ui.activities.SplashActivity"
+            android:theme="@style/Theme.Rivers.SplashScreen"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activities.MapsActivity"
+            android:label="@string/title_activity_maps"
+            android:theme="@style/Theme.Rivers.Dark.NoActionBar">
         </activity>
         <activity
             android:name=".ui.activities.CreateSectionActivity"
