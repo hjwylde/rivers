@@ -1,14 +1,18 @@
 package com.hjwylde.rivers.ui.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.rivers.R;
@@ -23,6 +27,8 @@ import static com.hjwylde.rivers.ui.dialogs.SelectImageDialog.REQUEST_CODE_PHOTO
 
 public final class CreateSectionActivity extends BaseActivity implements CreateSectionContract.View {
     public static final String INTENT_PUT_IN = "putIn";
+
+    private static final String TAG = MapsActivity.class.getSimpleName();
 
     private static final String STATE_SECTION_BUILDER = "sectionBuilder";
 
@@ -44,7 +50,21 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
 
     @Override
     public void onCreateSectionFailure(@NonNull Throwable t) {
-        // TODO (hjw)
+        Log.w(TAG, t.getMessage(), t);
+
+        final Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onCreateSection, Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.action_retryCreateSection, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (snackbar.isShown()) {
+                    snackbar.dismiss();
+                }
+
+                onCreateSectionClick();
+            }
+        });
+
+        snackbar.show();
     }
 
     @Override
@@ -171,7 +191,17 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         return findTextViewById(R.id.title).getText().toString();
     }
 
+    private void hideSoftKeyboard() {
+        View view = getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
     private void onCreateSectionClick() {
+        hideSoftKeyboard();
+
 //        mPresenter.createImage(buildImageBuilder());
         mPresenter.createSection(buildSectionBuilder());
     }
