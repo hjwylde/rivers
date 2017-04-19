@@ -2,8 +2,9 @@
 <resources>
     <string name="action_editSection">Edit</string>
     <string name="action_deleteSection">Delete</string>
+    <string name="action_retryDeleteSection">Retry</string>
 
-    <string name="error_onDeleteSection">Can\'t delete section.</string>
+    <string name="error_onDeleteSection">Unable to delete</string>
 
     <string name="label_grade">Grade</string>
     <string name="label_length">Length</string>
