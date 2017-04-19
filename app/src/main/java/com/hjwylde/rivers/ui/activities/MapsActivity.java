@@ -101,7 +101,21 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     @Override
     public void onDeleteSectionFailure(@NonNull Throwable t) {
-        // TODO (#77): snackbar with error message
+        Log.w(TAG, t.getMessage(), t);
+
+        final Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onDeleteSection, Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.action_retryDeleteSection, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (snackbar.isShown()) {
+                    snackbar.dismiss();
+                }
+
+                onDeleteSectionClick();
+            }
+        });
+
+        snackbar.show();
     }
 
     @Override
