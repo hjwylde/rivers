@@ -11,11 +11,14 @@ import rx.Observable;
 
 public interface RiversApi {
     @NonNull
+    Observable<Section> createSection(@NonNull Section.Builder builder);
+
+    @NonNull
+    Observable<Void> deleteSection(@NonNull Section section);
+
+    @NonNull
     Observable<Image> getImage(@NonNull String id);
 
     @NonNull
     Observable<List<Section>> streamSections();
-
-    @NonNull
-    Observable<Section> createSection(@NonNull Section.Builder builder);
 }

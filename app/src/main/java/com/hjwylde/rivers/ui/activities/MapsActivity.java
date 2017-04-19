@@ -100,6 +100,18 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     @Override
+    public void onDeleteSectionFailure(@NonNull Throwable t) {
+        // TODO (#77): snackbar with error message
+    }
+
+    @Override
+    public void onDeleteSectionSuccess() {
+        clearSelection();
+
+        // TODO (#43): snackbar with undo option
+    }
+
+    @Override
     public void onGetImageFailure(@NonNull Throwable t) {
         Log.w(TAG, t.getMessage(), t);
 
@@ -195,7 +207,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
                         onEditSectionClick();
                         return true;
                     case R.id.deleteSection:
-                        // TODO (#14)
+                        onDeleteSectionClick();
                         return true;
                 }
 
@@ -351,6 +363,10 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     @NonNull
     private LinearLayout getTitleContainer() {
         return findTById(R.id.title_container);
+    }
+
+    private void onDeleteSectionClick() {
+        mPresenter.deleteSection(mSection);
     }
 
     private void onEditSectionClick() {

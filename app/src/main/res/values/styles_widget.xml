@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Widget.Rivers.TextInputLayout" parent="Widget.Design.TextInputLayout" />
+    <style name="Widget.Rivers.TextInputLayout" parent="Widget.Design.TextInputLayout"/>
 
     <style name="Widget.Rivers.TextInputLayout.Dark" parent="Widget.Design.TextInputLayout">
         <item name="android:textColorHint">@color/text_secondaryDark</item>

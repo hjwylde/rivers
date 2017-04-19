@@ -7,14 +7,14 @@ import com.hjwylde.rivers.models.Section;
 
 public interface CreateSectionContract {
     interface View extends BaseContract.View {
-        void onCreateSectionSuccess(@NonNull Section section);
-
         void onCreateSectionFailure(@NonNull Throwable t);
+
+        void onCreateSectionSuccess(@NonNull Section section);
     }
 
     interface Presenter extends BaseContract.Presenter {
-        void createSection(@NonNull Section.Builder builder);
-
         void createImage(@NonNull Image image);
+
+        void createSection(@NonNull Section.Builder builder);
     }
 }
