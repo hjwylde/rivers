@@ -3,6 +3,7 @@
     <string name="title_activity_createSection"></string>
 
     <string name="action_createSection">CREATE</string>
+    <string name="action_retryCreateSection">Retry</string>
 
-    <string name="error_onCreateSection">Can\'t create section.</string>
+    <string name="error_onCreateSection">Unable to create</string>
 </resources>
