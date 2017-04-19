@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_activity_maps">Rivers (debug)</string>
+    <string name="title_activity_splash">Rivers</string>
 </resources>

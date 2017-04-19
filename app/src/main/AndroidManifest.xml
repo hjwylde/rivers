@@ -19,6 +19,7 @@
 
         <activity
             android:name=".ui.activities.SplashActivity"
+            android:label="@string/title_activity_splash"
             android:theme="@style/Theme.Rivers.SplashScreen"
             android:noHistory="true">
             <intent-filter>
@@ -49,8 +50,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hjwylde.rivers.ui.activities.MapsActivity"/>
-        </activity>
-        <activity android:name=".ui.activities.SplashActivity">
         </activity>
     </application>
 
