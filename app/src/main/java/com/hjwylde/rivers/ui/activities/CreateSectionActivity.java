@@ -43,14 +43,14 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     }
 
     @Override
-    public void onCreateSectionSuccess(@NonNull Section section) {
-        setResult(RESULT_OK);
-        finish();
+    public void onCreateSectionFailure(@NonNull Throwable t) {
+        // TODO (hjw)
     }
 
     @Override
-    public void onCreateSectionFailure(@NonNull Throwable t) {
-        // TODO (hjw)
+    public void onCreateSectionSuccess(@NonNull Section section) {
+        setResult(RESULT_OK);
+        finish();
     }
 
     @Override
@@ -61,8 +61,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
                 finish();
                 return true;
             case R.id.createSection:
-//                mPresenter.createImage(buildImageBuilder());
-                mPresenter.createSection(buildSectionBuilder());
+                onCreateSectionClick();
                 return true;
         }
 
@@ -170,6 +169,11 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     @NonNull
     private String getTitle_() {
         return findTextViewById(R.id.title).getText().toString();
+    }
+
+    private void onCreateSectionClick() {
+//        mPresenter.createImage(buildImageBuilder());
+        mPresenter.createSection(buildSectionBuilder());
     }
 
     private void refreshFocus() {

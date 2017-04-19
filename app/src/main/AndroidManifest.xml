@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hjwylde.rivers">
+          package="com.hjwylde.rivers">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:name=".RiversApplication"
@@ -13,19 +13,18 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/Theme.Rivers">
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_maps_key"/>
 
         <activity
             android:name=".ui.activities.MapsActivity"
             android:label="@string/title_activity_maps"
             android:theme="@style/Theme.Rivers.SplashScreen">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
@@ -35,7 +34,7 @@
             android:theme="@style/Theme.Rivers.Light.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hjwylde.rivers.ui.activities.MapsActivity" />
+                android:value="com.hjwylde.rivers.ui.activities.MapsActivity"/>
         </activity>
         <activity
             android:name=".ui.activities.EditSectionActivity"
@@ -44,7 +43,9 @@
             android:theme="@style/Theme.Rivers.Light.NoActionBar.Popup">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hjwylde.rivers.ui.activities.MapsActivity" />
+                android:value="com.hjwylde.rivers.ui.activities.MapsActivity"/>
+        </activity>
+        <activity android:name=".ui.activities.SplashActivity">
         </activity>
     </application>
 

@@ -14,6 +14,10 @@ public interface MapsContract {
 
         void createSection(@NonNull LatLng putIn);
 
+        void onDeleteSectionFailure(@NonNull Throwable t);
+
+        void onDeleteSectionSuccess();
+
         void onGetImageFailure(@NonNull Throwable t);
 
         void refreshImage();
@@ -28,6 +32,8 @@ public interface MapsContract {
     }
 
     interface Presenter extends BaseContract.Presenter {
+        void deleteSection(@NonNull Section section);
+
         void getImage(@NonNull String id);
 
         void streamSections();

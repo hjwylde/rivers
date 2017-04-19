@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root_container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.hjwylde.rivers.ui.activities.EditSectionActivity">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:id="@+id/root_container"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 tools:context="com.hjwylde.rivers.ui.activities.EditSectionActivity">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white">
 
-        <include layout="@layout/content_edit_section" />
+        <include layout="@layout/content_edit_section"/>
 
     </android.support.v4.widget.NestedScrollView>
 
@@ -34,7 +34,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/Theme.Rivers.Light.PopupOverlay" />
+                app:popupTheme="@style/Theme.Rivers.Light.PopupOverlay"/>
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -47,6 +47,22 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
+    public Observable<Void> deleteSection(@NonNull Section section) {
+        Document document = mDatabase.getDocument(section.getId());
+
+        try {
+            if (document != null) {
+                document.delete();
+            }
+        } catch (CouchbaseLiteException e) {
+            return Observable.error(e);
+        }
+
+        return Observable.empty();
+    }
+
+    @NonNull
+    @Override
     public Observable<Image> getImage(@NonNull String id) {
         Document document = mDatabase.getDocument(id);
 

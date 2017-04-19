@@ -28,6 +28,29 @@ public final class MapsPresenter implements MapsContract.Presenter {
     }
 
     @Override
+    public void deleteSection(@NonNull Section section) {
+        Subscription subscription = mRiversApi.deleteSection(section)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Void>() {
+                    @Override
+                    public void onCompleted() {
+                        mView.onDeleteSectionSuccess();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.onDeleteSectionFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(Void section) {
+                    }
+                });
+
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
     public void getImage(@NonNull String id) {
         Subscription subscription = mRiversApi.getImage(id)
                 .observeOn(AndroidSchedulers.mainThread())
