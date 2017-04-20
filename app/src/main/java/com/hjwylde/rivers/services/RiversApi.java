@@ -11,6 +11,9 @@ import rx.Observable;
 
 public interface RiversApi {
     @NonNull
+    Observable<Image> createImage(@NonNull Image.Builder builder);
+
+    @NonNull
     Observable<Section> createSection(@NonNull Section.Builder builder);
 
     @NonNull

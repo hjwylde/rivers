@@ -7,6 +7,7 @@ import android.util.Base64;
 
 import com.couchbase.lite.Document;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +54,11 @@ public final class Image implements Serializable {
     }
 
     @NonNull
+    public Map<String, Object> getProperties() {
+        return new HashMap<>(mProperties);
+    }
+
+    @NonNull
     private byte[] getDecodedData() {
         return Base64.decode(getData(), Base64.DEFAULT);
     }
@@ -75,16 +81,33 @@ public final class Image implements Serializable {
             this(document.getProperties());
         }
 
+        @NonNull
+        public Image.Builder bitmap(Bitmap bitmap) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+
+            String data = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+
+            return data(data);
+        }
+
+        @NonNull
         public Image build() {
             return new Image(mProperties);
         }
 
-        public void data(String data) {
+        @NonNull
+        public Image.Builder data(String data) {
             mProperties.put(PROPERTY_DATA, data);
+
+            return this;
         }
 
-        public void id(String id) {
+        @NonNull
+        public Image.Builder id(String id) {
             mProperties.put(BaseDocument.PROPERTY_ID, id);
+
+            return this;
         }
     }
 }
