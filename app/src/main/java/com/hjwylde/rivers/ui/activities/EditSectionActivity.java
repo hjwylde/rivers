@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +22,7 @@ import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.contracts.EditSectionContract;
 import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
 import com.hjwylde.rivers.ui.presenters.EditSectionPresenter;
+import com.hjwylde.rivers.ui.util.NullTextWatcher;
 
 import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
@@ -29,11 +31,11 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
 
     private static final String TAG = EditSectionActivity.class.getSimpleName();
 
-    private static final String STATE_SECTION = "section";
+    private static final String STATE_SECTION_BUILDER = "sectionBuilder";
 
     private EditSectionContract.Presenter mPresenter;
 
-    private Section mSection;
+    private Section.Builder mSectionBuilder;
     private Image mImage;
 
     public void onCameraClick(@NonNull View view) {
@@ -107,9 +109,48 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+        findEditTextById(R.id.title).addTextChangedListener(new NullTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mSectionBuilder.title(editable.toString());
+            }
+        });
+        findEditTextById(R.id.subtitle).addTextChangedListener(new NullTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mSectionBuilder.subtitle(editable.toString());
+            }
+        });
+        findEditTextById(R.id.grade).addTextChangedListener(new NullTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mSectionBuilder.grade(editable.toString());
+            }
+        });
+        findEditTextById(R.id.length).addTextChangedListener(new NullTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mSectionBuilder.length(editable.toString());
+            }
+        });
+        findEditTextById(R.id.duration).addTextChangedListener(new NullTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mSectionBuilder.duration(editable.toString());
+            }
+        });
+        findEditTextById(R.id.description).addTextChangedListener(new NullTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mSectionBuilder.description(editable.toString());
+            }
+        });
+
         mPresenter = new EditSectionPresenter(this, RiversApplication.getRiversService());
 
-        mSection = (Section) getIntent().getSerializableExtra(INTENT_SECTION);
+        Section section = (Section) getIntent().getSerializableExtra(INTENT_SECTION);
+        mSectionBuilder = new Section.Builder(section);
         refreshSection();
 
         refreshFocus();
@@ -126,7 +167,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        mSection = (Section) savedInstanceState.getSerializable(STATE_SECTION);
+        mSectionBuilder = (Section.Builder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
         refreshSection();
 
         refreshFocus();
@@ -136,8 +177,8 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     protected void onResume() {
         super.onResume();
 
-        if (mImage == null) {
-            mPresenter.getImage(mSection.getImageId());
+        if (mSectionBuilder.imageId() != null && mImage == null) {
+            mPresenter.getImage(mSectionBuilder.imageId());
         }
     }
 
@@ -145,56 +186,13 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putSerializable(STATE_SECTION, buildSection());
+        outState.putSerializable(STATE_SECTION_BUILDER, mSectionBuilder);
     }
 
     private void animateImageIn(@NonNull View imageView) {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
 
         imageView.startAnimation(animation);
-    }
-
-    @NonNull
-    private Section buildSection() {
-        Section.Builder builder = new Section.Builder(mSection);
-        builder.title(getTitle_());
-        builder.subtitle(getSubtitle());
-        builder.grade(getGrade());
-        builder.length(getLength());
-        builder.duration(getDuration());
-        builder.description(getDescription());
-
-        return builder.build();
-    }
-
-    @NonNull
-    private String getDescription() {
-        return findTextViewById(R.id.description).getText().toString();
-    }
-
-    @NonNull
-    private String getDuration() {
-        return findTextViewById(R.id.duration).getText().toString();
-    }
-
-    @NonNull
-    private String getGrade() {
-        return findTextViewById(R.id.grade).getText().toString();
-    }
-
-    @NonNull
-    private String getLength() {
-        return findTextViewById(R.id.length).getText().toString();
-    }
-
-    @NonNull
-    private String getSubtitle() {
-        return findTextViewById(R.id.subtitle).getText().toString();
-    }
-
-    @NonNull
-    private String getTitle_() {
-        return findTextViewById(R.id.title).getText().toString();
     }
 
     private void refreshFocus() {
@@ -221,11 +219,11 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     }
 
     private void refreshSection() {
-        findTextViewById(R.id.title).setText(mSection.getTitle());
-        findTextViewById(R.id.subtitle).setText(mSection.getSubtitle());
-        findTextViewById(R.id.grade).setText(mSection.getGrade());
-        findTextViewById(R.id.length).setText(mSection.getLength());
-        findTextViewById(R.id.duration).setText(mSection.getDuration());
-        findTextViewById(R.id.description).setText(mSection.getDescription());
+        findTextViewById(R.id.title).setText(mSectionBuilder.title());
+        findTextViewById(R.id.subtitle).setText(mSectionBuilder.subtitle());
+        findTextViewById(R.id.grade).setText(mSectionBuilder.grade());
+        findTextViewById(R.id.length).setText(mSectionBuilder.length());
+        findTextViewById(R.id.duration).setText(mSectionBuilder.duration());
+        findTextViewById(R.id.description).setText(mSectionBuilder.description());
     }
 }
