@@ -1,6 +1,7 @@
 package com.hjwylde.rivers.ui.presenters;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
@@ -15,9 +16,7 @@ import rx.subscriptions.CompositeSubscription;
 import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
 public final class CreateSectionPresenter implements CreateSectionContract.Presenter {
-    @SuppressWarnings("unused")
     private final CreateSectionContract.View mView;
-    @SuppressWarnings("unused")
     private final RiversApi mRiversApi;
 
     private final CompositeSubscription mSubscriptions = new CompositeSubscription();
@@ -28,8 +27,26 @@ public final class CreateSectionPresenter implements CreateSectionContract.Prese
     }
 
     @Override
-    public void createImage(@NonNull Image image) {
-        // TODO (hjw)
+    public void createImage(@NonNull Image.Builder builder) {
+        Subscription subscription = mRiversApi.createImage(builder)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Image>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.onCreateImageFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(Image image) {
+                        mView.onCreateImageSuccess(image);
+                    }
+                });
+
+        mSubscriptions.add(subscription);
     }
 
     @Override
@@ -49,6 +66,30 @@ public final class CreateSectionPresenter implements CreateSectionContract.Prese
                     @Override
                     public void onNext(Section section) {
                         mView.onCreateSectionSuccess(section);
+                    }
+                });
+
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
+    public void getImage(@NonNull String id) {
+        Subscription subscription = mRiversApi.getImage(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Image>() {
+                    @Override
+                    public void onCompleted() {
+                        mView.refreshImage();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.onGetImageFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(Image image) {
+                        mView.setImage(image);
                     }
                 });
 

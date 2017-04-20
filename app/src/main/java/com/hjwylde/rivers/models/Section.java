@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.hjwylde.rivers.models.BaseDocument.PROPERTY_ID;
 import static com.hjwylde.rivers.util.Preconditions.checkArgument;
 import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
@@ -48,7 +47,7 @@ public final class Section implements Serializable {
 
         checkArgument(mProperties.get(BaseDocument.PROPERTY_TYPE).equals(TYPE));
 
-        checkNotNull(mProperties.get(PROPERTY_ID));
+        checkNotNull(mProperties.get(BaseDocument.PROPERTY_ID));
         checkNotNull(mProperties.get(PROPERTY_TITLE));
         checkNotNull(mProperties.get(PROPERTY_PUT_IN));
     }
@@ -84,7 +83,7 @@ public final class Section implements Serializable {
 
     @NonNull
     public String getId() {
-        return (String) mProperties.get(PROPERTY_ID);
+        return (String) mProperties.get(BaseDocument.PROPERTY_ID);
     }
 
     public String getImageId() {
@@ -147,10 +146,12 @@ public final class Section implements Serializable {
             this(builder.mProperties);
         }
 
+        @NonNull
         public Section build() {
             return new Section(mProperties);
         }
 
+        @NonNull
         public Section.Builder description(String description) {
             mProperties.put(PROPERTY_DESCRIPTION, description);
 
@@ -161,6 +162,7 @@ public final class Section implements Serializable {
             return (String) mProperties.get(PROPERTY_DESCRIPTION);
         }
 
+        @NonNull
         public Section.Builder duration(String duration) {
             mProperties.put(PROPERTY_DURATION, duration);
 
@@ -171,6 +173,7 @@ public final class Section implements Serializable {
             return (String) mProperties.get(PROPERTY_DURATION);
         }
 
+        @NonNull
         public Section.Builder grade(String grade) {
             mProperties.put(PROPERTY_GRADE, grade);
 
@@ -181,12 +184,25 @@ public final class Section implements Serializable {
             return (String) mProperties.get(PROPERTY_GRADE);
         }
 
+        @NonNull
         public Section.Builder id(String id) {
-            mProperties.put(PROPERTY_ID, id);
+            mProperties.put(BaseDocument.PROPERTY_ID, id);
 
             return this;
         }
 
+        public String imageId() {
+            return (String) mProperties.get(PROPERTY_IMAGE_ID);
+        }
+
+        @NonNull
+        public Section.Builder imageId(String imageId) {
+            mProperties.put(PROPERTY_IMAGE_ID, imageId);
+
+            return this;
+        }
+
+        @NonNull
         public Section.Builder length(String length) {
             mProperties.put(PROPERTY_LENGTH, length);
 
@@ -197,6 +213,7 @@ public final class Section implements Serializable {
             return (String) mProperties.get(PROPERTY_LENGTH);
         }
 
+        @NonNull
         public Section.Builder putIn(LatLng putIn) {
             Map<String, Object> putInProperties = new HashMap<>();
             putInProperties.put(PROPERTY_PUT_IN_LATITUDE, putIn.latitude);
@@ -207,6 +224,7 @@ public final class Section implements Serializable {
             return this;
         }
 
+        @NonNull
         public Section.Builder subtitle(String subtitle) {
             mProperties.put(PROPERTY_SUBTITLE, subtitle);
 
@@ -217,6 +235,7 @@ public final class Section implements Serializable {
             return (String) mProperties.get(PROPERTY_SUBTITLE);
         }
 
+        @NonNull
         public Section.Builder title(String title) {
             mProperties.put(PROPERTY_TITLE, title);
 

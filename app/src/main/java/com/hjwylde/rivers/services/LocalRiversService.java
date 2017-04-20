@@ -30,6 +30,23 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
+    public Observable<Image> createImage(@NonNull Image.Builder builder) {
+        String id = UUID.randomUUID().toString();
+
+        try {
+            Image image = builder.id(id).build();
+
+            Document document = mDatabase.getDocument(id);
+            document.putProperties(image.getProperties());
+
+            return Observable.just(image);
+        } catch (CouchbaseLiteException e) {
+            return Observable.error(e);
+        }
+    }
+
+    @NonNull
+    @Override
     public Observable<Section> createSection(@NonNull Section.Builder builder) {
         String id = UUID.randomUUID().toString();
 

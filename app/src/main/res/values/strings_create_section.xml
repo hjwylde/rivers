@@ -6,4 +6,5 @@
     <string name="action_retryCreateSection">Retry</string>
 
     <string name="error_onCreateSection">Unable to create</string>
+    <string name="error_onCreateImage">Unable to save image</string>
 </resources>

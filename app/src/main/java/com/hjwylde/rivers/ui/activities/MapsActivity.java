@@ -345,7 +345,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         outState.putSerializable(STATE_SECTIONS, new ArrayList<>(mSections));
     }
 
-    private void animateImageIn(View imageView) {
+    private void animateImageIn(@NonNull View imageView) {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
 
         imageView.startAnimation(animation);
