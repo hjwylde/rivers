@@ -4,6 +4,8 @@
     <string name="action_deleteSection">Delete</string>
     <string name="action_retryDeleteSection">Retry</string>
 
+    <string name="info_onSectionEdited">Saved</string>
+
     <string name="error_onDeleteSection">Unable to delete</string>
 
     <string name="label_grade">Grade</string>

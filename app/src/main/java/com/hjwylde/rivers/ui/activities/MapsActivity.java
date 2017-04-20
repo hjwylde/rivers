@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.rivers.R;
@@ -38,6 +37,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     private static final String TAG = MapsActivity.class.getSimpleName();
 
     private static final int REQUEST_CODE_SECTION_CREATED = 0;
+    private static final int REQUEST_CODE_SECTION_EDITED = 1;
 
     private static final String STATE_SECTIONS = "sections";
     private static final String STATE_BOTTOM_SHEET = "bottomSheet";
@@ -142,7 +142,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     @Override
     public void refreshImage() {
-        ImageView imageView = getImage();
+        ImageView imageView = findTById(R.id.image);
 
         if (mImage != null) {
             imageView.setImageBitmap(mImage.getBitmap());
@@ -178,6 +178,11 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     @Override
+    public void setImage(@NonNull Image image) {
+        mImage = checkNotNull(image);
+    }
+
+    @Override
     public void setSections(@NonNull List<Section> sections) {
         mSections = checkNotNull(sections);
     }
@@ -193,6 +198,10 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         switch (requestCode) {
             case REQUEST_CODE_SECTION_CREATED:
                 onSectionCreated();
+            case REQUEST_CODE_SECTION_EDITED:
+                Section section = (Section) data.getSerializableExtra(EditSectionActivity.INTENT_SECTION);
+
+                onSectionEdited(section);
         }
     }
 
@@ -231,7 +240,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
             }
         });
 
-        FloatingActionButton fab = getFloatingActionButton();
+        FloatingActionButton fab = findTById(R.id.fab);
         fab.setOnClickListener(this);
 
         NestedScrollView bottomSheet = findTById(R.id.bottomSheet);
@@ -240,8 +249,8 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            private final FloatingActionButton mFab = getFloatingActionButton();
-            private final View mImageContainer = getImageContainer();
+            private final FloatingActionButton mFab = findTById(R.id.fab);
+            private final View mImageContainer = findViewById(R.id.image_container);
             private final float mExpandedHeight = getResources().getDimension(R.dimen.imageHeight);
 
             @Override
@@ -280,10 +289,11 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
             }
         });
 
-        getTitleContainer().post(new Runnable() {
+        final View titleContainer = findViewById(R.id.title_container);
+        titleContainer.post(new Runnable() {
             @Override
             public void run() {
-                mBottomSheetBehavior.setPeekHeight(getTitleContainer().getHeight());
+                mBottomSheetBehavior.setPeekHeight(titleContainer.getHeight());
             }
         });
 
@@ -325,9 +335,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     protected void onResume() {
         super.onResume();
 
-        if (mSection != null && mImage == null) {
-            mPresenter.getImage(mSection.getImageId());
-        }
+        loadImage();
 
         mPresenter.streamSections();
     }
@@ -352,33 +360,15 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         imageView.startAnimation(animation);
     }
 
-    private FloatingActionButton getFloatingActionButton() {
-        return findTById(R.id.fab);
-    }
-
-    @NonNull
-    private ImageView getImage() {
-        return findTById(R.id.image);
-    }
-
-    @Override
-    public void setImage(@NonNull Image image) {
-        mImage = checkNotNull(image);
-    }
-
-    @NonNull
-    private View getImageContainer() {
-        return findViewById(R.id.image_container);
-    }
-
     @NonNull
     private MapsFragment getMapsFragment() {
         return (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.map);
     }
 
-    @NonNull
-    private LinearLayout getTitleContainer() {
-        return findTById(R.id.title_container);
+    private void loadImage() {
+        if (mSection != null && mSection.getImageId() != null && mImage == null) {
+            mPresenter.getImage(mSection.getImageId());
+        }
     }
 
     private void onDeleteSectionClick() {
@@ -389,7 +379,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         Intent intent = new Intent(this, EditSectionActivity.class);
         intent.putExtra(EditSectionActivity.INTENT_SECTION, mSection);
 
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE_SECTION_EDITED);
     }
 
     private void onSectionCreated() {
@@ -399,12 +389,23 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         snackbar.show();
     }
 
+    private void onSectionEdited(@NonNull Section section) {
+        setSection(section);
+        refreshSection();
+        Log.w("foo", section.getProperties().toString());
+
+        loadImage();
+
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.info_onSectionEdited, Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
+
     private void refreshFloatingActionButton() {
         if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
             return;
         }
 
-        FloatingActionButton fab = getFloatingActionButton();
+        FloatingActionButton fab = findTById(R.id.fab);
         fab.hide();
     }
 
@@ -413,7 +414,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
             return;
         }
 
-        View imageContainer = getImageContainer();
+        View imageContainer = findViewById(R.id.image_container);
         imageContainer.getLayoutParams().height = (int) getResources().getDimension(R.dimen.imageHeight);
         imageContainer.requestLayout();
     }
@@ -428,16 +429,19 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
         if (mSection.getGrade() != null && !mSection.getGrade().isEmpty()) {
             findTextViewById(R.id.grade).setText(mSection.getGrade());
+            findViewById(R.id.grade_container).setVisibility(View.VISIBLE);
         } else {
             findViewById(R.id.grade_container).setVisibility(View.GONE);
         }
         if (mSection.getLength() != null && !mSection.getLength().isEmpty()) {
             findTextViewById(R.id.length).setText(mSection.getLength());
+            findViewById(R.id.length_container).setVisibility(View.VISIBLE);
         } else {
             findViewById(R.id.length_container).setVisibility(View.GONE);
         }
         if (mSection.getDuration() != null && !mSection.getDuration().isEmpty()) {
             findTextViewById(R.id.duration).setText(mSection.getDuration());
+            findViewById(R.id.duration_container).setVisibility(View.VISIBLE);
         } else {
             findViewById(R.id.duration_container).setVisibility(View.GONE);
         }
@@ -448,7 +452,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     private void setSection(@NonNull Section section) {
         mSection = checkNotNull(section);
 
-        if (mImage != null && !mSection.getImageId().equals(mImage.getId())) {
+        if (mImage != null && !mImage.getId().equals(mSection.getImageId())) {
             mImage = null;
         }
     }

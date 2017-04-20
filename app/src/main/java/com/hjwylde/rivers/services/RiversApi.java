@@ -24,4 +24,7 @@ public interface RiversApi {
 
     @NonNull
     Observable<List<Section>> streamSections();
+
+    @NonNull
+    Observable<Section> updateSection(@NonNull Section.Builder builder);
 }

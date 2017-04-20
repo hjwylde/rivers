@@ -2,9 +2,10 @@
 <resources>
     <string name="title_activity_editSection"></string>
 
-    <string name="action_saveSection">SAVE</string>
+    <string name="action_updateSection">SAVE</string>
+    <string name="action_retryUpdateSection">Retry</string>
 
-    <string name="error_onUpdateSection">Can\'t save updates.</string>
+    <string name="error_onUpdateSection">Unable to save</string>
 
     <string name="hint_title">Title</string>
     <string name="hint_subtitle">Subtitle</string>

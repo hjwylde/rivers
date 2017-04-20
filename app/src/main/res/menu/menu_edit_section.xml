@@ -3,7 +3,7 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/saveSection"
-        android:title="@string/action_saveSection"
+        android:id="@+id/updateSection"
+        android:title="@string/action_updateSection"
         app:showAsAction="always"/>
 </menu>

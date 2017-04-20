@@ -1,6 +1,5 @@
 package com.hjwylde.rivers.ui.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -17,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -30,6 +28,7 @@ import com.hjwylde.rivers.ui.contracts.CreateSectionContract;
 import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
 import com.hjwylde.rivers.ui.presenters.CreateSectionPresenter;
 import com.hjwylde.rivers.ui.util.NullTextWatcher;
+import com.hjwylde.rivers.ui.util.SoftInput;
 
 import java.io.IOException;
 
@@ -261,16 +260,8 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         imageView.startAnimation(animation);
     }
 
-    private void hideSoftInput() {
-        View view = getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
-
     private void onCreateSectionClick() {
-        hideSoftInput();
+        SoftInput.hide(this);
 
         mPresenter.createSection(mSectionBuilder);
     }
