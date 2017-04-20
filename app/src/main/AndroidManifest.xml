@@ -37,7 +37,8 @@
             android:name=".ui.activities.CreateSectionActivity"
             android:label="@string/title_activity_createSection"
             android:parentActivityName=".ui.activities.MapsActivity"
-            android:theme="@style/Theme.Rivers.Light.NoActionBar">
+            android:theme="@style/Theme.Rivers.Light.NoActionBar"
+            android:windowSoftInputMode="stateVisible">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hjwylde.rivers.ui.activities.MapsActivity"/>
