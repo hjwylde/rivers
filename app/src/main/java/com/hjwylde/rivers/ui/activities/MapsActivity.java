@@ -123,7 +123,8 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     public void onDeleteSectionSuccess() {
         clearSelection();
 
-        // TODO (#43): snackbar with undo option
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.info_onSectionDeleted, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     @Override
