@@ -22,15 +22,26 @@ import com.hjwylde.rivers.R;
 
 import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
-public final class ClusterRenderer<T extends ClusterItem> extends DefaultClusterRenderer<T> {
+public final class ClusterRenderer<T extends ClusterItem> extends DefaultClusterRenderer<T> implements GoogleMap.OnCameraIdleListener {
+    private static final float MAX_MAP_ZOOM = 10.0f;
+
     private Context mContext;
+    private GoogleMap mMap;
 
     private BitmapDescriptor mIcon;
+
+    private float mCurrentMapZoom = 0.0f;
 
     public ClusterRenderer(@NonNull Context context, @NonNull GoogleMap map, @NonNull ClusterManager<T> clusterManager) {
         super(context, map, clusterManager);
 
         mContext = checkNotNull(context);
+        mMap = checkNotNull(map);
+    }
+
+    @Override
+    public void onCameraIdle() {
+        mCurrentMapZoom = mMap.getCameraPosition().zoom;
     }
 
     @Override
@@ -42,7 +53,7 @@ public final class ClusterRenderer<T extends ClusterItem> extends DefaultCluster
 
     @Override
     protected boolean shouldRenderAsCluster(Cluster<T> cluster) {
-        return cluster.getSize() > 1;
+        return super.shouldRenderAsCluster(cluster) && mCurrentMapZoom <= MAX_MAP_ZOOM;
     }
 
     @NonNull
@@ -72,6 +83,10 @@ public final class ClusterRenderer<T extends ClusterItem> extends DefaultCluster
         }
 
         return mIcon;
+    }
+
+    private float getMapZoom() {
+        return mMap.getCameraPosition().zoom;
     }
 
     @ColorInt

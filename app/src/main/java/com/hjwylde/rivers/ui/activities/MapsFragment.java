@@ -96,11 +96,20 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         mUiSettings.setMyLocationButtonEnabled(true);
 
         mClusterManager = new ClusterManager<>(getContext(), mMap);
-        mClusterManager.setRenderer(new ClusterRenderer<>(getContext(), mMap, mClusterManager));
         mClusterManager.setOnClusterItemClickListener(this);
         mClusterManager.setOnClusterClickListener(this);
 
-        mMap.setOnCameraIdleListener(mClusterManager);
+        final ClusterRenderer clusterRenderer = new ClusterRenderer<>(getContext(), mMap, mClusterManager);
+        clusterRenderer.setMinClusterSize(1);
+        mClusterManager.setRenderer(clusterRenderer);
+
+        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                mClusterManager.onCameraIdle();
+                clusterRenderer.onCameraIdle();
+            }
+        });
         mMap.setOnMarkerClickListener(mOnMarkerClickListener);
         mMap.setOnMapClickListener(new DefaultOnMapClickListener());
 
