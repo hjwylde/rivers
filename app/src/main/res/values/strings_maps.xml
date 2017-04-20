@@ -5,4 +5,5 @@
     <string name="action_next">NEXT</string>
 
     <string name="info_onSectionCreated">Created</string>
+    <string name="info_onSectionDeleted">Deleted</string>
 </resources>
