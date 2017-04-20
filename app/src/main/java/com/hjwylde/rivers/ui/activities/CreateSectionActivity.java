@@ -33,8 +33,6 @@ import com.hjwylde.rivers.ui.util.NullTextWatcher;
 
 import java.io.IOException;
 
-import static com.hjwylde.rivers.ui.dialogs.SelectImageDialog.REQUEST_CODE_PHOTO_SELECTED;
-import static com.hjwylde.rivers.ui.dialogs.SelectImageDialog.REQUEST_CODE_PHOTO_TAKEN;
 import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
 public final class CreateSectionActivity extends BaseActivity implements CreateSectionContract.View {
@@ -57,7 +55,8 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     public void onCreateImageFailure(@NonNull Throwable t) {
         Log.w(TAG, t.getMessage(), t);
 
-        Snackbar.make(findViewById(R.id.root_container), R.string.error_onCreateImage, Snackbar.LENGTH_LONG).show();
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onCreateImage, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     @Override
@@ -145,12 +144,12 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         }
 
         switch (requestCode) {
-            case REQUEST_CODE_PHOTO_TAKEN:
+            case SelectImageDialog.REQUEST_CODE_PHOTO_TAKEN:
                 Bitmap bitmap = data.getParcelableExtra("data");
 
                 onImageSelected(bitmap);
                 break;
-            case REQUEST_CODE_PHOTO_SELECTED:
+            case SelectImageDialog.REQUEST_CODE_PHOTO_SELECTED:
                 Uri uri = data.getData();
 
                 try {

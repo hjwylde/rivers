@@ -22,8 +22,6 @@ import com.hjwylde.rivers.ui.contracts.EditSectionContract;
 import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
 import com.hjwylde.rivers.ui.presenters.EditSectionPresenter;
 
-import static com.hjwylde.rivers.ui.dialogs.SelectImageDialog.REQUEST_CODE_PHOTO_SELECTED;
-import static com.hjwylde.rivers.ui.dialogs.SelectImageDialog.REQUEST_CODE_PHOTO_TAKEN;
 import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
 public final class EditSectionActivity extends BaseActivity implements EditSectionContract.View {
@@ -91,10 +89,10 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
         }
 
         switch (requestCode) {
-            case REQUEST_CODE_PHOTO_TAKEN:
+            case SelectImageDialog.REQUEST_CODE_PHOTO_TAKEN:
                 // TODO (#11)
                 break;
-            case REQUEST_CODE_PHOTO_SELECTED:
+            case SelectImageDialog.REQUEST_CODE_PHOTO_SELECTED:
                 // TODO (#11)
         }
     }
