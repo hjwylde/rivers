@@ -3,6 +3,7 @@ package com.hjwylde.rivers.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.hjwylde.rivers.ui.contracts.EditSectionContract;
 import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
 import com.hjwylde.rivers.ui.presenters.EditSectionPresenter;
 import com.hjwylde.rivers.ui.util.NullTextWatcher;
+import com.hjwylde.rivers.ui.util.SoftInput;
 
 import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
@@ -54,7 +56,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     public void onGetImageFailure(@NonNull Throwable t) {
         Log.w(TAG, t.getMessage(), t);
 
-        // TODO (#74)
+        // TODO (hjw): report/retry
     }
 
     @Override
@@ -64,12 +66,40 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
                 setResult(RESULT_CANCELED);
                 finish();
                 return true;
-            case R.id.saveSection:
-                // TODO (#13)
+            case R.id.updateSection:
+                onUpdateSectionClick();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onUpdateSectionFailure(@NonNull Throwable t) {
+        Log.w(TAG, t.getMessage(), t);
+
+        final Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onUpdateSection, Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.action_retryUpdateSection, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (snackbar.isShown()) {
+                    snackbar.dismiss();
+                }
+
+                onUpdateSectionClick();
+            }
+        });
+
+        snackbar.show();
+    }
+
+    @Override
+    public void onUpdateSectionSuccess(@NonNull Section section) {
+        Intent data = new Intent();
+        data.putExtra(INTENT_SECTION, section);
+
+        setResult(RESULT_OK, data);
+        finish();
     }
 
     @Override
@@ -193,6 +223,12 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
 
         imageView.startAnimation(animation);
+    }
+
+    private void onUpdateSectionClick() {
+        SoftInput.hide(this);
+
+        mPresenter.updateSection(mSectionBuilder);
     }
 
     private void refreshFocus() {

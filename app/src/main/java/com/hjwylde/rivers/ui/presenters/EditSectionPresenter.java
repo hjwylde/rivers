@@ -3,6 +3,7 @@ package com.hjwylde.rivers.ui.presenters;
 import android.support.annotation.NonNull;
 
 import com.hjwylde.rivers.models.Image;
+import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.services.RiversApi;
 import com.hjwylde.rivers.ui.contracts.EditSectionContract;
 
@@ -51,5 +52,28 @@ public final class EditSectionPresenter implements EditSectionContract.Presenter
     @Override
     public void unsubscribe() {
         mSubscriptions.clear();
+    }
+
+    @Override
+    public void updateSection(@NonNull Section.Builder builder) {
+        Subscription subscription = mRiversApi.updateSection(builder)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Section>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.onUpdateSectionFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(Section section) {
+                        mView.onUpdateSectionSuccess(section);
+                    }
+                });
+
+        mSubscriptions.add(subscription);
     }
 }

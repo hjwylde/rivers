@@ -7,6 +7,7 @@ import com.couchbase.lite.Database;
 import com.couchbase.lite.Document;
 import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.QueryRow;
+import com.couchbase.lite.UnsavedRevision;
 import com.couchbase.lite.View;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
@@ -65,7 +66,7 @@ public final class LocalRiversService implements RiversApi {
     @NonNull
     @Override
     public Observable<Void> deleteSection(@NonNull Section section) {
-        Document document = mDatabase.getDocument(section.getId());
+        Document document = mDatabase.getExistingDocument(section.getId());
 
         try {
             if (document != null) {
@@ -81,7 +82,7 @@ public final class LocalRiversService implements RiversApi {
     @NonNull
     @Override
     public Observable<Image> getImage(@NonNull String id) {
-        Document document = mDatabase.getDocument(id);
+        Document document = mDatabase.getExistingDocument(id);
 
         if (document != null) {
             Image image = new Image.Builder(document).build();
@@ -128,6 +129,28 @@ public final class LocalRiversService implements RiversApi {
         query.start();
 
         return Observable.create(observer);
+    }
+
+    @NonNull
+    @Override
+    public Observable<Section> updateSection(@NonNull Section.Builder builder) {
+        try {
+            final Section section = builder.build();
+
+            Document document = mDatabase.getExistingDocument(section.getId());
+            document.update(new Document.DocumentUpdater() {
+                @Override
+                public boolean update(UnsavedRevision newRevision) {
+                    newRevision.setProperties(section.getProperties());
+
+                    return true;
+                }
+            });
+
+            return Observable.just(section);
+        } catch (CouchbaseLiteException e) {
+            return Observable.error(e);
+        }
     }
 
     private interface QueryObserver<T> extends LiveQuery.ChangeListener, Observable.OnSubscribe<T> {
