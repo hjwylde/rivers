@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.util.Log;
@@ -19,6 +18,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -216,8 +216,6 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
 
         LatLng putIn = getIntent().getParcelableExtra(INTENT_PUT_IN);
         mSectionBuilder.putIn(putIn);
-
-        refreshFocus();
     }
 
     @Override
@@ -287,10 +285,8 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
 
     private void refreshFocus() {
         View view = getCurrentFocus();
-        if (view == null) {
-            findViewById(R.id.title).requestFocus();
-        } else if (view instanceof TextInputEditText) {
-            TextInputEditText editText = (TextInputEditText) view;
+        if (view instanceof EditText) {
+            EditText editText = (EditText) view;
             editText.setSelection(editText.getText().length());
         }
     }
