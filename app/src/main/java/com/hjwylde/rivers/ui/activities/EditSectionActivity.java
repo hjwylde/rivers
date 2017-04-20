@@ -1,7 +1,10 @@
 package com.hjwylde.rivers.ui.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
@@ -26,6 +29,8 @@ import com.hjwylde.rivers.ui.presenters.EditSectionPresenter;
 import com.hjwylde.rivers.ui.util.NullTextWatcher;
 import com.hjwylde.rivers.ui.util.SoftInput;
 
+import java.io.IOException;
+
 import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
 
 public final class EditSectionActivity extends BaseActivity implements EditSectionContract.View {
@@ -42,6 +47,22 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
 
     public void onCameraClick(@NonNull View view) {
         new SelectImageDialog.Builder(this).create().show();
+    }
+
+    @Override
+    public void onCreateImageFailure(@NonNull Throwable t) {
+        Log.w(TAG, t.getMessage(), t);
+
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onCreateImage, Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
+
+    @Override
+    public void onCreateImageSuccess(@NonNull Image image) {
+        mSectionBuilder.imageId(image.getId());
+
+        setImage(image);
+        refreshImage();
     }
 
     @Override
@@ -104,7 +125,14 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
 
     @Override
     public void refreshImage() {
-        refreshImage(true);
+        if (mImage == null) {
+            return;
+        }
+
+        ImageView imageView = findTById(R.id.image);
+        imageView.setImageBitmap(mImage.getBitmap());
+
+        animateImageIn(imageView);
     }
 
     @Override
@@ -122,10 +150,22 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
 
         switch (requestCode) {
             case SelectImageDialog.REQUEST_CODE_PHOTO_TAKEN:
-                // TODO (#11)
+                Bitmap bitmap = data.getParcelableExtra("data");
+
+                onImageSelected(bitmap);
                 break;
             case SelectImageDialog.REQUEST_CODE_PHOTO_SELECTED:
-                // TODO (#11)
+                Uri uri = data.getData();
+
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+
+                    onImageSelected(bitmap);
+                } catch (IOException e) {
+                    Log.w(TAG, e.getMessage(), e);
+
+                    // TODO (hjw): report
+                }
         }
     }
 
@@ -225,6 +265,13 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
         imageView.startAnimation(animation);
     }
 
+    private void onImageSelected(Bitmap bitmap) {
+        Image.Builder builder = new Image.Builder();
+        builder.bitmap(bitmap);
+
+        mPresenter.createImage(builder);
+    }
+
     private void onUpdateSectionClick() {
         SoftInput.hide(this);
 
@@ -238,19 +285,6 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
             editText.setSelection(editText.getText().length());
         } else {
             findViewById(R.id.title).requestFocus();
-        }
-    }
-
-    private void refreshImage(boolean animate) {
-        if (mImage == null) {
-            return;
-        }
-
-        ImageView imageView = findTById(R.id.image);
-        imageView.setImageBitmap(mImage.getBitmap());
-
-        if (animate) {
-            animateImageIn(imageView);
         }
     }
 

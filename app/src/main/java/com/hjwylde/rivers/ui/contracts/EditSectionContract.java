@@ -7,6 +7,10 @@ import com.hjwylde.rivers.models.Section;
 
 public interface EditSectionContract {
     interface View extends BaseContract.View {
+        void onCreateImageFailure(@NonNull Throwable t);
+
+        void onCreateImageSuccess(@NonNull Image image);
+
         void onGetImageFailure(@NonNull Throwable t);
 
         void onUpdateSectionFailure(@NonNull Throwable t);
@@ -19,6 +23,8 @@ public interface EditSectionContract {
     }
 
     interface Presenter extends BaseContract.Presenter {
+        void createImage(@NonNull Image.Builder image);
+
         void getImage(@NonNull String id);
 
         void updateSection(@NonNull Section.Builder builder);

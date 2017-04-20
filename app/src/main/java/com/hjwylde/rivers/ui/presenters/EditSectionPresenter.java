@@ -25,6 +25,30 @@ public final class EditSectionPresenter implements EditSectionContract.Presenter
         mRiversApi = checkNotNull(riversApi);
     }
 
+
+    @Override
+    public void createImage(@NonNull Image.Builder builder) {
+        Subscription subscription = mRiversApi.createImage(builder)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Image>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.onCreateImageFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(Image image) {
+                        mView.onCreateImageSuccess(image);
+                    }
+                });
+
+        mSubscriptions.add(subscription);
+    }
+
     @Override
     public void getImage(@NonNull String id) {
         Subscription subscription = mRiversApi.getImage(id)
