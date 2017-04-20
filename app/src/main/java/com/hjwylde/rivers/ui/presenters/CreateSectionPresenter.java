@@ -1,7 +1,6 @@
 package com.hjwylde.rivers.ui.presenters;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;

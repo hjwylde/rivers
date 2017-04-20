@@ -136,6 +136,11 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     }
 
     @Override
+    public void setImage(@NonNull Image image) {
+        mImage = checkNotNull(image);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -254,11 +259,6 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
 
         imageView.startAnimation(animation);
-    }
-
-    @Override
-    public void setImage(@NonNull Image image) {
-        mImage = checkNotNull(image);
     }
 
     private void hideSoftInput() {

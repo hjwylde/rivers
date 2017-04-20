@@ -196,13 +196,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         }
     }
 
-    private void onSectionCreated() {
-        mCreateSectionMode.finish();
-
-        Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.info_onSectionCreated, Snackbar.LENGTH_LONG);
-        snackbar.show();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -397,6 +390,13 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         intent.putExtra(EditSectionActivity.INTENT_SECTION, mSection);
 
         startActivity(intent);
+    }
+
+    private void onSectionCreated() {
+        mCreateSectionMode.finish();
+
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.info_onSectionCreated, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     private void refreshFloatingActionButton() {
