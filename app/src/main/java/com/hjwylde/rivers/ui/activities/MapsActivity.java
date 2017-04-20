@@ -191,8 +191,15 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
         switch (requestCode) {
             case REQUEST_CODE_SECTION_CREATED:
-                mCreateSectionMode.finish();
+                onSectionCreated();
         }
+    }
+
+    private void onSectionCreated() {
+        mCreateSectionMode.finish();
+
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.info_onSectionCreated, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     @Override

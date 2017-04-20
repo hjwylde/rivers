@@ -3,4 +3,6 @@
     <string name="title_activity_maps">Rivers</string>
 
     <string name="action_next">NEXT</string>
+
+    <string name="info_onSectionCreated">Created</string>
 </resources>
