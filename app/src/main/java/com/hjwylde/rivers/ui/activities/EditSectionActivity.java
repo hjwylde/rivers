@@ -283,8 +283,6 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
         if (view instanceof EditText) {
             EditText editText = (EditText) view;
             editText.setSelection(editText.getText().length());
-        } else {
-            findViewById(R.id.title).requestFocus();
         }
     }
 
