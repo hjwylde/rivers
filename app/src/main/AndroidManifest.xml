@@ -37,8 +37,8 @@
             android:name=".ui.activities.CreateSectionActivity"
             android:label="@string/title_activity_createSection"
             android:parentActivityName=".ui.activities.MapsActivity"
-            android:theme="@style/Theme.Rivers.Light.NoActionBar.Translucent"
-            android:windowSoftInputMode="stateVisible">
+            android:theme="@style/Theme.Rivers.Light.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateVisible">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hjwylde.rivers.ui.activities.MapsActivity"/>
@@ -47,8 +47,8 @@
             android:name=".ui.activities.EditSectionActivity"
             android:label="@string/title_activity_editSection"
             android:parentActivityName=".ui.activities.MapsActivity"
-            android:theme="@style/Theme.Rivers.Light.NoActionBar.Translucent.Popup"
-            android:windowSoftInputMode="stateVisible">
+            android:theme="@style/Theme.Rivers.Light.NoActionBar.Popup"
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hjwylde.rivers.ui.activities.MapsActivity"/>
