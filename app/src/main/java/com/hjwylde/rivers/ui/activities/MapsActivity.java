@@ -153,6 +153,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         }
     }
 
+    @Override
     public void refreshMap() {
         MapsFragment mapsFragment = getMapsFragment();
         mapsFragment.refreshMap(mSections);
@@ -198,10 +199,12 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         switch (requestCode) {
             case REQUEST_CODE_SECTION_CREATED:
                 onSectionCreated();
+                break;
             case REQUEST_CODE_SECTION_EDITED:
                 Section section = (Section) data.getSerializableExtra(EditSectionActivity.INTENT_SECTION);
 
                 onSectionEdited(section);
+                break;
         }
     }
 
@@ -392,7 +395,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     private void onSectionEdited(@NonNull Section section) {
         setSection(section);
         refreshSection();
-        Log.w("foo", section.getProperties().toString());
 
         loadImage();
 
