@@ -52,10 +52,7 @@ public class RiversApplication extends Application {
             options.setCreate(true);
 
             mDatabase = manager.openDatabase("rivers", options);
-        } catch (IOException e) {
-            e.printStackTrace();
-            // TODO (hjw): panic
-        } catch (CouchbaseLiteException e) {
+        } catch (IOException | CouchbaseLiteException e) {
             e.printStackTrace();
             // TODO (hjw): panic
         }

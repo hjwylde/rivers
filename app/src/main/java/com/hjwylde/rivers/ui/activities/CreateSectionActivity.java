@@ -79,15 +79,12 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         Log.w(TAG, t.getMessage(), t);
 
         final Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onCreateSection, Snackbar.LENGTH_LONG);
-        snackbar.setAction(R.string.action_retryCreateSection, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (snackbar.isShown()) {
-                    snackbar.dismiss();
-                }
-
-                onCreateSectionClick();
+        snackbar.setAction(R.string.action_retryCreateSection, view -> {
+            if (snackbar.isShown()) {
+                snackbar.dismiss();
             }
+
+            onCreateSectionClick();
         });
 
         snackbar.show();

@@ -12,17 +12,17 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public abstract class BaseActivity extends AppCompatActivity {
     @NonNull
-    public EditText findEditTextById(@IdRes int id) {
+    protected EditText findEditTextById(@IdRes int id) {
         return findTById(id);
     }
 
     @NonNull
-    public <T extends View> T findTById(@IdRes int id) {
+    protected <T extends View> T findTById(@IdRes int id) {
         return (T) findViewById(id);
     }
 
     @NonNull
-    public TextView findTextViewById(@IdRes int id) {
+    protected TextView findTextViewById(@IdRes int id) {
         return findTById(id);
     }
 

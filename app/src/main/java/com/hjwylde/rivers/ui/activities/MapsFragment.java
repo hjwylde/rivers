@@ -99,16 +99,13 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         mClusterManager.setOnClusterItemClickListener(this);
         mClusterManager.setOnClusterClickListener(this);
 
-        final ClusterRenderer clusterRenderer = new ClusterRenderer<>(getContext(), mMap, mClusterManager);
+        final ClusterRenderer<SectionMarker> clusterRenderer = new ClusterRenderer<>(getContext(), mMap, mClusterManager);
         clusterRenderer.setMinClusterSize(1);
         mClusterManager.setRenderer(clusterRenderer);
 
-        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-                mClusterManager.onCameraIdle();
-                clusterRenderer.onCameraIdle();
-            }
+        mMap.setOnCameraIdleListener(() -> {
+            mClusterManager.onCameraIdle();
+            clusterRenderer.onCameraIdle();
         });
         mMap.setOnMarkerClickListener(mOnMarkerClickListener);
         mMap.setOnMapClickListener(new DefaultOnMapClickListener());

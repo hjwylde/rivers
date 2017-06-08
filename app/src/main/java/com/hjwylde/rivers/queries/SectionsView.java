@@ -3,13 +3,9 @@ package com.hjwylde.rivers.queries;
 import android.support.annotation.NonNull;
 
 import com.couchbase.lite.Database;
-import com.couchbase.lite.Emitter;
-import com.couchbase.lite.Mapper;
 import com.couchbase.lite.View;
 import com.hjwylde.rivers.models.BaseDocument;
 import com.hjwylde.rivers.models.Section;
-
-import java.util.Map;
 
 public final class SectionsView {
     @NonNull
@@ -35,13 +31,10 @@ public final class SectionsView {
     private static View buildView(Database database) {
         View view = database.getView(NAME);
         if (view.getMap() == null) {
-            view.setMap(new Mapper() {
-                @Override
-                public void map(Map<String, Object> document, Emitter emitter) {
-                    String type = (String) document.get(BaseDocument.PROPERTY_TYPE);
-                    if (Section.TYPE.equals(type)) {
-                        emitter.emit(document.get(BaseDocument.PROPERTY_ID), null);
-                    }
+            view.setMap((document, emitter) -> {
+                String type = (String) document.get(BaseDocument.PROPERTY_TYPE);
+                if (Section.TYPE.equals(type)) {
+                    emitter.emit(document.get(BaseDocument.PROPERTY_ID), null);
                 }
             }, VERSION);
         }
