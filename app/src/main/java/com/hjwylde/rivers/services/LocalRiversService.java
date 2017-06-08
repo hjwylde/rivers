@@ -7,7 +7,6 @@ import com.couchbase.lite.Database;
 import com.couchbase.lite.Document;
 import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.QueryRow;
-import com.couchbase.lite.UnsavedRevision;
 import com.couchbase.lite.View;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
@@ -98,7 +97,7 @@ public final class LocalRiversService implements RiversApi {
         View view = SectionsView.getInstance(mDatabase);
         LiveQuery query = view.createQuery().toLiveQuery();
 
-        QueryObserver observer = new QueryObserver<List<Section>>() {
+        QueryObserver<List<Section>> observer = new QueryObserver<List<Section>>() {
             private List<Subscriber<? super List<Section>>> mSubscribers = new ArrayList<>();
 
             private List<Section> mSections = new ArrayList<>();
@@ -119,7 +118,7 @@ public final class LocalRiversService implements RiversApi {
                     mSections.add(new Section.Builder(row.getDocument()).build());
                 }
 
-                for (Subscriber subscriber : mSubscribers) {
+                for (Subscriber<? super List<Section>> subscriber : mSubscribers) {
                     subscriber.onNext(mSections);
                 }
             }
@@ -138,13 +137,10 @@ public final class LocalRiversService implements RiversApi {
             final Section section = builder.build();
 
             Document document = mDatabase.getExistingDocument(section.getId());
-            document.update(new Document.DocumentUpdater() {
-                @Override
-                public boolean update(UnsavedRevision newRevision) {
-                    newRevision.setProperties(section.getProperties());
+            document.update(newRevision -> {
+                newRevision.setProperties(section.getProperties());
 
-                    return true;
-                }
+                return true;
             });
 
             return Observable.just(section);

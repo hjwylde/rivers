@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -105,15 +104,12 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         Log.w(TAG, t.getMessage(), t);
 
         final Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onDeleteSection, Snackbar.LENGTH_LONG);
-        snackbar.setAction(R.string.action_retryDeleteSection, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (snackbar.isShown()) {
-                    snackbar.dismiss();
-                }
-
-                onDeleteSectionClick();
+        snackbar.setAction(R.string.action_retryDeleteSection, view -> {
+            if (snackbar.isShown()) {
+                snackbar.dismiss();
             }
+
+            onDeleteSectionClick();
         });
 
         snackbar.show();
@@ -220,27 +216,21 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         Toolbar sectionToolbar = findTById(R.id.sectionToolbar);
         sectionToolbar.inflateMenu(R.menu.menu_section);
         sectionToolbar.setNavigationIcon(R.drawable.ic_arrow_left);
-        sectionToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-            }
+        sectionToolbar.setNavigationOnClickListener(view -> {
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         });
         sectionToolbar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.ic_dots_vertical));
-        sectionToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.editSection:
-                        onEditSectionClick();
-                        return true;
-                    case R.id.deleteSection:
-                        onDeleteSectionClick();
-                        return true;
-                }
-
-                return false;
+        sectionToolbar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.editSection:
+                    onEditSectionClick();
+                    return true;
+                case R.id.deleteSection:
+                    onDeleteSectionClick();
+                    return true;
             }
+
+            return false;
         });
 
         FloatingActionButton fab = findTById(R.id.fab);
@@ -293,11 +283,8 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         });
 
         final View titleContainer = findViewById(R.id.title_container);
-        titleContainer.post(new Runnable() {
-            @Override
-            public void run() {
-                mBottomSheetBehavior.setPeekHeight(titleContainer.getHeight());
-            }
+        titleContainer.post(() -> {
+            mBottomSheetBehavior.setPeekHeight(titleContainer.getHeight());
         });
 
         mPresenter = new MapsPresenter(this, RiversApplication.getRiversService());

@@ -100,15 +100,12 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
         Log.w(TAG, t.getMessage(), t);
 
         final Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onUpdateSection, Snackbar.LENGTH_LONG);
-        snackbar.setAction(R.string.action_retryUpdateSection, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (snackbar.isShown()) {
-                    snackbar.dismiss();
-                }
-
-                onUpdateSectionClick();
+        snackbar.setAction(R.string.action_retryUpdateSection, view -> {
+            if (snackbar.isShown()) {
+                snackbar.dismiss();
             }
+
+            onUpdateSectionClick();
         });
 
         snackbar.show();
