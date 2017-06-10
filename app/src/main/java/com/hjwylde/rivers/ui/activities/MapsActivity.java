@@ -36,7 +36,7 @@ import com.hjwylde.rivers.ui.util.SectionSuggestion;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public final class MapsActivity extends BaseActivity implements MapsContract.View, View.OnClickListener {
     private static final String TAG = MapsActivity.class.getSimpleName();
@@ -191,7 +191,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     @Override
     public void setImage(@NonNull Image image) {
-        mImage = checkNotNull(image);
+        mImage = requireNonNull(image);
     }
 
     @Override
@@ -201,7 +201,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     @Override
     public void setSections(@NonNull List<Section> sections) {
-        mSections = checkNotNull(sections);
+        mSections = requireNonNull(sections);
     }
 
     @Override
@@ -354,7 +354,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
         NestedScrollView child = findTById(R.id.bottomSheet);
         CoordinatorLayout parent = (CoordinatorLayout) child.getParent();
-        Parcelable bottomSheetParcelable = checkNotNull(savedInstanceState.getParcelable(STATE_BOTTOM_SHEET));
+        Parcelable bottomSheetParcelable = requireNonNull(savedInstanceState.getParcelable(STATE_BOTTOM_SHEET));
         mBottomSheetBehavior.onRestoreInstanceState(parent, child, bottomSheetParcelable);
 
         refreshFloatingActionButton();
@@ -495,7 +495,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     private void setSection(@NonNull Section section) {
-        mSection = checkNotNull(section);
+        mSection = requireNonNull(section);
 
         if (mImage != null && !mImage.getId().equals(mSection.getImageId())) {
             mImage = null;

@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.hjwylde.rivers.models.Section;
 
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public final class SectionSuggestion implements SearchSuggestion {
     public static final Creator<SectionSuggestion> CREATOR = new Creator<SectionSuggestion>() {
@@ -24,7 +24,7 @@ public final class SectionSuggestion implements SearchSuggestion {
     private final Section mSection;
 
     public SectionSuggestion(@NonNull Section section) {
-        mSection = checkNotNull(section);
+        mSection = requireNonNull(section);
     }
 
     public SectionSuggestion(@NonNull Parcel source) {

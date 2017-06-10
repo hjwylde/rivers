@@ -12,8 +12,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.hjwylde.rivers.util.Preconditions.checkArgument;
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
+import static com.hjwylde.rivers.util.Preconditions.requireTrue;
+import static java.util.Objects.requireNonNull;
 
 public final class Image implements Serializable {
     @NonNull
@@ -30,10 +30,10 @@ public final class Image implements Serializable {
     public Image(@NonNull Map<String, Object> properties) {
         mProperties = new HashMap<>(properties);
 
-        checkArgument(mProperties.get(BaseDocument.PROPERTY_TYPE).equals(TYPE));
+        requireTrue(mProperties.get(BaseDocument.PROPERTY_TYPE).equals(TYPE));
 
-        checkNotNull(mProperties.get(BaseDocument.PROPERTY_ID));
-        checkNotNull(mProperties.get(PROPERTY_DATA));
+        requireNonNull(mProperties.get(BaseDocument.PROPERTY_ID));
+        requireNonNull(mProperties.get(PROPERTY_DATA));
     }
 
     @NonNull

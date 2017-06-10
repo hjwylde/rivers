@@ -31,7 +31,7 @@ import com.hjwylde.rivers.ui.util.SoftInput;
 
 import java.io.IOException;
 
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public final class EditSectionActivity extends BaseActivity implements EditSectionContract.View {
     public static final String INTENT_SECTION = "section";
@@ -134,7 +134,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
 
     @Override
     public void setImage(@NonNull Image image) {
-        mImage = checkNotNull(image);
+        mImage = requireNonNull(image);
     }
 
     @Override

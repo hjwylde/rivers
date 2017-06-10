@@ -20,7 +20,7 @@ import com.hjwylde.rivers.ui.activities.MapsActivity;
 import com.hjwylde.rivers.ui.activities.MapsFragment;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
 
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public final class CreateSectionMode implements ActionMode.Callback {
     private final BaseActivity mActivity;
@@ -33,8 +33,8 @@ public final class CreateSectionMode implements ActionMode.Callback {
     private boolean mActive = false;
 
     public CreateSectionMode(@NonNull MapsActivity activity, @NonNull MapsFragment mapsFragment) {
-        mActivity = checkNotNull(activity);
-        mMapsFragment = checkNotNull(mapsFragment);
+        mActivity = requireNonNull(activity);
+        mMapsFragment = requireNonNull(mapsFragment);
 
         mView = activity;
     }

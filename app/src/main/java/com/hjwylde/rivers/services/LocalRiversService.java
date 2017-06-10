@@ -21,13 +21,13 @@ import java.util.UUID;
 import rx.Observable;
 import rx.Subscriber;
 
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public final class LocalRiversService implements RiversApi {
     private final Database mDatabase;
 
     private LocalRiversService(Database database) {
-        mDatabase = checkNotNull(database);
+        mDatabase = requireNonNull(database);
     }
 
     @NonNull

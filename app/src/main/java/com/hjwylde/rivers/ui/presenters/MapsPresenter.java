@@ -16,7 +16,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public final class MapsPresenter implements MapsContract.Presenter {
     private final MapsContract.View mView;
@@ -25,8 +25,8 @@ public final class MapsPresenter implements MapsContract.Presenter {
     private final CompositeSubscription mSubscriptions = new CompositeSubscription();
 
     public MapsPresenter(@NonNull MapsContract.View view, @NonNull RiversApi riversApi) {
-        mView = checkNotNull(view);
-        mRiversApi = checkNotNull(riversApi);
+        mView = requireNonNull(view);
+        mRiversApi = requireNonNull(riversApi);
     }
 
     @Override
@@ -82,7 +82,8 @@ public final class MapsPresenter implements MapsContract.Presenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Section>>() {
                     @Override
-                    public void onCompleted() {}
+                    public void onCompleted() {
+                    }
 
                     @Override
                     public void onError(Throwable e) {

@@ -32,7 +32,7 @@ import com.hjwylde.rivers.ui.util.SoftInput;
 
 import java.io.IOException;
 
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public final class CreateSectionActivity extends BaseActivity implements CreateSectionContract.View {
     public static final String INTENT_PUT_IN = "putIn";
@@ -133,7 +133,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
 
     @Override
     public void setImage(@NonNull Image image) {
-        mImage = checkNotNull(image);
+        mImage = requireNonNull(image);
     }
 
     @Override

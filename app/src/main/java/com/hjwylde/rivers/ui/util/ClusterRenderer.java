@@ -20,7 +20,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.hjwylde.rivers.R;
 
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public final class ClusterRenderer<T extends ClusterItem> extends DefaultClusterRenderer<T> implements GoogleMap.OnCameraIdleListener {
     private static final float MAX_MAP_ZOOM = 10.0f;
@@ -35,8 +35,8 @@ public final class ClusterRenderer<T extends ClusterItem> extends DefaultCluster
     public ClusterRenderer(@NonNull Context context, @NonNull GoogleMap map, @NonNull ClusterManager<T> clusterManager) {
         super(context, map, clusterManager);
 
-        mContext = checkNotNull(context);
-        mMap = checkNotNull(map);
+        mContext = requireNonNull(context);
+        mMap = requireNonNull(map);
     }
 
     @Override

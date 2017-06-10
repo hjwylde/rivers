@@ -12,7 +12,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public final class EditSectionPresenter implements EditSectionContract.Presenter {
     private final EditSectionContract.View mView;
@@ -21,8 +21,8 @@ public final class EditSectionPresenter implements EditSectionContract.Presenter
     private final CompositeSubscription mSubscriptions = new CompositeSubscription();
 
     public EditSectionPresenter(@NonNull EditSectionContract.View view, @NonNull RiversApi riversApi) {
-        mView = checkNotNull(view);
-        mRiversApi = checkNotNull(riversApi);
+        mView = requireNonNull(view);
+        mRiversApi = requireNonNull(riversApi);
     }
 
 
