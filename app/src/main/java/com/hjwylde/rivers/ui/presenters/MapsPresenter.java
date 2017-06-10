@@ -6,7 +6,9 @@ import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.services.RiversApi;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
+import com.hjwylde.rivers.ui.util.SectionSuggestion;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Subscriber;
@@ -68,6 +70,33 @@ public final class MapsPresenter implements MapsContract.Presenter {
                     @Override
                     public void onNext(Image image) {
                         mView.setImage(image);
+                    }
+                });
+
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
+    public void getSectionSuggestions(@NonNull String query) {
+        Subscription subscription = mRiversApi.searchSections(query)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Section>>() {
+                    @Override
+                    public void onCompleted() {}
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.onGetSectionSuggestionsFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(List<Section> sections) {
+                        List<SectionSuggestion> sectionSuggestions = new ArrayList<>();
+                        for (Section section : sections) {
+                            sectionSuggestions.add(new SectionSuggestion(section));
+                        }
+
+                        mView.setSectionSuggestions(sectionSuggestions);
                     }
                 });
 
