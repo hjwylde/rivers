@@ -18,6 +18,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
@@ -26,6 +31,7 @@ import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
 import com.hjwylde.rivers.ui.presenters.MapsPresenter;
 import com.hjwylde.rivers.ui.util.CreateSectionMode;
+import com.hjwylde.rivers.ui.util.SectionSuggestion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +44,13 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     private static final int REQUEST_CODE_SECTION_CREATED = 0;
     private static final int REQUEST_CODE_SECTION_EDITED = 1;
 
-    private static final String STATE_SECTIONS = "sections";
+    private static final String STATE_SEARCH_VIEW = "searchView";
     private static final String STATE_BOTTOM_SHEET = "bottomSheet";
-    private static final String STATE_SECTION = "section";
     private static final String STATE_CREATE_SECTION_MODE_ACTIVE = "createSectionModeActive";
+    private static final String STATE_SECTION = "section";
+    private static final String STATE_SECTIONS = "sections";
 
+    private FloatingSearchView mSearchView;
     private BottomSheetBehavior<NestedScrollView> mBottomSheetBehavior;
     private CreateSectionMode mCreateSectionMode;
 
@@ -130,6 +138,13 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         // TODO (#74)
     }
 
+    @Override
+    public void onGetSectionSuggestionsFailure(@NonNull Throwable t) {
+        Log.w(TAG, t.getMessage(), t);
+
+        mSearchView.clearSuggestions();
+    }
+
     public void onTitleContainerClick(@NonNull View view) {
         if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
             mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -180,6 +195,11 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     @Override
+    public void setSectionSuggestions(@NonNull List<SectionSuggestion> sectionSuggestions) {
+        mSearchView.swapSuggestions(sectionSuggestions);
+    }
+
+    @Override
     public void setSections(@NonNull List<Section> sections) {
         mSections = checkNotNull(sections);
     }
@@ -210,8 +230,37 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
         setContentView(R.layout.activity_maps);
 
-        Toolbar toolbar = findTById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mSearchView = findTById(R.id.floating_search_view);
+        mSearchView.setOnQueryChangeListener((oldQuery, newQuery) -> {
+            if (newQuery.isEmpty()) {
+                mSearchView.clearSuggestions();
+                return;
+            }
+
+            mPresenter.getSectionSuggestions(newQuery);
+        });
+        mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+            @Override
+            public void onSearchAction(String currentQuery) {
+            }
+
+            @Override
+            public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+                final Section section = ((SectionSuggestion) searchSuggestion).getSection();
+
+                CameraUpdate update = CameraUpdateFactory.newLatLng(section.getPutIn());
+                getMapsFragment().getMap().animateCamera(update, new GoogleMap.CancelableCallback() {
+                    @Override
+                    public void onCancel() {
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        selectSection(section);
+                    }
+                });
+            }
+        });
 
         Toolbar sectionToolbar = findTById(R.id.sectionToolbar);
         sectionToolbar.inflateMenu(R.menu.menu_section);
@@ -301,6 +350,8 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
+        mSearchView.onRestoreInstanceState(savedInstanceState.getParcelable(STATE_SEARCH_VIEW));
+
         NestedScrollView child = findTById(R.id.bottomSheet);
         CoordinatorLayout parent = (CoordinatorLayout) child.getParent();
         Parcelable bottomSheetParcelable = checkNotNull(savedInstanceState.getParcelable(STATE_BOTTOM_SHEET));
@@ -334,13 +385,18 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
+        Parcelable searchViewParcelable = mSearchView.onSaveInstanceState();
+        outState.putParcelable(STATE_SEARCH_VIEW, searchViewParcelable);
+
         NestedScrollView child = findTById(R.id.bottomSheet);
         CoordinatorLayout parent = (CoordinatorLayout) child.getParent();
         Parcelable bottomSheetParcelable = mBottomSheetBehavior.onSaveInstanceState(parent, child);
         outState.putParcelable(STATE_BOTTOM_SHEET, bottomSheetParcelable);
 
         outState.putBoolean(STATE_CREATE_SECTION_MODE_ACTIVE, mCreateSectionMode != null && mCreateSectionMode.isActive());
+
         outState.putSerializable(STATE_SECTION, mSection);
+
         outState.putSerializable(STATE_SECTIONS, new ArrayList<>(mSections));
     }
 

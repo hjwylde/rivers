@@ -6,11 +6,13 @@ import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.Document;
 import com.couchbase.lite.LiveQuery;
+import com.couchbase.lite.QueryEnumerator;
 import com.couchbase.lite.QueryRow;
 import com.couchbase.lite.View;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.queries.SectionsView;
+import com.hjwylde.rivers.util.SectionQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,6 +91,31 @@ public final class LocalRiversService implements RiversApi {
         } else {
             return Observable.empty();
         }
+    }
+
+    @NonNull
+    @Override
+    public Observable<List<Section>> searchSections(@NonNull String query) {
+        SectionQuery sectionQuery = new SectionQuery(query);
+        View view = SectionsView.getInstance(mDatabase);
+
+        List<Section> sections = new ArrayList<>();
+
+        try {
+            QueryEnumerator result = view.createQuery().run();
+
+            for (QueryRow row : result) {
+                Section section = new Section.Builder(row.getDocument()).build();
+
+                if (sectionQuery.test(section)) {
+                    sections.add(section);
+                }
+            }
+        } catch (CouchbaseLiteException e) {
+            Observable.error(e);
+        }
+
+        return Observable.just(sections);
     }
 
     @NonNull

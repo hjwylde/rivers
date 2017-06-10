@@ -7,26 +7,21 @@
                                                  android:layout_height="match_parent"
                                                  tools:context="com.hjwylde.rivers.ui.activities.MapsActivity">
 
-    <LinearLayout
+    <include layout="@layout/content_maps"/>
+
+    <com.arlib.floatingsearchview.FloatingSearchView
+        android:id="@+id/floating_search_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/primary"
         android:fitsSystemWindows="true"
-        android:orientation="vertical">
-
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"/>
-        </android.support.design.widget.AppBarLayout>
-
-        <include layout="@layout/content_maps"/>
-    </LinearLayout>
+        app:floatingSearch_searchHint="@string/label_search"
+        app:floatingSearch_searchBarMarginLeft="@dimen/toolbar_margin"
+        app:floatingSearch_searchBarMarginTop="@dimen/toolbar_margin"
+        app:floatingSearch_searchBarMarginRight="@dimen/toolbar_margin"
+        app:floatingSearch_suggestionsListAnimDuration="250"
+        app:floatingSearch_showSearchKey="false"
+        app:floatingSearch_leftActionMode="showSearch"
+        app:floatingSearch_close_search_on_keyboard_dismiss="true" />
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"

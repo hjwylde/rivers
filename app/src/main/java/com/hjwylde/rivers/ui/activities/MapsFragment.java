@@ -93,7 +93,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
 
         mUiSettings = mMap.getUiSettings();
         mUiSettings.setMapToolbarEnabled(false);
-        mUiSettings.setMyLocationButtonEnabled(true);
+        mUiSettings.setMyLocationButtonEnabled(false);
 
         mClusterManager = new ClusterManager<>(getContext(), mMap);
         mClusterManager.setOnClusterItemClickListener(this);
