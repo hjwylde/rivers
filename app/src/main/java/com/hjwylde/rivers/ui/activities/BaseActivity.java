@@ -11,6 +11,11 @@ import android.widget.TextView;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public abstract class BaseActivity extends AppCompatActivity {
+    @Override
+    public void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
     @NonNull
     public EditText findEditTextById(@IdRes int id) {
         return findTById(id);
@@ -24,10 +29,5 @@ public abstract class BaseActivity extends AppCompatActivity {
     @NonNull
     public TextView findTextViewById(@IdRes int id) {
         return findTById(id);
-    }
-
-    @Override
-    public void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }
