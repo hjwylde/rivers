@@ -26,7 +26,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
-import com.hjwylde.rivers.models.Image;
+import com.hjwylde.rivers.models.ImageDocument;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
 import com.hjwylde.rivers.ui.presenters.MapsPresenter;
@@ -58,7 +58,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     private List<Section> mSections = new ArrayList<>();
     private Section mSection;
-    private Image mImage;
+    private ImageDocument mImage;
 
     @Override
     public void clearSelection() {
@@ -190,7 +190,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     @Override
-    public void setImage(@NonNull Image image) {
+    public void setImage(@NonNull ImageDocument image) {
         mImage = requireNonNull(image);
     }
 

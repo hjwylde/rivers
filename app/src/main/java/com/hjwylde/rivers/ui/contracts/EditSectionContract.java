@@ -2,14 +2,14 @@ package com.hjwylde.rivers.ui.contracts;
 
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.models.Image;
+import com.hjwylde.rivers.models.ImageDocument;
 import com.hjwylde.rivers.models.Section;
 
 public interface EditSectionContract {
     interface View extends BaseContract.View {
         void onCreateImageFailure(@NonNull Throwable t);
 
-        void onCreateImageSuccess(@NonNull Image image);
+        void onCreateImageSuccess(@NonNull ImageDocument image);
 
         void onGetImageFailure(@NonNull Throwable t);
 
@@ -19,11 +19,11 @@ public interface EditSectionContract {
 
         void refreshImage();
 
-        void setImage(@NonNull Image image);
+        void setImage(@NonNull ImageDocument image);
     }
 
     interface Presenter extends BaseContract.Presenter {
-        void createImage(@NonNull Image.Builder image);
+        void createImage(@NonNull ImageDocument.Builder image);
 
         void getImage(@NonNull String id);
 

@@ -2,7 +2,7 @@ package com.hjwylde.rivers.ui.presenters;
 
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.models.Image;
+import com.hjwylde.rivers.models.ImageDocument;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.services.RiversApi;
 import com.hjwylde.rivers.ui.contracts.CreateSectionContract;
@@ -26,10 +26,10 @@ public final class CreateSectionPresenter implements CreateSectionContract.Prese
     }
 
     @Override
-    public void createImage(@NonNull Image.Builder builder) {
+    public void createImage(@NonNull ImageDocument.Builder builder) {
         Subscription subscription = mRiversApi.createImage(builder)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Image>() {
+                .subscribe(new Subscriber<ImageDocument>() {
                     @Override
                     public void onCompleted() {
                     }
@@ -40,7 +40,7 @@ public final class CreateSectionPresenter implements CreateSectionContract.Prese
                     }
 
                     @Override
-                    public void onNext(Image image) {
+                    public void onNext(ImageDocument image) {
                         mView.onCreateImageSuccess(image);
                     }
                 });
@@ -75,7 +75,7 @@ public final class CreateSectionPresenter implements CreateSectionContract.Prese
     public void getImage(@NonNull String id) {
         Subscription subscription = mRiversApi.getImage(id)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Image>() {
+                .subscribe(new Subscriber<ImageDocument>() {
                     @Override
                     public void onCompleted() {
                         mView.refreshImage();
@@ -87,7 +87,7 @@ public final class CreateSectionPresenter implements CreateSectionContract.Prese
                     }
 
                     @Override
-                    public void onNext(Image image) {
+                    public void onNext(ImageDocument image) {
                         mView.setImage(image);
                     }
                 });

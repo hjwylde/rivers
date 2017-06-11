@@ -15,7 +15,7 @@ import java.util.Map;
 import static com.hjwylde.rivers.util.Preconditions.requireTrue;
 import static java.util.Objects.requireNonNull;
 
-public final class Image implements Serializable {
+public final class ImageDocument implements Serializable {
     @NonNull
     public static final String TYPE = "image";
 
@@ -27,7 +27,7 @@ public final class Image implements Serializable {
     @NonNull
     private final Map<String, Object> mProperties;
 
-    public Image(@NonNull Map<String, Object> properties) {
+    public ImageDocument(@NonNull Map<String, Object> properties) {
         mProperties = new HashMap<>(properties);
 
         requireTrue(mProperties.get(BaseDocument.PROPERTY_TYPE).equals(TYPE));
@@ -82,7 +82,7 @@ public final class Image implements Serializable {
         }
 
         @NonNull
-        public Image.Builder bitmap(Bitmap bitmap) {
+        public ImageDocument.Builder bitmap(Bitmap bitmap) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
@@ -92,19 +92,19 @@ public final class Image implements Serializable {
         }
 
         @NonNull
-        public Image build() {
-            return new Image(mProperties);
+        public ImageDocument build() {
+            return new ImageDocument(mProperties);
         }
 
         @NonNull
-        public Image.Builder data(String data) {
+        public ImageDocument.Builder data(String data) {
             mProperties.put(PROPERTY_DATA, data);
 
             return this;
         }
 
         @NonNull
-        public Image.Builder id(String id) {
+        public ImageDocument.Builder id(String id) {
             mProperties.put(BaseDocument.PROPERTY_ID, id);
 
             return this;

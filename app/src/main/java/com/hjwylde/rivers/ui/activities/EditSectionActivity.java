@@ -21,7 +21,7 @@ import android.widget.ImageView;
 
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
-import com.hjwylde.rivers.models.Image;
+import com.hjwylde.rivers.models.ImageDocument;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.contracts.EditSectionContract;
 import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
@@ -43,7 +43,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     private EditSectionContract.Presenter mPresenter;
 
     private Section.Builder mSectionBuilder;
-    private Image mImage;
+    private ImageDocument mImage;
 
     public void onCameraClick(@NonNull View view) {
         new SelectImageDialog.Builder(this).create().show();
@@ -58,7 +58,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     }
 
     @Override
-    public void onCreateImageSuccess(@NonNull Image image) {
+    public void onCreateImageSuccess(@NonNull ImageDocument image) {
         mSectionBuilder.imageId(image.getId());
 
         setImage(image);
@@ -133,7 +133,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     }
 
     @Override
-    public void setImage(@NonNull Image image) {
+    public void setImage(@NonNull ImageDocument image) {
         mImage = requireNonNull(image);
     }
 
@@ -263,7 +263,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     }
 
     private void onImageSelected(Bitmap bitmap) {
-        Image.Builder builder = new Image.Builder();
+        ImageDocument.Builder builder = new ImageDocument.Builder();
         builder.bitmap(bitmap);
 
         mPresenter.createImage(builder);

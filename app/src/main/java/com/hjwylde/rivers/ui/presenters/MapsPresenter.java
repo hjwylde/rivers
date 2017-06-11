@@ -2,7 +2,7 @@ package com.hjwylde.rivers.ui.presenters;
 
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.models.Image;
+import com.hjwylde.rivers.models.ImageDocument;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.services.RiversApi;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
@@ -56,7 +56,7 @@ public final class MapsPresenter implements MapsContract.Presenter {
     public void getImage(@NonNull String id) {
         Subscription subscription = mRiversApi.getImage(id)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Image>() {
+                .subscribe(new Subscriber<ImageDocument>() {
                     @Override
                     public void onCompleted() {
                         mView.refreshImage();
@@ -68,7 +68,7 @@ public final class MapsPresenter implements MapsContract.Presenter {
                     }
 
                     @Override
-                    public void onNext(Image image) {
+                    public void onNext(ImageDocument image) {
                         mView.setImage(image);
                     }
                 });

@@ -9,7 +9,7 @@ import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.QueryEnumerator;
 import com.couchbase.lite.QueryRow;
 import com.couchbase.lite.View;
-import com.hjwylde.rivers.models.Image;
+import com.hjwylde.rivers.models.ImageDocument;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.queries.SectionsView;
 import com.hjwylde.rivers.util.SectionQuery;
@@ -32,16 +32,16 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
-    public Observable<Image> createImage(@NonNull Image.Builder builder) {
+    public Observable<ImageDocument> createImage(@NonNull ImageDocument.Builder builder) {
         String id = UUID.randomUUID().toString();
 
         try {
-            Image image = builder.id(id).build();
+            ImageDocument imageDocument = builder.id(id).build();
 
             Document document = mDatabase.getDocument(id);
-            document.putProperties(image.getProperties());
+            document.putProperties(imageDocument.getProperties());
 
-            return Observable.just(image);
+            return Observable.just(imageDocument);
         } catch (CouchbaseLiteException e) {
             return Observable.error(e);
         }
@@ -82,12 +82,12 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
-    public Observable<Image> getImage(@NonNull String id) {
+    public Observable<ImageDocument> getImage(@NonNull String id) {
         Document document = mDatabase.getExistingDocument(id);
 
         if (document != null) {
-            Image image = new Image.Builder(document).build();
-            return Observable.just(image);
+            ImageDocument imageDocument = new ImageDocument.Builder(document).build();
+            return Observable.just(imageDocument);
         } else {
             return Observable.empty();
         }
