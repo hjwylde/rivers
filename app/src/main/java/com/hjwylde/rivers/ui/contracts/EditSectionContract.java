@@ -3,7 +3,7 @@ package com.hjwylde.rivers.ui.contracts;
 import android.support.annotation.NonNull;
 
 import com.hjwylde.rivers.models.ImageDocument;
-import com.hjwylde.rivers.models.Section;
+import com.hjwylde.rivers.models.SectionDocument;
 
 public interface EditSectionContract {
     interface View extends BaseContract.View {
@@ -15,7 +15,7 @@ public interface EditSectionContract {
 
         void onUpdateSectionFailure(@NonNull Throwable t);
 
-        void onUpdateSectionSuccess(@NonNull Section section);
+        void onUpdateSectionSuccess(@NonNull SectionDocument section);
 
         void refreshImage();
 
@@ -27,6 +27,6 @@ public interface EditSectionContract {
 
         void getImage(@NonNull String id);
 
-        void updateSection(@NonNull Section.Builder builder);
+        void updateSection(@NonNull SectionDocument.Builder builder);
     }
 }

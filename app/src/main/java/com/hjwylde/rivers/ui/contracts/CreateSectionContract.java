@@ -3,7 +3,7 @@ package com.hjwylde.rivers.ui.contracts;
 import android.support.annotation.NonNull;
 
 import com.hjwylde.rivers.models.ImageDocument;
-import com.hjwylde.rivers.models.Section;
+import com.hjwylde.rivers.models.SectionDocument;
 
 public interface CreateSectionContract {
     interface View extends BaseContract.View {
@@ -13,7 +13,7 @@ public interface CreateSectionContract {
 
         void onCreateSectionFailure(@NonNull Throwable t);
 
-        void onCreateSectionSuccess(@NonNull Section section);
+        void onCreateSectionSuccess(@NonNull SectionDocument section);
 
         void onGetImageFailure(@NonNull Throwable t);
 
@@ -25,7 +25,7 @@ public interface CreateSectionContract {
     interface Presenter extends BaseContract.Presenter {
         void createImage(@NonNull ImageDocument.Builder image);
 
-        void createSection(@NonNull Section.Builder builder);
+        void createSection(@NonNull SectionDocument.Builder builder);
 
         void getImage(@NonNull String id);
     }

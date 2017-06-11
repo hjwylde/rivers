@@ -9,9 +9,9 @@ import static java.util.Objects.requireNonNull;
 
 public final class SectionMarker implements ClusterItem {
     @NonNull
-    private final Section mSection;
+    private final SectionDocument mSection;
 
-    public SectionMarker(@NonNull Section section) {
+    public SectionMarker(@NonNull SectionDocument section) {
         mSection = requireNonNull(section);
     }
 
@@ -21,7 +21,7 @@ public final class SectionMarker implements ClusterItem {
     }
 
     @NonNull
-    public Section getSection() {
+    public SectionDocument getSection() {
         return mSection;
     }
 }

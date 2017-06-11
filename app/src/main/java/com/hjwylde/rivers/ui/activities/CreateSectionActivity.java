@@ -23,7 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
 import com.hjwylde.rivers.models.ImageDocument;
-import com.hjwylde.rivers.models.Section;
+import com.hjwylde.rivers.models.SectionDocument;
 import com.hjwylde.rivers.ui.contracts.CreateSectionContract;
 import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
 import com.hjwylde.rivers.ui.presenters.CreateSectionPresenter;
@@ -43,7 +43,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
 
     private CreateSectionContract.Presenter mPresenter;
 
-    private Section.Builder mSectionBuilder = new Section.Builder();
+    private SectionDocument.Builder mSectionBuilder = new SectionDocument.Builder();
     private ImageDocument mImage;
 
     public void onCameraClick(@NonNull View view) {
@@ -91,7 +91,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     }
 
     @Override
-    public void onCreateSectionSuccess(@NonNull Section section) {
+    public void onCreateSectionSuccess(@NonNull SectionDocument section) {
         setResult(RESULT_OK);
         finish();
     }
@@ -229,7 +229,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        mSectionBuilder = (Section.Builder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
+        mSectionBuilder = (SectionDocument.Builder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
         refreshSection();
 
         refreshFocus();

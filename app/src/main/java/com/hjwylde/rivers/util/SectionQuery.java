@@ -2,7 +2,7 @@ package com.hjwylde.rivers.util;
 
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.models.Section;
+import com.hjwylde.rivers.models.SectionDocument;
 
 import static java.util.Objects.requireNonNull;
 
@@ -13,13 +13,13 @@ public final class SectionQuery {
         mQuery = requireNonNull(query);
     }
 
-    public boolean test(Section section) {
+    public boolean test(SectionDocument section) {
         String input = getInput(section).toLowerCase();
 
         return input.contains(mQuery.toLowerCase());
     }
 
-    private String getInput(Section section) {
+    private String getInput(SectionDocument section) {
         StringBuilder input = new StringBuilder();
         input.append(section.getTitle());
 

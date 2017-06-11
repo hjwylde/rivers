@@ -27,7 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
 import com.hjwylde.rivers.models.ImageDocument;
-import com.hjwylde.rivers.models.Section;
+import com.hjwylde.rivers.models.SectionDocument;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
 import com.hjwylde.rivers.ui.presenters.MapsPresenter;
 import com.hjwylde.rivers.ui.util.CreateSectionMode;
@@ -56,8 +56,8 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     private MapsContract.Presenter mPresenter;
 
-    private List<Section> mSections = new ArrayList<>();
-    private Section mSection;
+    private List<SectionDocument> mSections = new ArrayList<>();
+    private SectionDocument mSection;
     private ImageDocument mImage;
 
     @Override
@@ -171,7 +171,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     @Override
-    public void selectSection(@NonNull Section section) {
+    public void selectSection(@NonNull SectionDocument section) {
         if (mSection != null && mSection.getId().equals(section.getId())) {
             mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             return;
@@ -200,7 +200,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     @Override
-    public void setSections(@NonNull List<Section> sections) {
+    public void setSections(@NonNull List<SectionDocument> sections) {
         mSections = requireNonNull(sections);
     }
 
@@ -217,7 +217,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
                 onSectionCreated();
                 break;
             case REQUEST_CODE_SECTION_EDITED:
-                Section section = (Section) data.getSerializableExtra(EditSectionActivity.INTENT_SECTION);
+                SectionDocument section = (SectionDocument) data.getSerializableExtra(EditSectionActivity.INTENT_SECTION);
 
                 onSectionEdited(section);
                 break;
@@ -246,7 +246,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
             @Override
             public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
-                final Section section = ((SectionSuggestion) searchSuggestion).getSection();
+                final SectionDocument section = ((SectionSuggestion) searchSuggestion).getSection();
 
                 CameraUpdate update = CameraUpdateFactory.newLatLng(section.getPutIn());
                 getMapsFragment().getMap().animateCamera(update, new GoogleMap.CancelableCallback() {
@@ -364,11 +364,11 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
             startCreateSectionMode();
         }
 
-        mSection = (Section) savedInstanceState.getSerializable(STATE_SECTION);
+        mSection = (SectionDocument) savedInstanceState.getSerializable(STATE_SECTION);
         refreshSection();
         refreshImageContainer();
 
-        mSections = (List<Section>) savedInstanceState.getSerializable(STATE_SECTIONS);
+        mSections = (List<SectionDocument>) savedInstanceState.getSerializable(STATE_SECTIONS);
         refreshMap();
     }
 
@@ -435,7 +435,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         snackbar.show();
     }
 
-    private void onSectionEdited(@NonNull Section section) {
+    private void onSectionEdited(@NonNull SectionDocument section) {
         setSection(section);
         refreshSection();
 
@@ -494,7 +494,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         findTextViewById(R.id.description).setText(mSection.getDescription());
     }
 
-    private void setSection(@NonNull Section section) {
+    private void setSection(@NonNull SectionDocument section) {
         mSection = requireNonNull(section);
 
         if (mImage != null && !mImage.getId().equals(mSection.getImageId())) {

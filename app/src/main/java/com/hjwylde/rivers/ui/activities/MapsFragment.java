@@ -20,7 +20,7 @@ import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
 import com.hjwylde.rivers.R;
-import com.hjwylde.rivers.models.Section;
+import com.hjwylde.rivers.models.SectionDocument;
 import com.hjwylde.rivers.models.SectionMarker;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
 import com.hjwylde.rivers.ui.util.ClusterRenderer;
@@ -135,7 +135,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         }
     }
 
-    public void refreshMap(@NonNull Collection<Section> sections) {
+    public void refreshMap(@NonNull Collection<SectionDocument> sections) {
         if (mMap == null) {
             return;
         }
@@ -143,7 +143,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         mMap.clear();
         mClusterManager.clearItems();
 
-        for (Section section : sections) {
+        for (SectionDocument section : sections) {
             mClusterManager.addItem(new SectionMarker(section));
         }
 

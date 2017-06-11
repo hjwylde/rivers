@@ -12,7 +12,7 @@ import java.util.Map;
 import static com.hjwylde.rivers.util.Preconditions.requireTrue;
 import static java.util.Objects.requireNonNull;
 
-public final class Section implements Serializable {
+public final class SectionDocument implements Serializable {
     @NonNull
     public static final String TYPE = "section";
 
@@ -42,7 +42,7 @@ public final class Section implements Serializable {
     @NonNull
     private final Map<String, Object> mProperties;
 
-    public Section(@NonNull Map<String, Object> properties) {
+    public SectionDocument(@NonNull Map<String, Object> properties) {
         mProperties = deepClone(properties);
 
         requireTrue(mProperties.get(BaseDocument.PROPERTY_TYPE).equals(TYPE));
@@ -62,11 +62,11 @@ public final class Section implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Section)) {
+        if (!(obj instanceof SectionDocument)) {
             return false;
         }
 
-        return getId().equals(((Section) obj).getId());
+        return getId().equals(((SectionDocument) obj).getId());
     }
 
     public String getDescription() {
@@ -138,7 +138,7 @@ public final class Section implements Serializable {
             this(document.getProperties());
         }
 
-        public Builder(@NonNull Section section) {
+        public Builder(@NonNull SectionDocument section) {
             this(section.mProperties);
         }
 
@@ -147,12 +147,12 @@ public final class Section implements Serializable {
         }
 
         @NonNull
-        public Section build() {
-            return new Section(mProperties);
+        public SectionDocument build() {
+            return new SectionDocument(mProperties);
         }
 
         @NonNull
-        public Section.Builder description(String description) {
+        public SectionDocument.Builder description(String description) {
             mProperties.put(PROPERTY_DESCRIPTION, description);
 
             return this;
@@ -163,7 +163,7 @@ public final class Section implements Serializable {
         }
 
         @NonNull
-        public Section.Builder duration(String duration) {
+        public SectionDocument.Builder duration(String duration) {
             mProperties.put(PROPERTY_DURATION, duration);
 
             return this;
@@ -174,7 +174,7 @@ public final class Section implements Serializable {
         }
 
         @NonNull
-        public Section.Builder grade(String grade) {
+        public SectionDocument.Builder grade(String grade) {
             mProperties.put(PROPERTY_GRADE, grade);
 
             return this;
@@ -185,7 +185,7 @@ public final class Section implements Serializable {
         }
 
         @NonNull
-        public Section.Builder id(String id) {
+        public SectionDocument.Builder id(String id) {
             mProperties.put(BaseDocument.PROPERTY_ID, id);
 
             return this;
@@ -196,14 +196,14 @@ public final class Section implements Serializable {
         }
 
         @NonNull
-        public Section.Builder imageId(String imageId) {
+        public SectionDocument.Builder imageId(String imageId) {
             mProperties.put(PROPERTY_IMAGE_ID, imageId);
 
             return this;
         }
 
         @NonNull
-        public Section.Builder length(String length) {
+        public SectionDocument.Builder length(String length) {
             mProperties.put(PROPERTY_LENGTH, length);
 
             return this;
@@ -214,7 +214,7 @@ public final class Section implements Serializable {
         }
 
         @NonNull
-        public Section.Builder putIn(LatLng putIn) {
+        public SectionDocument.Builder putIn(LatLng putIn) {
             Map<String, Object> putInProperties = new HashMap<>();
             putInProperties.put(PROPERTY_PUT_IN_LATITUDE, putIn.latitude);
             putInProperties.put(PROPERTY_PUT_IN_LONGITUDE, putIn.longitude);
@@ -225,7 +225,7 @@ public final class Section implements Serializable {
         }
 
         @NonNull
-        public Section.Builder subtitle(String subtitle) {
+        public SectionDocument.Builder subtitle(String subtitle) {
             mProperties.put(PROPERTY_SUBTITLE, subtitle);
 
             return this;
@@ -236,7 +236,7 @@ public final class Section implements Serializable {
         }
 
         @NonNull
-        public Section.Builder title(String title) {
+        public SectionDocument.Builder title(String title) {
             mProperties.put(PROPERTY_TITLE, title);
 
             return this;

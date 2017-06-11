@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.View;
 import com.hjwylde.rivers.models.BaseDocument;
-import com.hjwylde.rivers.models.Section;
+import com.hjwylde.rivers.models.SectionDocument;
 
 public final class SectionsView {
     @NonNull
@@ -33,7 +33,7 @@ public final class SectionsView {
         if (view.getMap() == null) {
             view.setMap((document, emitter) -> {
                 String type = (String) document.get(BaseDocument.PROPERTY_TYPE);
-                if (Section.TYPE.equals(type)) {
+                if (SectionDocument.TYPE.equals(type)) {
                     emitter.emit(document.get(BaseDocument.PROPERTY_ID), null);
                 }
             }, VERSION);

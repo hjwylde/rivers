@@ -3,7 +3,7 @@ package com.hjwylde.rivers.services;
 import android.support.annotation.NonNull;
 
 import com.hjwylde.rivers.models.ImageDocument;
-import com.hjwylde.rivers.models.Section;
+import com.hjwylde.rivers.models.SectionDocument;
 
 import java.util.List;
 
@@ -14,20 +14,20 @@ public interface RiversApi {
     Observable<ImageDocument> createImage(@NonNull ImageDocument.Builder builder);
 
     @NonNull
-    Observable<Section> createSection(@NonNull Section.Builder builder);
+    Observable<SectionDocument> createSection(@NonNull SectionDocument.Builder builder);
 
     @NonNull
-    Observable<Void> deleteSection(@NonNull Section section);
+    Observable<Void> deleteSection(@NonNull SectionDocument section);
 
     @NonNull
     Observable<ImageDocument> getImage(@NonNull String id);
 
     @NonNull
-    Observable<List<Section>> searchSections(@NonNull String query);
+    Observable<List<SectionDocument>> searchSections(@NonNull String query);
 
     @NonNull
-    Observable<List<Section>> streamSections();
+    Observable<List<SectionDocument>> streamSections();
 
     @NonNull
-    Observable<Section> updateSection(@NonNull Section.Builder builder);
+    Observable<SectionDocument> updateSection(@NonNull SectionDocument.Builder builder);
 }

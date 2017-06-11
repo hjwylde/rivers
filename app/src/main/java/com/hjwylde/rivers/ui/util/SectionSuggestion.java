@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.support.annotation.NonNull;
 
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
-import com.hjwylde.rivers.models.Section;
+import com.hjwylde.rivers.models.SectionDocument;
 
 import static java.util.Objects.requireNonNull;
 
@@ -21,14 +21,14 @@ public final class SectionSuggestion implements SearchSuggestion {
         }
     };
 
-    private final Section mSection;
+    private final SectionDocument mSection;
 
-    public SectionSuggestion(@NonNull Section section) {
+    public SectionSuggestion(@NonNull SectionDocument section) {
         mSection = requireNonNull(section);
     }
 
     public SectionSuggestion(@NonNull Parcel source) {
-        mSection = (Section) source.readSerializable();
+        mSection = (SectionDocument) source.readSerializable();
     }
 
     @Override
@@ -59,7 +59,7 @@ public final class SectionSuggestion implements SearchSuggestion {
     }
 
     @NonNull
-    public Section getSection() {
+    public SectionDocument getSection() {
         return mSection;
     }
 
