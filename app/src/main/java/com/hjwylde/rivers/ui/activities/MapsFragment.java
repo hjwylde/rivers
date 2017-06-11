@@ -20,10 +20,10 @@ import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
 import com.hjwylde.rivers.R;
-import com.hjwylde.rivers.models.SectionDocument;
-import com.hjwylde.rivers.models.SectionMarker;
+import com.hjwylde.rivers.db.models.SectionDocument;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
 import com.hjwylde.rivers.ui.util.ClusterRenderer;
+import com.hjwylde.rivers.ui.util.SectionMarker;
 
 import java.util.Collection;
 

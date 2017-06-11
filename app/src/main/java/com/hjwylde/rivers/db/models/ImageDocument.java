@@ -1,4 +1,4 @@
-package com.hjwylde.rivers.models;
+package com.hjwylde.rivers.db.models;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

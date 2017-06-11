@@ -1,8 +1,8 @@
-package com.hjwylde.rivers.util;
+package com.hjwylde.rivers.ui.util;
 
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.models.SectionDocument;
+import com.hjwylde.rivers.db.models.SectionDocument;
 
 import static java.util.Objects.requireNonNull;
 

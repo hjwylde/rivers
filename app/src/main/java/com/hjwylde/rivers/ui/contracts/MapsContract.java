@@ -3,8 +3,8 @@ package com.hjwylde.rivers.ui.contracts;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.hjwylde.rivers.models.ImageDocument;
-import com.hjwylde.rivers.models.SectionDocument;
+import com.hjwylde.rivers.db.models.ImageDocument;
+import com.hjwylde.rivers.db.models.SectionDocument;
 import com.hjwylde.rivers.ui.util.SectionSuggestion;
 
 import java.util.List;

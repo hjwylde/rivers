@@ -1,4 +1,4 @@
-package com.hjwylde.rivers.models;
+package com.hjwylde.rivers.db.models;
 
 import android.support.annotation.NonNull;
 

@@ -2,8 +2,8 @@ package com.hjwylde.rivers.ui.presenters;
 
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.models.ImageDocument;
-import com.hjwylde.rivers.models.SectionDocument;
+import com.hjwylde.rivers.db.models.ImageDocument;
+import com.hjwylde.rivers.db.models.SectionDocument;
 import com.hjwylde.rivers.services.RiversApi;
 import com.hjwylde.rivers.ui.contracts.CreateSectionContract;
 

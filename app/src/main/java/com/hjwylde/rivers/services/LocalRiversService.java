@@ -9,10 +9,10 @@ import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.QueryEnumerator;
 import com.couchbase.lite.QueryRow;
 import com.couchbase.lite.View;
-import com.hjwylde.rivers.models.ImageDocument;
-import com.hjwylde.rivers.models.SectionDocument;
+import com.hjwylde.rivers.db.models.ImageDocument;
+import com.hjwylde.rivers.db.models.SectionDocument;
 import com.hjwylde.rivers.queries.SectionsView;
-import com.hjwylde.rivers.util.SectionQuery;
+import com.hjwylde.rivers.ui.util.SectionQuery;
 
 import java.util.ArrayList;
 import java.util.List;

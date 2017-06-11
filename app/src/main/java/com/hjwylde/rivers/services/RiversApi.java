@@ -2,8 +2,8 @@ package com.hjwylde.rivers.services;
 
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.models.ImageDocument;
-import com.hjwylde.rivers.models.SectionDocument;
+import com.hjwylde.rivers.db.models.ImageDocument;
+import com.hjwylde.rivers.db.models.SectionDocument;
 
 import java.util.List;
 

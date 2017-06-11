@@ -2,8 +2,8 @@ package com.hjwylde.rivers.ui.contracts;
 
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.models.ImageDocument;
-import com.hjwylde.rivers.models.SectionDocument;
+import com.hjwylde.rivers.db.models.ImageDocument;
+import com.hjwylde.rivers.db.models.SectionDocument;
 
 public interface EditSectionContract {
     interface View extends BaseContract.View {

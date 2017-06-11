@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.couchbase.lite.Database;
 import com.couchbase.lite.View;
-import com.hjwylde.rivers.models.BaseDocument;
-import com.hjwylde.rivers.models.SectionDocument;
+import com.hjwylde.rivers.db.models.BaseDocument;
+import com.hjwylde.rivers.db.models.SectionDocument;
 
 public final class SectionsView {
     @NonNull
