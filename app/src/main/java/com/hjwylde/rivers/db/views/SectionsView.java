@@ -1,4 +1,4 @@
-package com.hjwylde.rivers.queries;
+package com.hjwylde.rivers.db.views;
 
 import android.support.annotation.NonNull;
 
