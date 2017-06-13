@@ -5,26 +5,22 @@ import android.support.annotation.NonNull;
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.Document;
-import com.hjwylde.rivers.models.AbstractImage;
 import com.hjwylde.rivers.models.Image;
 
-import static com.hjwylde.rivers.db.models.BaseDocument.PROPERTY_TYPE;
 import static com.hjwylde.rivers.util.Preconditions.requireTrue;
 import static java.util.Objects.requireNonNull;
 
-public final class ImageDocument extends AbstractImage {
+public final class ImageDocument extends BaseDocument implements Image {
     @NonNull
     public static final String TYPE = "image";
 
-    private static final long serialVersionUID = 1L;
-
     @NonNull
-    private final Document mDocument;
+    public static final String PROPERTY_DATA = "data";
 
     public ImageDocument(@NonNull Document document) {
-        requireTrue(TYPE.equals(document.getProperty(PROPERTY_TYPE)));
+        super(document);
 
-        mDocument = requireNonNull(document);
+        requireTrue(TYPE.equals(getType()));
     }
 
     public static Builder builder(@NonNull Database database) {
@@ -35,12 +31,6 @@ public final class ImageDocument extends AbstractImage {
     @Override
     public String getData() {
         return (String) mDocument.getProperty(PROPERTY_DATA);
-    }
-
-    @NonNull
-    @Override
-    public String getId() {
-        return (String) mDocument.getProperty(PROPERTY_ID);
     }
 
     public static final class Builder extends BaseDocument.Builder implements Image.Builder {

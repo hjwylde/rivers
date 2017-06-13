@@ -12,20 +12,62 @@ import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
 
-public abstract class BaseDocument {
+abstract public class BaseDocument {
     @NonNull
     public static final String PROPERTY_ID = "_id";
     @NonNull
     public static final String PROPERTY_TYPE = "type";
 
-    public abstract static class Builder {
+    @NonNull
+    protected final Document mDocument;
+
+    BaseDocument(@NonNull Document document) {
+        mDocument = requireNonNull(document);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof BaseDocument)) {
+            return false;
+        }
+
+        BaseDocument document = (BaseDocument) obj;
+
+        if (!getType().equals(document.getType())) {
+            return false;
+        }
+
+        return getId().equals(document.getId());
+    }
+
+    @NonNull
+    public Document getDocument() {
+        return mDocument;
+    }
+
+    @NonNull
+    public String getId() {
+        return (String) mDocument.getProperty(PROPERTY_ID);
+    }
+
+    @NonNull
+    public String getType() {
+        return (String) mDocument.getProperty(PROPERTY_TYPE);
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
+
+    abstract static class Builder {
         @NonNull
         protected Database mDatabase;
 
         @NonNull
         protected Map<String, Object> mProperties = new HashMap<>();
 
-        protected Builder(@NonNull Database database, @NonNull String type) {
+        Builder(@NonNull Database database, @NonNull String type) {
             mDatabase = requireNonNull(database);
 
             mProperties.put(PROPERTY_TYPE, type);

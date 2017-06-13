@@ -17,6 +17,27 @@ public final class SectionDocument extends AbstractSection {
     @NonNull
     public static final String TYPE = "section";
 
+    @NonNull
+    public static final String PROPERTY_TITLE = "title";
+    @NonNull
+    public static final String PROPERTY_SUBTITLE = "subtitle";
+    @NonNull
+    public static final String PROPERTY_DESCRIPTION = "description";
+    @NonNull
+    public static final String PROPERTY_PUT_IN = "putIn";
+    @NonNull
+    public static final String PROPERTY_PUT_IN_LATITUDE = "latitude";
+    @NonNull
+    public static final String PROPERTY_PUT_IN_LONGITUDE = "longitude";
+    @NonNull
+    public static final String PROPERTY_IMAGE_ID = "imageId";
+    @NonNull
+    public static final String PROPERTY_GRADE = "grade";
+    @NonNull
+    public static final String PROPERTY_LENGTH = "length";
+    @NonNull
+    public static final String PROPERTY_DURATION = "duration";
+
     private static final long serialVersionUID = 1L;
 
     @NonNull

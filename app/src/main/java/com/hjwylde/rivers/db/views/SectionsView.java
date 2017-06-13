@@ -4,8 +4,10 @@ import android.support.annotation.NonNull;
 
 import com.couchbase.lite.Database;
 import com.couchbase.lite.View;
-import com.hjwylde.rivers.db.models.BaseDocument;
 import com.hjwylde.rivers.db.models.SectionDocument;
+
+import static com.hjwylde.rivers.db.models.BaseDocument.PROPERTY_ID;
+import static com.hjwylde.rivers.db.models.BaseDocument.PROPERTY_TYPE;
 
 public final class SectionsView {
     @NonNull
@@ -32,9 +34,9 @@ public final class SectionsView {
         View view = database.getView(NAME);
         if (view.getMap() == null) {
             view.setMap((document, emitter) -> {
-                String type = (String) document.get(BaseDocument.PROPERTY_TYPE);
+                String type = (String) document.get(PROPERTY_TYPE);
                 if (SectionDocument.TYPE.equals(type)) {
-                    emitter.emit(document.get(BaseDocument.PROPERTY_ID), null);
+                    emitter.emit(document.get(PROPERTY_ID), null);
                 }
             }, VERSION);
         }

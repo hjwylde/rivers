@@ -28,7 +28,7 @@ public final class SectionSuggestion implements SearchSuggestion {
         mSection = requireNonNull(section);
     }
 
-    public SectionSuggestion(@NonNull Parcel source) {
+    private SectionSuggestion(@NonNull Parcel source) {
         mSection = (Section) source.readSerializable();
     }
 

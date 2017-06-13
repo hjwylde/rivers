@@ -8,12 +8,7 @@ import android.util.Base64;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
-public interface Image extends Serializable {
-    @NonNull
-    String PROPERTY_ID = "_id";
-    @NonNull
-    String PROPERTY_DATA = "data";
-
+public interface Image {
     static Builder builder() {
         return new DefaultBuilder();
     }
@@ -36,7 +31,7 @@ public interface Image extends Serializable {
     @NonNull
     String getId();
 
-    interface Builder extends Serializable {
+    interface Builder {
         @NonNull
         default Builder bitmap(Bitmap bitmap) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -61,7 +56,7 @@ public interface Image extends Serializable {
         Builder id(String id);
     }
 
-    class DefaultBuilder implements Builder {
+    class DefaultBuilder implements Builder, Serializable {
         private static final long serialVersionUID = 1L;
 
         protected String mId;
