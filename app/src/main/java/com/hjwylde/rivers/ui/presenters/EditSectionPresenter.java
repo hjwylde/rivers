@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.hjwylde.rivers.db.models.ImageDocument;
 import com.hjwylde.rivers.db.models.SectionDocument;
+import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.services.RiversApi;
 import com.hjwylde.rivers.ui.contracts.EditSectionContract;
@@ -31,7 +32,7 @@ public final class EditSectionPresenter implements EditSectionContract.Presenter
     public void createImage(@NonNull ImageDocument.Builder builder) {
         Subscription subscription = mRiversApi.createImage(builder)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ImageDocument>() {
+                .subscribe(new Subscriber<Image>() {
                     @Override
                     public void onCompleted() {
                     }
@@ -42,7 +43,7 @@ public final class EditSectionPresenter implements EditSectionContract.Presenter
                     }
 
                     @Override
-                    public void onNext(ImageDocument image) {
+                    public void onNext(Image image) {
                         mView.onCreateImageSuccess(image);
                     }
                 });
@@ -54,7 +55,7 @@ public final class EditSectionPresenter implements EditSectionContract.Presenter
     public void getImage(@NonNull String id) {
         Subscription subscription = mRiversApi.getImage(id)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ImageDocument>() {
+                .subscribe(new Subscriber<Image>() {
                     @Override
                     public void onCompleted() {
                         mView.refreshImage();
@@ -66,7 +67,7 @@ public final class EditSectionPresenter implements EditSectionContract.Presenter
                     }
 
                     @Override
-                    public void onNext(ImageDocument image) {
+                    public void onNext(Image image) {
                         mView.setImage(image);
                     }
                 });

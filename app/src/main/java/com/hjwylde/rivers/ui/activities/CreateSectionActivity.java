@@ -24,6 +24,7 @@ import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
 import com.hjwylde.rivers.db.models.ImageDocument;
 import com.hjwylde.rivers.db.models.SectionDocument;
+import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.contracts.CreateSectionContract;
 import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
@@ -45,7 +46,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     private CreateSectionContract.Presenter mPresenter;
 
     private SectionDocument.Builder mSectionBuilder = new SectionDocument.Builder();
-    private ImageDocument mImage;
+    private Image mImage;
 
     public void onCameraClick(@NonNull View view) {
         new SelectImageDialog.Builder(this).create().show();
@@ -60,7 +61,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     }
 
     @Override
-    public void onCreateImageSuccess(@NonNull ImageDocument image) {
+    public void onCreateImageSuccess(@NonNull Image image) {
         mSectionBuilder.imageId(image.getId());
 
         setImage(image);
@@ -133,7 +134,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     }
 
     @Override
-    public void setImage(@NonNull ImageDocument image) {
+    public void setImage(@NonNull Image image) {
         mImage = requireNonNull(image);
     }
 

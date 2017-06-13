@@ -11,6 +11,7 @@ import com.couchbase.lite.QueryRow;
 import com.couchbase.lite.View;
 import com.hjwylde.rivers.db.models.ImageDocument;
 import com.hjwylde.rivers.db.models.SectionDocument;
+import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.queries.SectionsView;
 import com.hjwylde.rivers.ui.util.SectionQuery;
@@ -33,7 +34,7 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
-    public Observable<ImageDocument> createImage(@NonNull ImageDocument.Builder builder) {
+    public Observable<Image> createImage(@NonNull ImageDocument.Builder builder) {
         String id = UUID.randomUUID().toString();
 
         try {
@@ -83,11 +84,12 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
-    public Observable<ImageDocument> getImage(@NonNull String id) {
+    public Observable<Image> getImage(@NonNull String id) {
         Document document = mDatabase.getExistingDocument(id);
 
         if (document != null) {
             ImageDocument imageDocument = new ImageDocument.Builder(document).build();
+
             return Observable.just(imageDocument);
         } else {
             return Observable.empty();

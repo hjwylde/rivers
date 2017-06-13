@@ -1,26 +1,22 @@
 package com.hjwylde.rivers.db.models;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.util.Base64;
 
 import com.couchbase.lite.Document;
+import com.hjwylde.rivers.models.AbstractImage;
 
 import java.io.ByteArrayOutputStream;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.hjwylde.rivers.util.Preconditions.requireTrue;
 import static java.util.Objects.requireNonNull;
 
-public final class ImageDocument implements Serializable {
+public final class ImageDocument extends AbstractImage {
     @NonNull
     public static final String TYPE = "image";
-
-    @NonNull
-    public static final String PROPERTY_DATA = "data";
 
     private static final long serialVersionUID = 1L;
 
@@ -37,18 +33,13 @@ public final class ImageDocument implements Serializable {
     }
 
     @NonNull
-    public Bitmap getBitmap() {
-        byte[] decodedData = getDecodedData();
-
-        return BitmapFactory.decodeByteArray(decodedData, 0, decodedData.length);
-    }
-
-    @NonNull
+    @Override
     public String getData() {
         return (String) mProperties.get(PROPERTY_DATA);
     }
 
     @NonNull
+    @Override
     public String getId() {
         return (String) mProperties.get(BaseDocument.PROPERTY_ID);
     }
@@ -56,11 +47,6 @@ public final class ImageDocument implements Serializable {
     @NonNull
     public Map<String, Object> getProperties() {
         return new HashMap<>(mProperties);
-    }
-
-    @NonNull
-    private byte[] getDecodedData() {
-        return Base64.decode(getData(), Base64.DEFAULT);
     }
 
 
