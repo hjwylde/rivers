@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.couchbase.lite.Document;
 import com.google.android.gms.maps.model.LatLng;
+import com.hjwylde.rivers.models.AbstractSection;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -12,30 +13,9 @@ import java.util.Map;
 import static com.hjwylde.rivers.util.Preconditions.requireTrue;
 import static java.util.Objects.requireNonNull;
 
-public final class SectionDocument implements Serializable {
+public final class SectionDocument extends AbstractSection {
     @NonNull
     public static final String TYPE = "section";
-
-    @NonNull
-    public static final String PROPERTY_TITLE = "title";
-    @NonNull
-    public static final String PROPERTY_SUBTITLE = "subtitle";
-    @NonNull
-    public static final String PROPERTY_DESCRIPTION = "description";
-    @NonNull
-    public static final String PROPERTY_PUT_IN = "putIn";
-    @NonNull
-    public static final String PROPERTY_PUT_IN_LATITUDE = "latitude";
-    @NonNull
-    public static final String PROPERTY_PUT_IN_LONGITUDE = "longitude";
-    @NonNull
-    public static final String PROPERTY_IMAGE_ID = "imageId";
-    @NonNull
-    public static final String PROPERTY_GRADE = "grade";
-    @NonNull
-    public static final String PROPERTY_LENGTH = "length";
-    @NonNull
-    public static final String PROPERTY_DURATION = "duration";
 
     private static final long serialVersionUID = 1L;
 
@@ -61,35 +41,32 @@ public final class SectionDocument implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof SectionDocument)) {
-            return false;
-        }
-
-        return getId().equals(((SectionDocument) obj).getId());
-    }
-
     public String getDescription() {
         return (String) mProperties.get(PROPERTY_DESCRIPTION);
     }
 
+    @Override
     public String getDuration() {
         return (String) mProperties.get(PROPERTY_DURATION);
     }
 
+    @Override
     public String getGrade() {
         return (String) mProperties.get(PROPERTY_GRADE);
     }
 
     @NonNull
+    @Override
     public String getId() {
         return (String) mProperties.get(BaseDocument.PROPERTY_ID);
     }
 
+    @Override
     public String getImageId() {
         return (String) mProperties.get(PROPERTY_IMAGE_ID);
     }
 
+    @Override
     public String getLength() {
         return (String) mProperties.get(PROPERTY_LENGTH);
     }
@@ -99,24 +76,22 @@ public final class SectionDocument implements Serializable {
     }
 
     @NonNull
+    @Override
     public LatLng getPutIn() {
         Map<String, Object> putInProperties = (Map<String, Object>) mProperties.get(PROPERTY_PUT_IN);
 
         return new LatLng((double) putInProperties.get(PROPERTY_PUT_IN_LATITUDE), (double) putInProperties.get(PROPERTY_PUT_IN_LONGITUDE));
     }
 
+    @Override
     public String getSubtitle() {
         return (String) mProperties.get(PROPERTY_SUBTITLE);
     }
 
     @NonNull
+    @Override
     public String getTitle() {
         return (String) mProperties.get(PROPERTY_TITLE);
-    }
-
-    @Override
-    public int hashCode() {
-        return getId().hashCode();
     }
 
     public static final class Builder implements Serializable {

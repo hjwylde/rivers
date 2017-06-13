@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.hjwylde.rivers.db.models.ImageDocument;
 import com.hjwylde.rivers.db.models.SectionDocument;
+import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.services.RiversApi;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
 import com.hjwylde.rivers.ui.util.SectionSuggestion;
@@ -30,7 +31,7 @@ public final class MapsPresenter implements MapsContract.Presenter {
     }
 
     @Override
-    public void deleteSection(@NonNull SectionDocument section) {
+    public void deleteSection(@NonNull Section section) {
         Subscription subscription = mRiversApi.deleteSection(section)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Void>() {
@@ -80,7 +81,7 @@ public final class MapsPresenter implements MapsContract.Presenter {
     public void getSectionSuggestions(@NonNull String query) {
         Subscription subscription = mRiversApi.searchSections(query)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<SectionDocument>>() {
+                .subscribe(new Subscriber<List<? extends Section>>() {
                     @Override
                     public void onCompleted() {
                     }
@@ -91,9 +92,9 @@ public final class MapsPresenter implements MapsContract.Presenter {
                     }
 
                     @Override
-                    public void onNext(List<SectionDocument> sections) {
+                    public void onNext(List<? extends Section> sections) {
                         List<SectionSuggestion> sectionSuggestions = new ArrayList<>();
-                        for (SectionDocument section : sections) {
+                        for (Section section : sections) {
                             sectionSuggestions.add(new SectionSuggestion(section));
                         }
 
@@ -108,7 +109,7 @@ public final class MapsPresenter implements MapsContract.Presenter {
     public void streamSections() {
         Subscription subscription = mRiversApi.streamSections()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<SectionDocument>>() {
+                .subscribe(new Subscriber<List<? extends Section>>() {
                     @Override
                     public void onCompleted() {
                     }
@@ -118,7 +119,7 @@ public final class MapsPresenter implements MapsContract.Presenter {
                     }
 
                     @Override
-                    public void onNext(List<SectionDocument> sections) {
+                    public void onNext(List<? extends Section> sections) {
                         mView.setSections(sections);
                         mView.refreshMap();
                     }

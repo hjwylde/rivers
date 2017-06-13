@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.hjwylde.rivers.db.models.ImageDocument;
 import com.hjwylde.rivers.db.models.SectionDocument;
+import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.services.RiversApi;
 import com.hjwylde.rivers.ui.contracts.CreateSectionContract;
 
@@ -52,7 +53,7 @@ public final class CreateSectionPresenter implements CreateSectionContract.Prese
     public void createSection(@NonNull SectionDocument.Builder builder) {
         Subscription subscription = mRiversApi.createSection(builder)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<SectionDocument>() {
+                .subscribe(new Subscriber<Section>() {
                     @Override
                     public void onCompleted() {
                     }
@@ -63,7 +64,7 @@ public final class CreateSectionPresenter implements CreateSectionContract.Prese
                     }
 
                     @Override
-                    public void onNext(SectionDocument section) {
+                    public void onNext(Section section) {
                         mView.onCreateSectionSuccess(section);
                     }
                 });

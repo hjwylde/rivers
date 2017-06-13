@@ -11,6 +11,7 @@ import com.couchbase.lite.QueryRow;
 import com.couchbase.lite.View;
 import com.hjwylde.rivers.db.models.ImageDocument;
 import com.hjwylde.rivers.db.models.SectionDocument;
+import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.queries.SectionsView;
 import com.hjwylde.rivers.ui.util.SectionQuery;
 
@@ -49,7 +50,7 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
-    public Observable<SectionDocument> createSection(@NonNull SectionDocument.Builder builder) {
+    public Observable<Section> createSection(@NonNull SectionDocument.Builder builder) {
         String id = UUID.randomUUID().toString();
 
         try {
@@ -66,7 +67,7 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
-    public Observable<Void> deleteSection(@NonNull SectionDocument section) {
+    public Observable<Void> deleteSection(@NonNull Section section) {
         Document document = mDatabase.getExistingDocument(section.getId());
 
         try {
@@ -95,11 +96,11 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
-    public Observable<List<SectionDocument>> searchSections(@NonNull String query) {
+    public Observable<List<Section>> searchSections(@NonNull String query) {
         SectionQuery sectionQuery = new SectionQuery(query);
         View view = SectionsView.getInstance(mDatabase);
 
-        List<SectionDocument> sections = new ArrayList<>();
+        List<Section> sections = new ArrayList<>();
 
         try {
             QueryEnumerator result = view.createQuery().run();
@@ -120,17 +121,17 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
-    public Observable<List<SectionDocument>> streamSections() {
+    public Observable<List<Section>> streamSections() {
         View view = SectionsView.getInstance(mDatabase);
         LiveQuery query = view.createQuery().toLiveQuery();
 
-        QueryObserver<List<SectionDocument>> observer = new QueryObserver<List<SectionDocument>>() {
-            private List<Subscriber<? super List<SectionDocument>>> mSubscribers = new ArrayList<>();
+        QueryObserver<List<Section>> observer = new QueryObserver<List<Section>>() {
+            private List<Subscriber<? super List<Section>>> mSubscribers = new ArrayList<>();
 
-            private List<SectionDocument> mSections = new ArrayList<>();
+            private List<Section> mSections = new ArrayList<>();
 
             @Override
-            public void call(Subscriber<? super List<SectionDocument>> subscriber) {
+            public void call(Subscriber<? super List<Section>> subscriber) {
                 mSubscribers.add(subscriber);
 
                 if (!mSections.isEmpty()) {
@@ -145,7 +146,7 @@ public final class LocalRiversService implements RiversApi {
                     mSections.add(new SectionDocument.Builder(row.getDocument()).build());
                 }
 
-                for (Subscriber<? super List<SectionDocument>> subscriber : mSubscribers) {
+                for (Subscriber<? super List<Section>> subscriber : mSubscribers) {
                     subscriber.onNext(mSections);
                 }
             }
@@ -159,7 +160,7 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
-    public Observable<SectionDocument> updateSection(@NonNull SectionDocument.Builder builder) {
+    public Observable<Section> updateSection(@NonNull SectionDocument.Builder builder) {
         try {
             final SectionDocument sectionDocument = builder.build();
 

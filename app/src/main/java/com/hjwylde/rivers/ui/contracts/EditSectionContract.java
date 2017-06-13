@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.hjwylde.rivers.db.models.ImageDocument;
 import com.hjwylde.rivers.db.models.SectionDocument;
+import com.hjwylde.rivers.models.Section;
 
 public interface EditSectionContract {
     interface View extends BaseContract.View {
@@ -15,7 +16,7 @@ public interface EditSectionContract {
 
         void onUpdateSectionFailure(@NonNull Throwable t);
 
-        void onUpdateSectionSuccess(@NonNull SectionDocument section);
+        void onUpdateSectionSuccess(@NonNull Section section);
 
         void refreshImage();
 

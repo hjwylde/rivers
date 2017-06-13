@@ -23,6 +23,7 @@ import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
 import com.hjwylde.rivers.db.models.ImageDocument;
 import com.hjwylde.rivers.db.models.SectionDocument;
+import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.contracts.EditSectionContract;
 import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
 import com.hjwylde.rivers.ui.presenters.EditSectionPresenter;
@@ -112,7 +113,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     }
 
     @Override
-    public void onUpdateSectionSuccess(@NonNull SectionDocument section) {
+    public void onUpdateSectionSuccess(@NonNull Section section) {
         Intent data = new Intent();
         data.putExtra(INTENT_SECTION, section);
 

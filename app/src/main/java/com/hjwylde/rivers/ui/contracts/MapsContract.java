@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.rivers.db.models.ImageDocument;
-import com.hjwylde.rivers.db.models.SectionDocument;
+import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.util.SectionSuggestion;
 
 import java.util.List;
@@ -27,17 +27,17 @@ public interface MapsContract {
 
         void refreshMap();
 
-        void selectSection(@NonNull SectionDocument section);
+        void selectSection(@NonNull Section section);
 
         void setImage(@NonNull ImageDocument image);
 
         void setSectionSuggestions(@NonNull List<SectionSuggestion> sectionSuggestions);
 
-        void setSections(@NonNull List<SectionDocument> sections);
+        void setSections(@NonNull List<? extends Section> sections);
     }
 
     interface Presenter extends BaseContract.Presenter {
-        void deleteSection(@NonNull SectionDocument section);
+        void deleteSection(@NonNull Section section);
 
         void getImage(@NonNull String id);
 

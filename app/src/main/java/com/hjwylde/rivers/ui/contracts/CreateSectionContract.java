@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.hjwylde.rivers.db.models.ImageDocument;
 import com.hjwylde.rivers.db.models.SectionDocument;
+import com.hjwylde.rivers.models.Section;
 
 public interface CreateSectionContract {
     interface View extends BaseContract.View {
@@ -13,7 +14,7 @@ public interface CreateSectionContract {
 
         void onCreateSectionFailure(@NonNull Throwable t);
 
-        void onCreateSectionSuccess(@NonNull SectionDocument section);
+        void onCreateSectionSuccess(@NonNull Section section);
 
         void onGetImageFailure(@NonNull Throwable t);
 
