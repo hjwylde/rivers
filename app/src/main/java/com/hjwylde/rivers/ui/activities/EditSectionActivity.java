@@ -43,7 +43,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
 
     private EditSectionContract.Presenter mPresenter;
 
-    private SectionDocument.Builder mSectionBuilder;
+    private Section.DefaultBuilder mSectionBuilder;
     private Image mImage;
 
     public void onCameraClick(@NonNull View view) {
@@ -218,7 +218,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
         mPresenter = new EditSectionPresenter(this, RiversApplication.getRiversService());
 
         SectionDocument section = (SectionDocument) getIntent().getSerializableExtra(INTENT_SECTION);
-        mSectionBuilder = new SectionDocument.Builder(section);
+        mSectionBuilder = Section.builder().copy(section);
         refreshSection();
 
         refreshFocus();
@@ -235,7 +235,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        mSectionBuilder = (SectionDocument.Builder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
+        mSectionBuilder = (Section.DefaultBuilder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
         refreshSection();
 
         refreshFocus();

@@ -22,7 +22,6 @@ import android.widget.ImageView;
 import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
-import com.hjwylde.rivers.db.models.SectionDocument;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.contracts.CreateSectionContract;
@@ -44,7 +43,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
 
     private CreateSectionContract.Presenter mPresenter;
 
-    private SectionDocument.Builder mSectionBuilder = new SectionDocument.Builder();
+    private Section.DefaultBuilder mSectionBuilder = Section.builder();
     private Image mImage;
 
     public void onCameraClick(@NonNull View view) {
@@ -230,7 +229,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        mSectionBuilder = (SectionDocument.Builder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
+        mSectionBuilder = (Section.DefaultBuilder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
         refreshSection();
 
         refreshFocus();

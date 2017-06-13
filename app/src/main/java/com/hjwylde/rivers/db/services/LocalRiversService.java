@@ -19,7 +19,6 @@ import com.hjwylde.rivers.ui.util.SectionQuery;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -37,7 +36,7 @@ public final class LocalRiversService implements RiversApi {
     @NonNull
     @Override
     public Observable<Image> createImage(@NonNull Image.Builder builder) {
-        ImageDocument.Builder documentBuilder = ImageDocument.builder(mDatabase).clone(builder);
+        ImageDocument.Builder documentBuilder = ImageDocument.builder(mDatabase).copy(builder);
 
         try {
             ImageDocument imageDocument = documentBuilder.build();
@@ -50,14 +49,11 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
-    public Observable<Section> createSection(@NonNull SectionDocument.Builder builder) {
-        String id = UUID.randomUUID().toString();
+    public Observable<Section> createSection(@NonNull Section.Builder builder) {
+        SectionDocument.Builder documentBuilder = SectionDocument.builder(mDatabase).copy(builder);
 
         try {
-            SectionDocument sectionDocument = builder.id(id).build();
-
-            Document document = mDatabase.getDocument(id);
-            document.putProperties(sectionDocument.getProperties());
+            SectionDocument sectionDocument = documentBuilder.build();
 
             return Observable.just(sectionDocument);
         } catch (CouchbaseLiteException e) {
@@ -98,6 +94,7 @@ public final class LocalRiversService implements RiversApi {
     @NonNull
     @Override
     public Observable<List<Section>> searchSections(@NonNull String query) {
+        // TODO (hjw): this has potential to use a lot of memory
         SectionQuery sectionQuery = new SectionQuery(query);
         View view = SectionsView.getInstance(mDatabase);
 
@@ -107,7 +104,7 @@ public final class LocalRiversService implements RiversApi {
             QueryEnumerator result = view.createQuery().run();
 
             for (QueryRow row : result) {
-                SectionDocument sectionDocument = new SectionDocument.Builder(row.getDocument()).build();
+                SectionDocument sectionDocument = new SectionDocument(row.getDocument());
 
                 if (sectionQuery.test(sectionDocument)) {
                     sections.add(sectionDocument);
@@ -123,6 +120,7 @@ public final class LocalRiversService implements RiversApi {
     @NonNull
     @Override
     public Observable<List<Section>> streamSections() {
+        // TODO (hjw): this has potential to use a lot of memory
         View view = SectionsView.getInstance(mDatabase);
         LiveQuery query = view.createQuery().toLiveQuery();
 
@@ -144,7 +142,7 @@ public final class LocalRiversService implements RiversApi {
             public void changed(LiveQuery.ChangeEvent event) {
                 mSections = new ArrayList<>();
                 for (QueryRow row : event.getRows()) {
-                    mSections.add(new SectionDocument.Builder(row.getDocument()).build());
+                    mSections.add(new SectionDocument(row.getDocument()));
                 }
 
                 for (Subscriber<? super List<Section>> subscriber : mSubscribers) {
@@ -161,16 +159,11 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
-    public Observable<Section> updateSection(@NonNull SectionDocument.Builder builder) {
+    public Observable<Section> updateSection(@NonNull Section.Builder builder) {
+        SectionDocument.Builder documentBuilder = SectionDocument.builder(mDatabase).copy(builder);
+
         try {
-            final SectionDocument sectionDocument = builder.build();
-
-            Document document = mDatabase.getExistingDocument(sectionDocument.getId());
-            document.update(newRevision -> {
-                newRevision.setProperties(sectionDocument.getProperties());
-
-                return true;
-            });
+            SectionDocument sectionDocument = documentBuilder.build();
 
             return Observable.just(sectionDocument);
         } catch (CouchbaseLiteException e) {

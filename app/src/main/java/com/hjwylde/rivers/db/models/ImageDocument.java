@@ -44,7 +44,7 @@ public final class ImageDocument extends BaseDocument implements Image {
         }
 
         @NonNull
-        public Builder clone(@NonNull Image.Builder builder) {
+        public Builder copy(@NonNull Image.Builder builder) {
             id(builder.id());
             data(builder.data());
 

@@ -2,7 +2,6 @@ package com.hjwylde.rivers.ui.contracts;
 
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.db.models.SectionDocument;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 
@@ -26,7 +25,7 @@ public interface CreateSectionContract {
     interface Presenter extends BaseContract.Presenter {
         void createImage(@NonNull Image.Builder image);
 
-        void createSection(@NonNull SectionDocument.Builder builder);
+        void createSection(@NonNull Section.Builder builder);
 
         void getImage(@NonNull String id);
     }

@@ -2,7 +2,6 @@ package com.hjwylde.rivers.services;
 
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.db.models.SectionDocument;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 
@@ -15,7 +14,7 @@ public interface RiversApi {
     Observable<Image> createImage(@NonNull Image.Builder builder);
 
     @NonNull
-    Observable<Section> createSection(@NonNull SectionDocument.Builder builder);
+    Observable<Section> createSection(@NonNull Section.Builder builder);
 
     @NonNull
     Observable<Void> deleteSection(@NonNull Section section);
@@ -30,5 +29,5 @@ public interface RiversApi {
     Observable<List<Section>> streamSections();
 
     @NonNull
-    Observable<Section> updateSection(@NonNull SectionDocument.Builder builder);
+    Observable<Section> updateSection(@NonNull Section.Builder builder);
 }

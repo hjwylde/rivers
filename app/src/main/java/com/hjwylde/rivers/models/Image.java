@@ -9,7 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
 public interface Image {
-    static Builder builder() {
+    static DefaultBuilder builder() {
         return new DefaultBuilder();
     }
 
@@ -56,13 +56,13 @@ public interface Image {
         Builder id(String id);
     }
 
-    class DefaultBuilder implements Builder, Serializable {
+    final class DefaultBuilder implements Builder, Serializable {
         private static final long serialVersionUID = 1L;
 
-        protected String mId;
-        protected String mData;
+        private String mId;
+        private String mData;
 
-        protected DefaultBuilder() {
+        private DefaultBuilder() {
         }
 
         @NonNull
@@ -79,7 +79,7 @@ public interface Image {
 
         @NonNull
         @Override
-        public Builder data(String data) {
+        public DefaultBuilder data(String data) {
             mData = data;
 
             return this;
@@ -92,7 +92,7 @@ public interface Image {
 
         @NonNull
         @Override
-        public Builder id(String id) {
+        public DefaultBuilder id(String id) {
             mId = id;
 
             return this;
