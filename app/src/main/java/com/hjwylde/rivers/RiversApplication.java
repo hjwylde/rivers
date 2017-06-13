@@ -8,7 +8,7 @@ import com.couchbase.lite.Database;
 import com.couchbase.lite.DatabaseOptions;
 import com.couchbase.lite.Manager;
 import com.couchbase.lite.android.AndroidContext;
-import com.hjwylde.rivers.services.LocalRiversService;
+import com.hjwylde.rivers.db.services.LocalRiversService;
 import com.hjwylde.rivers.services.RiversApi;
 
 import java.io.IOException;

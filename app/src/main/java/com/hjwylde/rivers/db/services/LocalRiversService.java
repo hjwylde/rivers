@@ -1,4 +1,4 @@
-package com.hjwylde.rivers.services;
+package com.hjwylde.rivers.db.services;
 
 import android.support.annotation.NonNull;
 
@@ -14,6 +14,7 @@ import com.hjwylde.rivers.db.models.SectionDocument;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.db.views.SectionsView;
+import com.hjwylde.rivers.services.RiversApi;
 import com.hjwylde.rivers.ui.util.SectionQuery;
 
 import java.util.ArrayList;
