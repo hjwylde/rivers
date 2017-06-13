@@ -2,7 +2,6 @@ package com.hjwylde.rivers.ui.presenters;
 
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.db.models.ImageDocument;
 import com.hjwylde.rivers.db.models.SectionDocument;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
@@ -28,7 +27,7 @@ public final class CreateSectionPresenter implements CreateSectionContract.Prese
     }
 
     @Override
-    public void createImage(@NonNull ImageDocument.Builder builder) {
+    public void createImage(@NonNull Image.Builder builder) {
         Subscription subscription = mRiversApi.createImage(builder)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<Image>() {

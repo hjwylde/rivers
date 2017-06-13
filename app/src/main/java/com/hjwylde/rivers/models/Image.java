@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.util.Base64;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
 public interface Image extends Serializable {
@@ -12,6 +13,10 @@ public interface Image extends Serializable {
     String PROPERTY_ID = "_id";
     @NonNull
     String PROPERTY_DATA = "data";
+
+    static Builder builder() {
+        return new DefaultBuilder();
+    }
 
     @NonNull
     default Bitmap getBitmap() {
@@ -30,4 +35,72 @@ public interface Image extends Serializable {
 
     @NonNull
     String getId();
+
+    interface Builder extends Serializable {
+        @NonNull
+        default Builder bitmap(Bitmap bitmap) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+
+            String data = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+
+            return data(data);
+        }
+
+        @NonNull
+        Image build() throws Exception;
+
+        String data();
+
+        @NonNull
+        Builder data(String data);
+
+        String id();
+
+        @NonNull
+        Builder id(String id);
+    }
+
+    class DefaultBuilder implements Builder {
+        private static final long serialVersionUID = 1L;
+
+        protected String mId;
+        protected String mData;
+
+        protected DefaultBuilder() {
+        }
+
+        @NonNull
+        @Override
+        public Image build() {
+            throw new UnsupportedOperationException();
+        }
+
+        @NonNull
+        @Override
+        public String data() {
+            return mData;
+        }
+
+        @NonNull
+        @Override
+        public Builder data(String data) {
+            mData = data;
+
+            return this;
+        }
+
+        @Override
+        public String id() {
+            return mId;
+        }
+
+        @NonNull
+        @Override
+        public Builder id(String id) {
+            mId = id;
+
+            return this;
+        }
+    }
 }

@@ -21,7 +21,6 @@ import android.widget.ImageView;
 
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
-import com.hjwylde.rivers.db.models.ImageDocument;
 import com.hjwylde.rivers.db.models.SectionDocument;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
@@ -265,7 +264,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     }
 
     private void onImageSelected(Bitmap bitmap) {
-        ImageDocument.Builder builder = new ImageDocument.Builder();
+        Image.Builder builder = Image.builder();
         builder.bitmap(bitmap);
 
         mPresenter.createImage(builder);

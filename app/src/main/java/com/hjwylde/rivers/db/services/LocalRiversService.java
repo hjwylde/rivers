@@ -11,9 +11,9 @@ import com.couchbase.lite.QueryRow;
 import com.couchbase.lite.View;
 import com.hjwylde.rivers.db.models.ImageDocument;
 import com.hjwylde.rivers.db.models.SectionDocument;
+import com.hjwylde.rivers.db.views.SectionsView;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
-import com.hjwylde.rivers.db.views.SectionsView;
 import com.hjwylde.rivers.services.RiversApi;
 import com.hjwylde.rivers.ui.util.SectionQuery;
 
@@ -27,22 +27,20 @@ import rx.Subscriber;
 import static java.util.Objects.requireNonNull;
 
 public final class LocalRiversService implements RiversApi {
+    @NonNull
     private final Database mDatabase;
 
-    private LocalRiversService(Database database) {
+    private LocalRiversService(@NonNull Database database) {
         mDatabase = requireNonNull(database);
     }
 
     @NonNull
     @Override
-    public Observable<Image> createImage(@NonNull ImageDocument.Builder builder) {
-        String id = UUID.randomUUID().toString();
+    public Observable<Image> createImage(@NonNull Image.Builder builder) {
+        ImageDocument.Builder documentBuilder = ImageDocument.builder(mDatabase).clone(builder);
 
         try {
-            ImageDocument imageDocument = builder.id(id).build();
-
-            Document document = mDatabase.getDocument(id);
-            document.putProperties(imageDocument.getProperties());
+            ImageDocument imageDocument = documentBuilder.build();
 
             return Observable.just(imageDocument);
         } catch (CouchbaseLiteException e) {
@@ -89,7 +87,7 @@ public final class LocalRiversService implements RiversApi {
         Document document = mDatabase.getExistingDocument(id);
 
         if (document != null) {
-            ImageDocument imageDocument = new ImageDocument.Builder(document).build();
+            ImageDocument imageDocument = new ImageDocument(document);
 
             return Observable.just(imageDocument);
         } else {

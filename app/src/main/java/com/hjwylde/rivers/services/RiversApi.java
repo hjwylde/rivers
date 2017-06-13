@@ -2,7 +2,6 @@ package com.hjwylde.rivers.services;
 
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.db.models.ImageDocument;
 import com.hjwylde.rivers.db.models.SectionDocument;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
@@ -13,7 +12,7 @@ import rx.Observable;
 
 public interface RiversApi {
     @NonNull
-    Observable<Image> createImage(@NonNull ImageDocument.Builder builder);
+    Observable<Image> createImage(@NonNull Image.Builder builder);
 
     @NonNull
     Observable<Section> createSection(@NonNull SectionDocument.Builder builder);
