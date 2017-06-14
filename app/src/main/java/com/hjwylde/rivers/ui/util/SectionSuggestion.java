@@ -6,8 +6,6 @@ import android.support.annotation.NonNull;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.hjwylde.rivers.models.Section;
 
-import static java.util.Objects.requireNonNull;
-
 public final class SectionSuggestion implements SearchSuggestion {
     public static final Creator<SectionSuggestion> CREATOR = new Creator<SectionSuggestion>() {
         @Override
@@ -22,14 +20,22 @@ public final class SectionSuggestion implements SearchSuggestion {
     };
 
     @NonNull
-    private final Section mSection;
+    private final String mId;
+    @NonNull
+    private final String mTitle;
+    @NonNull
+    private final String mSubtitle;
 
     public SectionSuggestion(@NonNull Section section) {
-        mSection = requireNonNull(section);
+        mId = section.getId();
+        mTitle = section.getTitle();
+        mSubtitle = section.getSubtitle();
     }
 
     private SectionSuggestion(@NonNull Parcel source) {
-        mSection = (Section) source.readSerializable();
+        mId = source.readString();
+        mTitle = source.readString();
+        mSubtitle = source.readString();
     }
 
     @Override
@@ -43,34 +49,31 @@ public final class SectionSuggestion implements SearchSuggestion {
             return false;
         }
 
-        return mSection.equals(((SectionSuggestion) obj).mSection);
+        return mId.equals(((SectionSuggestion) obj).mId);
     }
 
     @Override
     public String getBody() {
         StringBuilder body = new StringBuilder();
-        body.append(mSection.getTitle());
+        body.append(mTitle);
 
-        if (mSection.getSubtitle() != null && !mSection.getSubtitle().isEmpty()) {
+        if (mSubtitle != null && !mSubtitle.isEmpty()) {
             body.append(", ");
-            body.append(mSection.getSubtitle());
+            body.append(mSubtitle);
         }
 
         return body.toString();
     }
 
-    @NonNull
-    public Section getSection() {
-        return mSection;
-    }
-
     @Override
     public int hashCode() {
-        return mSection.hashCode();
+        return mId.hashCode();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeSerializable(mSection);
+        dest.writeString(mId);
+        dest.writeString(mTitle);
+        dest.writeString(mSubtitle);
     }
 }

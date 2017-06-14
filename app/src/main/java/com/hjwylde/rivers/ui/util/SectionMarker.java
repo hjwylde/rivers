@@ -4,25 +4,28 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
-import com.hjwylde.rivers.models.Section;
 
 import static java.util.Objects.requireNonNull;
 
 public final class SectionMarker implements ClusterItem {
     @NonNull
-    private final Section mSection;
+    private final String mId;
+    @NonNull
+    private final LatLng mPutIn;
 
-    public SectionMarker(@NonNull Section section) {
-        mSection = requireNonNull(section);
-    }
-
-    @Override
-    public LatLng getPosition() {
-        return mSection.getPutIn();
+    public SectionMarker(@NonNull String id, @NonNull LatLng putIn) {
+        mId = requireNonNull(id);
+        mPutIn = requireNonNull(putIn);
     }
 
     @NonNull
-    public Section getSection() {
-        return mSection;
+    public String getId() {
+        return mId;
+    }
+
+    @NonNull
+    @Override
+    public LatLng getPosition() {
+        return mPutIn;
     }
 }

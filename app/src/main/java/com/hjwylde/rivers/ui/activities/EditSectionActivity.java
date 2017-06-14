@@ -21,7 +21,6 @@ import android.widget.ImageView;
 
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
-import com.hjwylde.rivers.db.models.SectionDocument;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.contracts.EditSectionContract;
@@ -35,7 +34,8 @@ import java.io.IOException;
 import static java.util.Objects.requireNonNull;
 
 public final class EditSectionActivity extends BaseActivity implements EditSectionContract.View {
-    public static final String INTENT_SECTION = "section";
+    public static final String INTENT_SECTION_BUILDER = "sectionBuilder";
+    public static final String RESULT_SECTION_ID = "sectionId";
 
     private static final String TAG = EditSectionActivity.class.getSimpleName();
 
@@ -115,7 +115,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     @Override
     public void onUpdateSectionSuccess(@NonNull Section section) {
         Intent data = new Intent();
-        data.putExtra(INTENT_SECTION, section);
+        data.putExtra(RESULT_SECTION_ID, section.getId());
 
         setResult(RESULT_OK, data);
         finish();
@@ -217,8 +217,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
 
         mPresenter = new EditSectionPresenter(this, RiversApplication.getRiversService());
 
-        SectionDocument section = (SectionDocument) getIntent().getSerializableExtra(INTENT_SECTION);
-        mSectionBuilder = Section.builder().copy(section);
+        mSectionBuilder = (Section.DefaultBuilder) getIntent().getSerializableExtra(INTENT_SECTION_BUILDER);
         refreshSection();
 
         refreshFocus();

@@ -93,6 +93,20 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
+    public Observable<Section> getSection(@NonNull String id) {
+        Document document = mDatabase.getExistingDocument(id);
+
+        if (document != null) {
+            SectionDocument sectionDocument = new SectionDocument(document);
+
+            return Observable.just(sectionDocument);
+        } else {
+            return Observable.empty();
+        }
+    }
+
+    @NonNull
+    @Override
     public Observable<List<Section>> searchSections(@NonNull String query) {
         // TODO (hjw): this has potential to use a lot of memory
         SectionQuery sectionQuery = new SectionQuery(query);

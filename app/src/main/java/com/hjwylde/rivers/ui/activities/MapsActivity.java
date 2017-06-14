@@ -20,9 +20,6 @@ import android.widget.ImageView;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
@@ -47,8 +44,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     private static final String STATE_SEARCH_VIEW = "searchView";
     private static final String STATE_BOTTOM_SHEET = "bottomSheet";
     private static final String STATE_CREATE_SECTION_MODE_ACTIVE = "createSectionModeActive";
-    private static final String STATE_SECTION = "section";
-    private static final String STATE_SECTIONS = "sections";
+    private static final String STATE_SECTION_ID = "sectionId";
 
     private FloatingSearchView mSearchView;
     private BottomSheetBehavior<NestedScrollView> mBottomSheetBehavior;
@@ -139,6 +135,27 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     @Override
+    public void onGetSectionFailure(@NonNull Throwable t) {
+        Log.w(TAG, t.getMessage(), t);
+
+        // TODO (hjw)
+    }
+
+    @Override
+    public void onGetSectionSuccess(@NonNull Section section) {
+        setSection(section);
+
+        refreshSection();
+        refreshImage();
+
+        if (mImage == null) {
+            mPresenter.getImage(mSection.getImageId());
+        }
+
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+    @Override
     public void onGetSectionSuggestionsFailure(@NonNull Throwable t) {
         Log.w(TAG, t.getMessage(), t);
 
@@ -171,22 +188,13 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     @Override
-    public void selectSection(@NonNull Section section) {
-        if (mSection != null && mSection.getId().equals(section.getId())) {
+    public void selectSection(@NonNull String id) {
+        if (mSection != null && mSection.getId().equals(id)) {
             mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             return;
         }
 
-        setSection(section);
-
-        refreshSection();
-        refreshImage();
-
-        if (mImage == null) {
-            mPresenter.getImage(mSection.getImageId());
-        }
-
-        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        mPresenter.getSection(id);
     }
 
     @Override
@@ -217,9 +225,10 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
                 onSectionCreated();
                 break;
             case REQUEST_CODE_SECTION_EDITED:
-                Section section = (Section) data.getSerializableExtra(EditSectionActivity.INTENT_SECTION);
+                String id = data.getStringExtra(EditSectionActivity.RESULT_SECTION_ID);
 
-                onSectionEdited(section);
+                // TODO (hjw)
+                // onSectionEdited(section);
                 break;
         }
     }
@@ -246,19 +255,20 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
             @Override
             public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
-                final Section section = ((SectionSuggestion) searchSuggestion).getSection();
+                // TODO (hjw)
+                // final String id = ((String) searchSuggestion).getSectionId();
 
-                CameraUpdate update = CameraUpdateFactory.newLatLng(section.getPutIn());
-                getMapsFragment().getMap().animateCamera(update, new GoogleMap.CancelableCallback() {
-                    @Override
-                    public void onCancel() {
-                    }
+                // CameraUpdate update = CameraUpdateFactory.newLatLng(section.getPutIn());
+                // getMapsFragment().getMap().animateCamera(update, new GoogleMap.CancelableCallback() {
+                //     @Override
+                //     public void onCancel() {
+                //     }
 
-                    @Override
-                    public void onFinish() {
-                        selectSection(section);
-                    }
-                });
+                //     @Override
+                //     public void onFinish() {
+                //         selectSection(section);
+                //     }
+                // });
             }
         });
 
@@ -364,12 +374,10 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
             startCreateSectionMode();
         }
 
-        mSection = (Section) savedInstanceState.getSerializable(STATE_SECTION);
-        refreshSection();
-        refreshImageContainer();
-
-        mSections = (List<? extends Section>) savedInstanceState.getSerializable(STATE_SECTIONS);
-        refreshMap();
+        // TODO (hjw)
+        // mSection = (Section) savedInstanceState.getSerializable(STATE_SECTION);
+        // refreshSection();
+        // refreshImageContainer();
     }
 
     @Override
@@ -395,9 +403,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
         outState.putBoolean(STATE_CREATE_SECTION_MODE_ACTIVE, mCreateSectionMode != null && mCreateSectionMode.isActive());
 
-        outState.putSerializable(STATE_SECTION, mSection);
-
-        outState.putSerializable(STATE_SECTIONS, new ArrayList<>(mSections));
+        outState.putString(STATE_SECTION_ID, mSection.getId());
     }
 
     private void animateImageIn(@NonNull View imageView) {
@@ -423,7 +429,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     private void onEditSectionClick() {
         Intent intent = new Intent(this, EditSectionActivity.class);
-        intent.putExtra(EditSectionActivity.INTENT_SECTION, mSection);
+        intent.putExtra(EditSectionActivity.INTENT_SECTION_BUILDER, Section.builder().copy(mSection));
 
         startActivityForResult(intent, REQUEST_CODE_SECTION_EDITED);
     }

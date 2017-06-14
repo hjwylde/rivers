@@ -39,6 +39,7 @@ public final class ImageDocument extends BaseDocument implements Image {
         }
 
         @NonNull
+        @Override
         public ImageDocument build() throws CouchbaseLiteException {
             return new ImageDocument(createOrUpdate());
         }

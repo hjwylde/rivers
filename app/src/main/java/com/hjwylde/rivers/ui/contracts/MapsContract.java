@@ -21,13 +21,17 @@ public interface MapsContract {
 
         void onGetImageFailure(@NonNull Throwable t);
 
+        void onGetSectionFailure(@NonNull Throwable t);
+
+        void onGetSectionSuccess(@NonNull Section section);
+
         void onGetSectionSuggestionsFailure(@NonNull Throwable t);
 
         void refreshImage();
 
         void refreshMap();
 
-        void selectSection(@NonNull Section section);
+        void selectSection(@NonNull String id);
 
         void setImage(@NonNull Image image);
 
@@ -40,6 +44,8 @@ public interface MapsContract {
         void deleteSection(@NonNull Section section);
 
         void getImage(@NonNull String id);
+
+        void getSection(@NonNull String id);
 
         void getSectionSuggestions(@NonNull String query);
 

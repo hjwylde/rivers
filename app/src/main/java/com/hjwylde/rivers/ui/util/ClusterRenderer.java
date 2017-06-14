@@ -85,10 +85,6 @@ public final class ClusterRenderer<T extends ClusterItem> extends DefaultCluster
         return mIcon;
     }
 
-    private float getMapZoom() {
-        return mMap.getCameraPosition().zoom;
-    }
-
     @ColorInt
     private int getMarkerColor() {
         return ContextCompat.getColor(mContext, R.color.accent);

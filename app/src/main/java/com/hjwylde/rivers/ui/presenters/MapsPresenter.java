@@ -77,6 +77,29 @@ public final class MapsPresenter implements MapsContract.Presenter {
     }
 
     @Override
+    public void getSection(@NonNull String id) {
+        Subscription subscription = mRiversApi.getSection(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Section>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.onGetSectionFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(Section section) {
+                        mView.onGetSectionSuccess(section);
+                    }
+                });
+
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
     public void getSectionSuggestions(@NonNull String query) {
         Subscription subscription = mRiversApi.searchSections(query)
                 .observeOn(AndroidSchedulers.mainThread())

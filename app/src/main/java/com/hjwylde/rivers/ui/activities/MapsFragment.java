@@ -74,7 +74,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
 
     @Override
     public boolean onClusterItemClick(SectionMarker sectionMarker) {
-        mView.selectSection(sectionMarker.getSection());
+        mView.selectSection(sectionMarker.getId());
 
         return true;
     }
@@ -144,7 +144,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         mClusterManager.clearItems();
 
         for (Section section : sections) {
-            mClusterManager.addItem(new SectionMarker(section));
+            mClusterManager.addItem(new SectionMarker(section.getId(), section.getPutIn()));
         }
 
         mClusterManager.cluster();
