@@ -13,6 +13,8 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public interface RiversApi {
+    // TODO (hjw): more generic return types
+
     @NonNull
     Single<Image> createImage(@NonNull Image.Builder builder);
 
@@ -23,14 +25,13 @@ public interface RiversApi {
     Completable deleteSection(@NonNull Section section);
 
     @NonNull
+    Observable<Section> findSection(@NonNull String query);
+
+    @NonNull
     Maybe<Image> getImage(@NonNull String id);
 
     @NonNull
     Maybe<Section> getSection(@NonNull String id);
-
-    // TODO (hjw): update this to Flowable<Section>
-    @NonNull
-    Single<List<Section>> searchSections(@NonNull String query);
 
     // TODO (hjw): Flowable
     @NonNull

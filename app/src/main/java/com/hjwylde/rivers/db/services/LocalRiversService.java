@@ -11,11 +11,11 @@ import com.couchbase.lite.QueryRow;
 import com.couchbase.lite.View;
 import com.hjwylde.rivers.db.models.ImageDocument;
 import com.hjwylde.rivers.db.models.SectionDocument;
+import com.hjwylde.rivers.db.util.SectionQuery;
 import com.hjwylde.rivers.db.views.SectionsView;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.services.RiversApi;
-import com.hjwylde.rivers.ui.util.SectionQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +83,30 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
+    public Observable<Section> findSection(@NonNull String query) {
+        SectionQuery sectionQuery = new SectionQuery(query);
+        View view = SectionsView.getInstance(mDatabase);
+
+        return Observable
+                .<Document>create(emitter -> {
+                    try {
+                        QueryEnumerator result = view.createQuery().run();
+
+                        for (QueryRow row : result) {
+                            emitter.onNext(row.getDocument());
+                        }
+
+                        emitter.onComplete();
+                    } catch (CouchbaseLiteException e) {
+                        emitter.onError(e);
+                    }
+                })
+                .<Section>map(SectionDocument::new)
+                .filter(sectionQuery::test);
+    }
+
+    @NonNull
+    @Override
     public Maybe<Image> getImage(@NonNull String id) {
         Document document = mDatabase.getExistingDocument(id);
 
@@ -106,32 +130,6 @@ public final class LocalRiversService implements RiversApi {
             return Maybe.just(sectionDocument);
         } else {
             return Maybe.empty();
-        }
-    }
-
-    @NonNull
-    @Override
-    public Single<List<Section>> searchSections(@NonNull String query) {
-        // TODO (hjw): this has potential to use a lot of memory
-        SectionQuery sectionQuery = new SectionQuery(query);
-        View view = SectionsView.getInstance(mDatabase);
-
-        List<Section> sections = new ArrayList<>();
-
-        try {
-            QueryEnumerator result = view.createQuery().run();
-
-            for (QueryRow row : result) {
-                SectionDocument sectionDocument = new SectionDocument(row.getDocument());
-
-                if (sectionQuery.test(sectionDocument)) {
-                    sections.add(sectionDocument);
-                }
-            }
-
-            return Single.just(sections);
-        } catch (CouchbaseLiteException e) {
-            return Single.error(e);
         }
     }
 

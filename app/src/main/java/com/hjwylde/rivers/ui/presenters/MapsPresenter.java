@@ -7,9 +7,6 @@ import com.hjwylde.rivers.services.RiversApi;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
 import com.hjwylde.rivers.ui.util.SectionSuggestion;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -59,16 +56,11 @@ public final class MapsPresenter implements MapsContract.Presenter {
 
     @Override
     public void getSectionSuggestions(@NonNull String query) {
-        Disposable disposable = mRiversApi.searchSections(query)
+        Disposable disposable = mRiversApi.findSection(query)
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(sections -> {
-                    List<SectionSuggestion> sectionSuggestions = new ArrayList<>();
-                    for (Section section : sections) {
-                        sectionSuggestions.add(new SectionSuggestion(section));
-                    }
-
-                    return sectionSuggestions;
-                })
+                .map(SectionSuggestion::new)
+                .take(5)
+                .toList()
                 .subscribe(mView::setSectionSuggestions, mView::onGetSectionSuggestionsFailure);
 
         mDisposables.add(disposable);
