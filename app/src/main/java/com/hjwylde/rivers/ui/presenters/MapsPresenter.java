@@ -2,7 +2,6 @@ package com.hjwylde.rivers.ui.presenters;
 
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.services.RiversApi;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
@@ -11,10 +10,9 @@ import com.hjwylde.rivers.ui.util.SectionSuggestion;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 import static java.util.Objects.requireNonNull;
 
@@ -22,7 +20,7 @@ public final class MapsPresenter implements MapsContract.Presenter {
     private final MapsContract.View mView;
     private final RiversApi mRiversApi;
 
-    private final CompositeSubscription mSubscriptions = new CompositeSubscription();
+    private final CompositeDisposable mDisposables = new CompositeDisposable();
 
     public MapsPresenter(@NonNull MapsContract.View view, @NonNull RiversApi riversApi) {
         mView = requireNonNull(view);
@@ -31,127 +29,65 @@ public final class MapsPresenter implements MapsContract.Presenter {
 
     @Override
     public void deleteSection(@NonNull Section section) {
-        Subscription subscription = mRiversApi.deleteSection(section)
+        Disposable disposable = mRiversApi.deleteSection(section)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Void>() {
-                    @Override
-                    public void onCompleted() {
-                        mView.onDeleteSectionSuccess();
-                    }
+                .subscribe(mView::onDeleteSectionSuccess, mView::onDeleteSectionFailure);
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.onDeleteSectionFailure(e);
-                    }
-
-                    @Override
-                    public void onNext(Void section) {
-                    }
-                });
-
-        mSubscriptions.add(subscription);
+        mDisposables.add(disposable);
     }
 
     @Override
     public void getImage(@NonNull String id) {
-        Subscription subscription = mRiversApi.getImage(id)
+        Disposable disposable = mRiversApi.getImage(id)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Image>() {
-                    @Override
-                    public void onCompleted() {
-                        mView.refreshImage();
-                    }
+                .subscribe(image -> {
+                    mView.setImage(image);
+                    mView.refreshImage();
+                }, mView::onGetImageFailure);
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.onGetImageFailure(e);
-                    }
-
-                    @Override
-                    public void onNext(Image image) {
-                        mView.setImage(image);
-                    }
-                });
-
-        mSubscriptions.add(subscription);
+        mDisposables.add(disposable);
     }
 
     @Override
     public void getSection(@NonNull String id) {
-        Subscription subscription = mRiversApi.getSection(id)
+        Disposable disposable = mRiversApi.getSection(id)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Section>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+                .subscribe(mView::onGetSectionSuccess, mView::onGetSectionFailure);
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.onGetSectionFailure(e);
-                    }
-
-                    @Override
-                    public void onNext(Section section) {
-                        mView.onGetSectionSuccess(section);
-                    }
-                });
-
-        mSubscriptions.add(subscription);
+        mDisposables.add(disposable);
     }
 
     @Override
     public void getSectionSuggestions(@NonNull String query) {
-        Subscription subscription = mRiversApi.searchSections(query)
+        Disposable disposable = mRiversApi.searchSections(query)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<? extends Section>>() {
-                    @Override
-                    public void onCompleted() {
+                .map(sections -> {
+                    List<SectionSuggestion> sectionSuggestions = new ArrayList<>();
+                    for (Section section : sections) {
+                        sectionSuggestions.add(new SectionSuggestion(section));
                     }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.onGetSectionSuggestionsFailure(e);
-                    }
+                    return sectionSuggestions;
+                })
+                .subscribe(mView::setSectionSuggestions, mView::onGetSectionSuggestionsFailure);
 
-                    @Override
-                    public void onNext(List<? extends Section> sections) {
-                        List<SectionSuggestion> sectionSuggestions = new ArrayList<>();
-                        for (Section section : sections) {
-                            sectionSuggestions.add(new SectionSuggestion(section));
-                        }
-
-                        mView.setSectionSuggestions(sectionSuggestions);
-                    }
-                });
-
-        mSubscriptions.add(subscription);
+        mDisposables.add(disposable);
     }
 
     @Override
     public void streamSections() {
-        Subscription subscription = mRiversApi.streamSections()
+        Disposable disposable = mRiversApi.streamSections()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<? extends Section>>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onNext(List<? extends Section> sections) {
-                        mView.setSections(sections);
-                        mView.refreshMap();
-                    }
+                .subscribe(sections -> {
+                    mView.setSections(sections);
+                    mView.refreshMap();
                 });
 
-        mSubscriptions.add(subscription);
+        mDisposables.add(disposable);
     }
 
     @Override
     public void unsubscribe() {
-        mSubscriptions.clear();
+        mDisposables.clear();
     }
 }

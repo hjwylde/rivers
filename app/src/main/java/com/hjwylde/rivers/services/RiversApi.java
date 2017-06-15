@@ -7,30 +7,35 @@ import com.hjwylde.rivers.models.Section;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Completable;
+import io.reactivex.Maybe;
+import io.reactivex.Observable;
+import io.reactivex.Single;
 
 public interface RiversApi {
     @NonNull
-    Observable<Image> createImage(@NonNull Image.Builder builder);
+    Single<Image> createImage(@NonNull Image.Builder builder);
 
     @NonNull
-    Observable<Section> createSection(@NonNull Section.Builder builder);
+    Single<Section> createSection(@NonNull Section.Builder builder);
 
     @NonNull
-    Observable<Void> deleteSection(@NonNull Section section);
+    Completable deleteSection(@NonNull Section section);
 
     @NonNull
-    Observable<Image> getImage(@NonNull String id);
+    Maybe<Image> getImage(@NonNull String id);
 
     @NonNull
-    Observable<Section> getSection(@NonNull String id);
+    Maybe<Section> getSection(@NonNull String id);
 
+    // TODO (hjw): update this to Flowable<Section>
     @NonNull
-    Observable<List<Section>> searchSections(@NonNull String query);
+    Single<List<Section>> searchSections(@NonNull String query);
 
+    // TODO (hjw): Flowable
     @NonNull
     Observable<List<Section>> streamSections();
 
     @NonNull
-    Observable<Section> updateSection(@NonNull Section.Builder builder);
+    Single<Section> updateSection(@NonNull Section.Builder builder);
 }

@@ -20,8 +20,12 @@ import com.hjwylde.rivers.ui.util.SectionQuery;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
+import io.reactivex.Completable;
+import io.reactivex.Maybe;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Single;
 
 import static java.util.Objects.requireNonNull;
 
@@ -35,79 +39,79 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
-    public Observable<Image> createImage(@NonNull Image.Builder builder) {
+    public Single<Image> createImage(@NonNull Image.Builder builder) {
         ImageDocument.Builder documentBuilder = ImageDocument.builder(mDatabase).copy(builder);
 
         try {
             ImageDocument imageDocument = documentBuilder.build();
 
-            return Observable.just(imageDocument);
+            return Single.just(imageDocument);
         } catch (CouchbaseLiteException e) {
-            return Observable.error(e);
+            return Single.error(e);
         }
     }
 
     @NonNull
     @Override
-    public Observable<Section> createSection(@NonNull Section.Builder builder) {
+    public Single<Section> createSection(@NonNull Section.Builder builder) {
         SectionDocument.Builder documentBuilder = SectionDocument.builder(mDatabase).copy(builder);
 
         try {
             SectionDocument sectionDocument = documentBuilder.build();
 
-            return Observable.just(sectionDocument);
+            return Single.just(sectionDocument);
         } catch (CouchbaseLiteException e) {
-            return Observable.error(e);
+            return Single.error(e);
         }
     }
 
     @NonNull
     @Override
-    public Observable<Void> deleteSection(@NonNull Section section) {
+    public Completable deleteSection(@NonNull Section section) {
         Document document = mDatabase.getExistingDocument(section.getId());
 
         try {
             if (document != null) {
                 document.delete();
             }
-        } catch (CouchbaseLiteException e) {
-            return Observable.error(e);
-        }
 
-        return Observable.empty();
+            return Completable.complete();
+        } catch (CouchbaseLiteException e) {
+            return Completable.error(e);
+        }
     }
 
     @NonNull
     @Override
-    public Observable<Image> getImage(@NonNull String id) {
+    public Maybe<Image> getImage(@NonNull String id) {
         Document document = mDatabase.getExistingDocument(id);
 
         if (document != null) {
             ImageDocument imageDocument = new ImageDocument(document);
 
-            return Observable.just(imageDocument);
+            return Maybe.just(imageDocument);
         } else {
-            return Observable.empty();
+            return Maybe.empty();
         }
     }
 
     @NonNull
     @Override
-    public Observable<Section> getSection(@NonNull String id) {
+    public Maybe<Section> getSection(@NonNull String id) {
         Document document = mDatabase.getExistingDocument(id);
 
         if (document != null) {
             SectionDocument sectionDocument = new SectionDocument(document);
 
-            return Observable.just(sectionDocument);
+            return Maybe.just(sectionDocument);
         } else {
-            return Observable.empty();
+            return Maybe.empty();
         }
     }
 
     @NonNull
     @Override
-    public Observable<List<Section>> searchSections(@NonNull String query) {
+    public Single<List<Section>> searchSections(@NonNull String query) {
         // TODO (hjw): this has potential to use a lot of memory
         SectionQuery sectionQuery = new SectionQuery(query);
         View view = SectionsView.getInstance(mDatabase);
@@ -124,11 +128,11 @@ public final class LocalRiversService implements RiversApi {
                     sections.add(sectionDocument);
                 }
             }
-        } catch (CouchbaseLiteException e) {
-            Observable.error(e);
-        }
 
-        return Observable.just(sections);
+            return Single.just(sections);
+        } catch (CouchbaseLiteException e) {
+            return Single.error(e);
+        }
     }
 
     @NonNull
@@ -139,18 +143,9 @@ public final class LocalRiversService implements RiversApi {
         LiveQuery query = view.createQuery().toLiveQuery();
 
         QueryObserver<List<Section>> observer = new QueryObserver<List<Section>>() {
-            private List<Subscriber<? super List<Section>>> mSubscribers = new ArrayList<>();
+            private List<ObservableEmitter<List<Section>>> mSubscribers = new ArrayList<>();
 
             private List<Section> mSections = new ArrayList<>();
-
-            @Override
-            public void call(Subscriber<? super List<Section>> subscriber) {
-                mSubscribers.add(subscriber);
-
-                if (!mSections.isEmpty()) {
-                    subscriber.onNext(mSections);
-                }
-            }
 
             @Override
             public void changed(LiveQuery.ChangeEvent event) {
@@ -159,7 +154,16 @@ public final class LocalRiversService implements RiversApi {
                     mSections.add(new SectionDocument(row.getDocument()));
                 }
 
-                for (Subscriber<? super List<Section>> subscriber : mSubscribers) {
+                for (ObservableEmitter<List<Section>> subscriber : mSubscribers) {
+                    subscriber.onNext(mSections);
+                }
+            }
+
+            @Override
+            public void subscribe(ObservableEmitter<List<Section>> subscriber) throws Exception {
+                mSubscribers.add(subscriber);
+
+                if (!mSections.isEmpty()) {
                     subscriber.onNext(mSections);
                 }
             }
@@ -173,19 +177,19 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
-    public Observable<Section> updateSection(@NonNull Section.Builder builder) {
+    public Single<Section> updateSection(@NonNull Section.Builder builder) {
         SectionDocument.Builder documentBuilder = SectionDocument.builder(mDatabase).copy(builder);
 
         try {
             SectionDocument sectionDocument = documentBuilder.build();
 
-            return Observable.just(sectionDocument);
+            return Single.just(sectionDocument);
         } catch (CouchbaseLiteException e) {
-            return Observable.error(e);
+            return Single.error(e);
         }
     }
 
-    private interface QueryObserver<T> extends LiveQuery.ChangeListener, Observable.OnSubscribe<T> {
+    private interface QueryObserver<T> extends LiveQuery.ChangeListener, ObservableOnSubscribe<T> {
     }
 
     public static final class Builder {

@@ -7,10 +7,9 @@ import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.services.RiversApi;
 import com.hjwylde.rivers.ui.contracts.EditSectionContract;
 
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 import static java.util.Objects.requireNonNull;
 
@@ -18,7 +17,7 @@ public final class EditSectionPresenter implements EditSectionContract.Presenter
     private final EditSectionContract.View mView;
     private final RiversApi mRiversApi;
 
-    private final CompositeSubscription mSubscriptions = new CompositeSubscription();
+    private final CompositeDisposable mDisposables = new CompositeDisposable();
 
     public EditSectionPresenter(@NonNull EditSectionContract.View view, @NonNull RiversApi riversApi) {
         mView = requireNonNull(view);
@@ -28,76 +27,37 @@ public final class EditSectionPresenter implements EditSectionContract.Presenter
 
     @Override
     public void createImage(@NonNull Image.Builder builder) {
-        Subscription subscription = mRiversApi.createImage(builder)
+        Disposable disposable = mRiversApi.createImage(builder)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Image>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+                .subscribe(mView::onCreateImageSuccess, mView::onCreateImageFailure);
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.onCreateImageFailure(e);
-                    }
-
-                    @Override
-                    public void onNext(Image image) {
-                        mView.onCreateImageSuccess(image);
-                    }
-                });
-
-        mSubscriptions.add(subscription);
+        mDisposables.add(disposable);
     }
 
     @Override
     public void getImage(@NonNull String id) {
-        Subscription subscription = mRiversApi.getImage(id)
+        // TODO (hjw): should we care about if the image can't be found? If no, delete View::onGetImageFailure
+        Disposable disposable = mRiversApi.getImage(id)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Image>() {
-                    @Override
-                    public void onCompleted() {
-                        mView.refreshImage();
-                    }
+                .subscribe(image -> {
+                    mView.setImage(image);
+                    mView.refreshImage();
+                }, mView::onGetImageFailure);
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.onGetImageFailure(e);
-                    }
-
-                    @Override
-                    public void onNext(Image image) {
-                        mView.setImage(image);
-                    }
-                });
-
-        mSubscriptions.add(subscription);
+        mDisposables.add(disposable);
     }
 
     @Override
     public void unsubscribe() {
-        mSubscriptions.clear();
+        mDisposables.clear();
     }
 
     @Override
     public void updateSection(@NonNull Section.Builder builder) {
-        Subscription subscription = mRiversApi.updateSection(builder)
+        Disposable disposable = mRiversApi.updateSection(builder)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Section>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+                .subscribe(mView::onUpdateSectionSuccess, mView::onUpdateSectionFailure);
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.onUpdateSectionFailure(e);
-                    }
-
-                    @Override
-                    public void onNext(Section section) {
-                        mView.onUpdateSectionSuccess(section);
-                    }
-                });
-
-        mSubscriptions.add(subscription);
+        mDisposables.add(disposable);
     }
 }
