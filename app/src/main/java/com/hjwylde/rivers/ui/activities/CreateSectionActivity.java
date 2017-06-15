@@ -32,7 +32,7 @@ import com.hjwylde.rivers.ui.util.SoftInput;
 
 import java.io.IOException;
 
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public final class CreateSectionActivity extends BaseActivity implements CreateSectionContract.View {
     public static final String INTENT_PUT_IN = "putIn";
@@ -43,7 +43,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
 
     private CreateSectionContract.Presenter mPresenter;
 
-    private Section.Builder mSectionBuilder = new Section.Builder();
+    private Section.DefaultBuilder mSectionBuilder = Section.builder();
     private Image mImage;
 
     public void onCameraClick(@NonNull View view) {
@@ -133,7 +133,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
 
     @Override
     public void setImage(@NonNull Image image) {
-        mImage = checkNotNull(image);
+        mImage = requireNonNull(image);
     }
 
     @Override
@@ -229,7 +229,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        mSectionBuilder = (Section.Builder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
+        mSectionBuilder = (Section.DefaultBuilder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
         refreshSection();
 
         refreshFocus();
@@ -264,7 +264,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     }
 
     private void onImageSelected(Bitmap bitmap) {
-        Image.Builder builder = new Image.Builder();
+        Image.Builder builder = Image.builder();
         builder.bitmap(bitmap);
 
         mPresenter.createImage(builder);

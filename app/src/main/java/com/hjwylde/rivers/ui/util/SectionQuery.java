@@ -1,16 +1,16 @@
-package com.hjwylde.rivers.util;
+package com.hjwylde.rivers.ui.util;
 
 import android.support.annotation.NonNull;
 
 import com.hjwylde.rivers.models.Section;
 
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public final class SectionQuery {
     private final String mQuery;
 
     public SectionQuery(@NonNull String query) {
-        mQuery = checkNotNull(query);
+        mQuery = requireNonNull(query);
     }
 
     public boolean test(Section section) {

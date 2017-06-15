@@ -16,7 +16,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public final class MapsPresenter implements MapsContract.Presenter {
     private final MapsContract.View mView;
@@ -25,8 +25,8 @@ public final class MapsPresenter implements MapsContract.Presenter {
     private final CompositeSubscription mSubscriptions = new CompositeSubscription();
 
     public MapsPresenter(@NonNull MapsContract.View view, @NonNull RiversApi riversApi) {
-        mView = checkNotNull(view);
-        mRiversApi = checkNotNull(riversApi);
+        mView = requireNonNull(view);
+        mRiversApi = requireNonNull(riversApi);
     }
 
     @Override
@@ -77,12 +77,36 @@ public final class MapsPresenter implements MapsContract.Presenter {
     }
 
     @Override
+    public void getSection(@NonNull String id) {
+        Subscription subscription = mRiversApi.getSection(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Section>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.onGetSectionFailure(e);
+                    }
+
+                    @Override
+                    public void onNext(Section section) {
+                        mView.onGetSectionSuccess(section);
+                    }
+                });
+
+        mSubscriptions.add(subscription);
+    }
+
+    @Override
     public void getSectionSuggestions(@NonNull String query) {
         Subscription subscription = mRiversApi.searchSections(query)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Section>>() {
+                .subscribe(new Subscriber<List<? extends Section>>() {
                     @Override
-                    public void onCompleted() {}
+                    public void onCompleted() {
+                    }
 
                     @Override
                     public void onError(Throwable e) {
@@ -90,7 +114,7 @@ public final class MapsPresenter implements MapsContract.Presenter {
                     }
 
                     @Override
-                    public void onNext(List<Section> sections) {
+                    public void onNext(List<? extends Section> sections) {
                         List<SectionSuggestion> sectionSuggestions = new ArrayList<>();
                         for (Section section : sections) {
                             sectionSuggestions.add(new SectionSuggestion(section));
@@ -107,7 +131,7 @@ public final class MapsPresenter implements MapsContract.Presenter {
     public void streamSections() {
         Subscription subscription = mRiversApi.streamSections()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Section>>() {
+                .subscribe(new Subscriber<List<? extends Section>>() {
                     @Override
                     public void onCompleted() {
                     }
@@ -117,7 +141,7 @@ public final class MapsPresenter implements MapsContract.Presenter {
                     }
 
                     @Override
-                    public void onNext(List<Section> sections) {
+                    public void onNext(List<? extends Section> sections) {
                         mView.setSections(sections);
                         mView.refreshMap();
                     }

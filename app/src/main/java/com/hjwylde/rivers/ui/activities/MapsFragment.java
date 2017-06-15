@@ -21,9 +21,9 @@ import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.models.Section;
-import com.hjwylde.rivers.models.SectionMarker;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
 import com.hjwylde.rivers.ui.util.ClusterRenderer;
+import com.hjwylde.rivers.ui.util.SectionMarker;
 
 import java.util.Collection;
 
@@ -74,7 +74,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
 
     @Override
     public boolean onClusterItemClick(SectionMarker sectionMarker) {
-        mView.selectSection(sectionMarker.getSection());
+        mView.selectSection(sectionMarker.getId());
 
         return true;
     }
@@ -135,7 +135,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         }
     }
 
-    public void refreshMap(@NonNull Collection<Section> sections) {
+    public void refreshMap(@NonNull Collection<? extends Section> sections) {
         if (mMap == null) {
             return;
         }
@@ -144,7 +144,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         mClusterManager.clearItems();
 
         for (Section section : sections) {
-            mClusterManager.addItem(new SectionMarker(section));
+            mClusterManager.addItem(new SectionMarker(section.getId(), section.getPutIn()));
         }
 
         mClusterManager.cluster();

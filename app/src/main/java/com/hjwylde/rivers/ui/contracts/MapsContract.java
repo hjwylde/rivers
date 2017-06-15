@@ -21,25 +21,31 @@ public interface MapsContract {
 
         void onGetImageFailure(@NonNull Throwable t);
 
+        void onGetSectionFailure(@NonNull Throwable t);
+
+        void onGetSectionSuccess(@NonNull Section section);
+
         void onGetSectionSuggestionsFailure(@NonNull Throwable t);
 
         void refreshImage();
 
         void refreshMap();
 
-        void selectSection(@NonNull Section section);
+        void selectSection(@NonNull String id);
 
         void setImage(@NonNull Image image);
 
         void setSectionSuggestions(@NonNull List<SectionSuggestion> sectionSuggestions);
 
-        void setSections(@NonNull List<Section> sections);
+        void setSections(@NonNull List<? extends Section> sections);
     }
 
     interface Presenter extends BaseContract.Presenter {
         void deleteSection(@NonNull Section section);
 
         void getImage(@NonNull String id);
+
+        void getSection(@NonNull String id);
 
         void getSectionSuggestions(@NonNull String query);
 

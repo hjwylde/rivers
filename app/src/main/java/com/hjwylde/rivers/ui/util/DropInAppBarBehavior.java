@@ -15,7 +15,7 @@ import android.view.View;
 
 import com.hjwylde.rivers.R;
 
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Behavior<AppBarLayout> {
     private static final String TAG = DropInAppBarBehavior.class.getSimpleName();
@@ -25,7 +25,7 @@ public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Beha
     public DropInAppBarBehavior(@NonNull Context context, @NonNull AttributeSet attrs) {
         super(context, attrs);
 
-        mContext = checkNotNull(context);
+        mContext = requireNonNull(context);
     }
 
     @Override

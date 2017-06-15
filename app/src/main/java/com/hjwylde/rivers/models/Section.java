@@ -2,248 +2,273 @@ package com.hjwylde.rivers.models;
 
 import android.support.annotation.NonNull;
 
-import com.couchbase.lite.Document;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
-import static com.hjwylde.rivers.util.Preconditions.checkArgument;
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
-
-public final class Section implements Serializable {
-    @NonNull
-    public static final String TYPE = "section";
-
-    @NonNull
-    public static final String PROPERTY_TITLE = "title";
-    @NonNull
-    public static final String PROPERTY_SUBTITLE = "subtitle";
-    @NonNull
-    public static final String PROPERTY_DESCRIPTION = "description";
-    @NonNull
-    public static final String PROPERTY_PUT_IN = "putIn";
-    @NonNull
-    public static final String PROPERTY_PUT_IN_LATITUDE = "latitude";
-    @NonNull
-    public static final String PROPERTY_PUT_IN_LONGITUDE = "longitude";
-    @NonNull
-    public static final String PROPERTY_IMAGE_ID = "imageId";
-    @NonNull
-    public static final String PROPERTY_GRADE = "grade";
-    @NonNull
-    public static final String PROPERTY_LENGTH = "length";
-    @NonNull
-    public static final String PROPERTY_DURATION = "duration";
-
-    private static final long serialVersionUID = 1L;
-
-    @NonNull
-    private final Map<String, Object> mProperties;
-
-    public Section(@NonNull Map<String, Object> properties) {
-        mProperties = deepClone(properties);
-
-        checkArgument(mProperties.get(BaseDocument.PROPERTY_TYPE).equals(TYPE));
-
-        checkNotNull(mProperties.get(BaseDocument.PROPERTY_ID));
-        checkNotNull(mProperties.get(PROPERTY_TITLE));
-        checkNotNull(mProperties.get(PROPERTY_PUT_IN));
+public interface Section {
+    static DefaultBuilder builder() {
+        return new DefaultBuilder();
     }
 
+    String getDescription();
 
-    private static Map<String, Object> deepClone(Map<String, Object> properties) {
-        Map<String, Object> clone = new HashMap<>(properties);
-        clone.put(PROPERTY_PUT_IN, new HashMap<>((Map<String, Object>) properties.get(PROPERTY_PUT_IN)));
+    String getDuration();
 
-        return clone;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Section)) {
-            return false;
-        }
-
-        return getId().equals(((Section) obj).getId());
-    }
-
-    public String getDescription() {
-        return (String) mProperties.get(PROPERTY_DESCRIPTION);
-    }
-
-    public String getDuration() {
-        return (String) mProperties.get(PROPERTY_DURATION);
-    }
-
-    public String getGrade() {
-        return (String) mProperties.get(PROPERTY_GRADE);
-    }
+    String getGrade();
 
     @NonNull
-    public String getId() {
-        return (String) mProperties.get(BaseDocument.PROPERTY_ID);
-    }
+    String getId();
 
-    public String getImageId() {
-        return (String) mProperties.get(PROPERTY_IMAGE_ID);
-    }
+    String getImageId();
 
-    public String getLength() {
-        return (String) mProperties.get(PROPERTY_LENGTH);
-    }
-
-    public Map<String, Object> getProperties() {
-        return deepClone(mProperties);
-    }
+    String getLength();
 
     @NonNull
-    public LatLng getPutIn() {
-        Map<String, Object> putInProperties = (Map<String, Object>) mProperties.get(PROPERTY_PUT_IN);
+    LatLng getPutIn();
 
-        return new LatLng((double) putInProperties.get(PROPERTY_PUT_IN_LATITUDE), (double) putInProperties.get(PROPERTY_PUT_IN_LONGITUDE));
-    }
-
-    public String getSubtitle() {
-        return (String) mProperties.get(PROPERTY_SUBTITLE);
-    }
+    String getSubtitle();
 
     @NonNull
-    public String getTitle() {
-        return (String) mProperties.get(PROPERTY_TITLE);
+    String getTitle();
+
+    interface Builder {
+        @NonNull
+        Section build() throws Exception;
+
+        String description();
+
+        @NonNull
+        Builder description(String description);
+
+        String duration();
+
+        @NonNull
+        Builder duration(String duration);
+
+        String grade();
+
+        @NonNull
+        Builder grade(String grade);
+
+        String id();
+
+        @NonNull
+        Builder id(String id);
+
+        String imageId();
+
+        @NonNull
+        Builder imageId(String imageId);
+
+        String length();
+
+        @NonNull
+        Builder length(String length);
+
+        LatLng putIn();
+
+        @NonNull
+        Builder putIn(LatLng putIn);
+
+        String subtitle();
+
+        @NonNull
+        Builder subtitle(String subtitle);
+
+        String title();
+
+        @NonNull
+        Builder title(String title);
     }
 
-    @Override
-    public int hashCode() {
-        return getId().hashCode();
-    }
-
-    public static final class Builder implements Serializable {
+    final class DefaultBuilder implements Builder, Serializable {
         private static final long serialVersionUID = 1L;
 
-        @NonNull
-        private final Map<String, Object> mProperties;
+        private String mId;
+        private String mTitle;
+        private String mSubtitle;
+        private String mDescription;
+        private LatLng mPutIn;
+        private String mImageId;
+        private String mGrade;
+        private String mLength;
+        private String mDuration;
 
-        public Builder() {
-            mProperties = new HashMap<>();
-            mProperties.put(BaseDocument.PROPERTY_TYPE, TYPE);
-        }
-
-        public Builder(@NonNull Map<String, Object> properties) {
-            mProperties = deepClone(properties);
-        }
-
-        public Builder(@NonNull Document document) {
-            this(document.getProperties());
-        }
-
-        public Builder(@NonNull Section section) {
-            this(section.mProperties);
-        }
-
-        public Builder(@NonNull Builder builder) {
-            this(builder.mProperties);
+        private DefaultBuilder() {
         }
 
         @NonNull
+        @Override
         public Section build() {
-            return new Section(mProperties);
+            throw new UnsupportedOperationException();
         }
 
-        @NonNull
-        public Section.Builder description(String description) {
-            mProperties.put(PROPERTY_DESCRIPTION, description);
+        public DefaultBuilder copy(@NonNull Section section) {
+            id(section.getId());
+            subtitle(section.getSubtitle());
+            description(section.getDescription());
+            putIn(section.getPutIn());
+            imageId(section.getImageId());
+            grade(section.getGrade());
+            length(section.getLength());
+            duration(section.getDuration());
 
             return this;
         }
 
+        @Override
         public String description() {
-            return (String) mProperties.get(PROPERTY_DESCRIPTION);
+            return mDescription;
         }
 
         @NonNull
-        public Section.Builder duration(String duration) {
-            mProperties.put(PROPERTY_DURATION, duration);
+        @Override
+        public DefaultBuilder description(String description) {
+            mDescription = description;
 
             return this;
         }
 
+        @Override
         public String duration() {
-            return (String) mProperties.get(PROPERTY_DURATION);
+            return mDuration;
         }
 
         @NonNull
-        public Section.Builder grade(String grade) {
-            mProperties.put(PROPERTY_GRADE, grade);
+        @Override
+        public DefaultBuilder duration(String duration) {
+            mDuration = duration;
 
             return this;
         }
 
+        @Override
         public String grade() {
-            return (String) mProperties.get(PROPERTY_GRADE);
+            return mGrade;
         }
 
         @NonNull
-        public Section.Builder id(String id) {
-            mProperties.put(BaseDocument.PROPERTY_ID, id);
+        @Override
+        public DefaultBuilder grade(String grade) {
+            mGrade = grade;
 
             return this;
         }
 
+        @Override
+        public String id() {
+            return mId;
+        }
+
+        @NonNull
+        @Override
+        public DefaultBuilder id(String id) {
+            mId = id;
+
+            return this;
+        }
+
+        @Override
         public String imageId() {
-            return (String) mProperties.get(PROPERTY_IMAGE_ID);
+            return mImageId;
         }
 
         @NonNull
-        public Section.Builder imageId(String imageId) {
-            mProperties.put(PROPERTY_IMAGE_ID, imageId);
+        @Override
+        public DefaultBuilder imageId(String imageId) {
+            mImageId = imageId;
 
             return this;
         }
 
-        @NonNull
-        public Section.Builder length(String length) {
-            mProperties.put(PROPERTY_LENGTH, length);
-
-            return this;
-        }
-
+        @Override
         public String length() {
-            return (String) mProperties.get(PROPERTY_LENGTH);
+            return mLength;
         }
 
         @NonNull
-        public Section.Builder putIn(LatLng putIn) {
-            Map<String, Object> putInProperties = new HashMap<>();
-            putInProperties.put(PROPERTY_PUT_IN_LATITUDE, putIn.latitude);
-            putInProperties.put(PROPERTY_PUT_IN_LONGITUDE, putIn.longitude);
-
-            mProperties.put(PROPERTY_PUT_IN, putInProperties);
+        @Override
+        public DefaultBuilder length(String length) {
+            mLength = length;
 
             return this;
         }
 
+        @Override
+        public LatLng putIn() {
+            return mPutIn;
+        }
+
         @NonNull
-        public Section.Builder subtitle(String subtitle) {
-            mProperties.put(PROPERTY_SUBTITLE, subtitle);
+        @Override
+        public DefaultBuilder putIn(LatLng putIn) {
+            mPutIn = putIn;
 
             return this;
         }
 
+        @Override
         public String subtitle() {
-            return (String) mProperties.get(PROPERTY_SUBTITLE);
+            return mSubtitle;
         }
 
         @NonNull
-        public Section.Builder title(String title) {
-            mProperties.put(PROPERTY_TITLE, title);
+        @Override
+        public DefaultBuilder subtitle(String subtitle) {
+            mSubtitle = subtitle;
 
             return this;
         }
 
+        @Override
         public String title() {
-            return (String) mProperties.get(PROPERTY_TITLE);
+            return mTitle;
+        }
+
+        @NonNull
+        @Override
+        public DefaultBuilder title(String title) {
+            mTitle = title;
+
+            return this;
+        }
+
+        private void readObject(ObjectInputStream in)
+                throws IOException, ClassNotFoundException {
+            mId = (String) in.readObject();
+            mTitle = (String) in.readObject();
+            mSubtitle = (String) in.readObject();
+            mDescription = (String) in.readObject();
+            if (in.readBoolean()) {
+                mPutIn = new LatLng(in.readDouble(), in.readDouble());
+            }
+            mImageId = (String) in.readObject();
+            mGrade = (String) in.readObject();
+            mLength = (String) in.readObject();
+            mDuration = (String) in.readObject();
+        }
+
+        private void writeObject(ObjectOutputStream out)
+                throws IOException {
+            out.writeObject(mId);
+            out.writeObject(mTitle);
+            out.writeObject(mSubtitle);
+            out.writeObject(mDescription);
+            if (mPutIn != null) {
+                out.writeBoolean(true);
+                out.writeDouble(mPutIn.latitude);
+                out.writeDouble(mPutIn.longitude);
+            } else {
+                out.writeBoolean(false);
+            }
+            out.writeObject(mImageId);
+            out.writeObject(mGrade);
+            out.writeObject(mLength);
+            out.writeObject(mDuration);
         }
     }
 }

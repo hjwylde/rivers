@@ -31,10 +31,11 @@ import com.hjwylde.rivers.ui.util.SoftInput;
 
 import java.io.IOException;
 
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public final class EditSectionActivity extends BaseActivity implements EditSectionContract.View {
-    public static final String INTENT_SECTION = "section";
+    public static final String INTENT_SECTION_BUILDER = "sectionBuilder";
+    public static final String RESULT_SECTION_ID = "sectionId";
 
     private static final String TAG = EditSectionActivity.class.getSimpleName();
 
@@ -42,7 +43,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
 
     private EditSectionContract.Presenter mPresenter;
 
-    private Section.Builder mSectionBuilder;
+    private Section.DefaultBuilder mSectionBuilder;
     private Image mImage;
 
     public void onCameraClick(@NonNull View view) {
@@ -114,7 +115,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     @Override
     public void onUpdateSectionSuccess(@NonNull Section section) {
         Intent data = new Intent();
-        data.putExtra(INTENT_SECTION, section);
+        data.putExtra(RESULT_SECTION_ID, section.getId());
 
         setResult(RESULT_OK, data);
         finish();
@@ -134,7 +135,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
 
     @Override
     public void setImage(@NonNull Image image) {
-        mImage = checkNotNull(image);
+        mImage = requireNonNull(image);
     }
 
     @Override
@@ -216,8 +217,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
 
         mPresenter = new EditSectionPresenter(this, RiversApplication.getRiversService());
 
-        Section section = (Section) getIntent().getSerializableExtra(INTENT_SECTION);
-        mSectionBuilder = new Section.Builder(section);
+        mSectionBuilder = (Section.DefaultBuilder) getIntent().getSerializableExtra(INTENT_SECTION_BUILDER);
         refreshSection();
 
         refreshFocus();
@@ -234,7 +234,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        mSectionBuilder = (Section.Builder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
+        mSectionBuilder = (Section.DefaultBuilder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
         refreshSection();
 
         refreshFocus();
@@ -263,7 +263,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
     }
 
     private void onImageSelected(Bitmap bitmap) {
-        Image.Builder builder = new Image.Builder();
+        Image.Builder builder = Image.builder();
         builder.bitmap(bitmap);
 
         mPresenter.createImage(builder);

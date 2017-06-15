@@ -9,7 +9,7 @@ import android.support.v7.app.AlertDialog;
 
 import com.hjwylde.rivers.R;
 
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
+import static java.util.Objects.requireNonNull;
 
 public final class SelectImageDialog {
     public static final int REQUEST_CODE_PHOTO_TAKEN = 0;
@@ -31,7 +31,7 @@ public final class SelectImageDialog {
         private final Activity mActivity;
 
         public DefaultOnClickListener(@NonNull Activity activity) {
-            mActivity = checkNotNull(activity);
+            mActivity = requireNonNull(activity);
         }
 
         @Override

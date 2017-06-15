@@ -5,84 +5,35 @@ import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.util.Base64;
 
-import com.couchbase.lite.Document;
-
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
-import static com.hjwylde.rivers.util.Preconditions.checkArgument;
-import static com.hjwylde.rivers.util.Preconditions.checkNotNull;
-
-public final class Image implements Serializable {
-    @NonNull
-    public static final String TYPE = "image";
-
-    @NonNull
-    public static final String PROPERTY_DATA = "data";
-
-    private static final long serialVersionUID = 1L;
-
-    @NonNull
-    private final Map<String, Object> mProperties;
-
-    public Image(@NonNull Map<String, Object> properties) {
-        mProperties = new HashMap<>(properties);
-
-        checkArgument(mProperties.get(BaseDocument.PROPERTY_TYPE).equals(TYPE));
-
-        checkNotNull(mProperties.get(BaseDocument.PROPERTY_ID));
-        checkNotNull(mProperties.get(PROPERTY_DATA));
+public interface Image {
+    static DefaultBuilder builder() {
+        return new DefaultBuilder();
     }
 
     @NonNull
-    public Bitmap getBitmap() {
+    default Bitmap getBitmap() {
         byte[] decodedData = getDecodedData();
 
         return BitmapFactory.decodeByteArray(decodedData, 0, decodedData.length);
     }
 
     @NonNull
-    public String getData() {
-        return (String) mProperties.get(PROPERTY_DATA);
-    }
+    String getData();
 
     @NonNull
-    public String getId() {
-        return (String) mProperties.get(BaseDocument.PROPERTY_ID);
-    }
-
-    @NonNull
-    public Map<String, Object> getProperties() {
-        return new HashMap<>(mProperties);
-    }
-
-    @NonNull
-    private byte[] getDecodedData() {
+    default byte[] getDecodedData() {
         return Base64.decode(getData(), Base64.DEFAULT);
     }
 
+    @NonNull
+    String getId();
 
-    public static final class Builder {
+    interface Builder {
         @NonNull
-        private final Map<String, Object> mProperties;
-
-        public Builder() {
-            mProperties = new HashMap<>();
-            mProperties.put(BaseDocument.PROPERTY_TYPE, TYPE);
-        }
-
-        public Builder(@NonNull Map<String, Object> properties) {
-            mProperties = new HashMap<>(properties);
-        }
-
-        public Builder(@NonNull Document document) {
-            this(document.getProperties());
-        }
-
-        @NonNull
-        public Image.Builder bitmap(Bitmap bitmap) {
+        default Builder bitmap(Bitmap bitmap) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
@@ -92,20 +43,57 @@ public final class Image implements Serializable {
         }
 
         @NonNull
-        public Image build() {
-            return new Image(mProperties);
+        Image build() throws Exception;
+
+        String data();
+
+        @NonNull
+        Builder data(String data);
+
+        String id();
+
+        @NonNull
+        Builder id(String id);
+    }
+
+    final class DefaultBuilder implements Builder, Serializable {
+        private static final long serialVersionUID = 1L;
+
+        private String mId;
+        private String mData;
+
+        private DefaultBuilder() {
         }
 
         @NonNull
-        public Image.Builder data(String data) {
-            mProperties.put(PROPERTY_DATA, data);
+        @Override
+        public Image build() {
+            throw new UnsupportedOperationException();
+        }
+
+        @NonNull
+        @Override
+        public String data() {
+            return mData;
+        }
+
+        @NonNull
+        @Override
+        public DefaultBuilder data(String data) {
+            mData = data;
 
             return this;
         }
 
+        @Override
+        public String id() {
+            return mId;
+        }
+
         @NonNull
-        public Image.Builder id(String id) {
-            mProperties.put(BaseDocument.PROPERTY_ID, id);
+        @Override
+        public DefaultBuilder id(String id) {
+            mId = id;
 
             return this;
         }

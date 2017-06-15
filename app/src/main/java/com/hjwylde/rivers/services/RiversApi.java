@@ -23,6 +23,9 @@ public interface RiversApi {
     Observable<Image> getImage(@NonNull String id);
 
     @NonNull
+    Observable<Section> getSection(@NonNull String id);
+
+    @NonNull
     Observable<List<Section>> searchSections(@NonNull String query);
 
     @NonNull
