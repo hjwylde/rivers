@@ -212,7 +212,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
             }
         });
 
-        mPresenter = new CreateSectionPresenter(this, RiversApplication.getRiversService());
+        mPresenter = new CreateSectionPresenter(this, RiversApplication.getRepository());
 
         LatLng putIn = getIntent().getParcelableExtra(INTENT_PUT_IN);
         mSectionBuilder.putIn(putIn);

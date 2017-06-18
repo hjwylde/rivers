@@ -3,7 +3,7 @@ package com.hjwylde.rivers.ui.presenters;
 import android.support.annotation.NonNull;
 
 import com.hjwylde.rivers.models.Section;
-import com.hjwylde.rivers.services.RiversApi;
+import com.hjwylde.rivers.services.Repository;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
 import com.hjwylde.rivers.ui.util.SectionSuggestion;
 
@@ -15,18 +15,18 @@ import static java.util.Objects.requireNonNull;
 
 public final class MapsPresenter implements MapsContract.Presenter {
     private final MapsContract.View mView;
-    private final RiversApi mRiversApi;
+    private final Repository mRepository;
 
     private final CompositeDisposable mDisposables = new CompositeDisposable();
 
-    public MapsPresenter(@NonNull MapsContract.View view, @NonNull RiversApi riversApi) {
+    public MapsPresenter(@NonNull MapsContract.View view, @NonNull Repository repository) {
         mView = requireNonNull(view);
-        mRiversApi = requireNonNull(riversApi);
+        mRepository = requireNonNull(repository);
     }
 
     @Override
     public void deleteSection(@NonNull Section section) {
-        Disposable disposable = mRiversApi.deleteSection(section)
+        Disposable disposable = mRepository.deleteSection(section)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mView::onDeleteSectionSuccess, mView::onDeleteSectionFailure);
 
@@ -35,7 +35,7 @@ public final class MapsPresenter implements MapsContract.Presenter {
 
     @Override
     public void getImage(@NonNull String id) {
-        Disposable disposable = mRiversApi.getImage(id)
+        Disposable disposable = mRepository.getImage(id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(image -> {
                     mView.setImage(image);
@@ -47,7 +47,7 @@ public final class MapsPresenter implements MapsContract.Presenter {
 
     @Override
     public void getSection(@NonNull String id) {
-        Disposable disposable = mRiversApi.getSection(id)
+        Disposable disposable = mRepository.getSection(id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mView::onGetSectionSuccess, mView::onGetSectionFailure);
 
@@ -56,7 +56,7 @@ public final class MapsPresenter implements MapsContract.Presenter {
 
     @Override
     public void getSectionSuggestions(@NonNull String query) {
-        Disposable disposable = mRiversApi.findSection(query)
+        Disposable disposable = mRepository.findSection(query)
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(SectionSuggestion::new)
                 .take(5)
@@ -68,7 +68,7 @@ public final class MapsPresenter implements MapsContract.Presenter {
 
     @Override
     public void getSections() {
-        Disposable disposable = mRiversApi.getSections()
+        Disposable disposable = mRepository.getSections()
                 .observeOn(AndroidSchedulers.mainThread())
                 .toList()
                 .subscribe(sections -> {

@@ -346,7 +346,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
             mBottomSheetBehavior.setPeekHeight(titleContainer.getHeight());
         });
 
-        mPresenter = new MapsPresenter(this, RiversApplication.getRiversService());
+        mPresenter = new MapsPresenter(this, RiversApplication.getRepository());
     }
 
     @Override

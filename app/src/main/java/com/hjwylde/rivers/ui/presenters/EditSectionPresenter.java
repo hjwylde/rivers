@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
-import com.hjwylde.rivers.services.RiversApi;
+import com.hjwylde.rivers.services.Repository;
 import com.hjwylde.rivers.ui.contracts.EditSectionContract;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -15,19 +15,19 @@ import static java.util.Objects.requireNonNull;
 
 public final class EditSectionPresenter implements EditSectionContract.Presenter {
     private final EditSectionContract.View mView;
-    private final RiversApi mRiversApi;
+    private final Repository mRepository;
 
     private final CompositeDisposable mDisposables = new CompositeDisposable();
 
-    public EditSectionPresenter(@NonNull EditSectionContract.View view, @NonNull RiversApi riversApi) {
+    public EditSectionPresenter(@NonNull EditSectionContract.View view, @NonNull Repository repository) {
         mView = requireNonNull(view);
-        mRiversApi = requireNonNull(riversApi);
+        mRepository = requireNonNull(repository);
     }
 
 
     @Override
     public void createImage(@NonNull Image.Builder builder) {
-        Disposable disposable = mRiversApi.createImage(builder)
+        Disposable disposable = mRepository.createImage(builder)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mView::onCreateImageSuccess, mView::onCreateImageFailure);
 
@@ -37,7 +37,7 @@ public final class EditSectionPresenter implements EditSectionContract.Presenter
     @Override
     public void getImage(@NonNull String id) {
         // TODO (hjw): should we care about if the image can't be found? If no, delete View::onGetImageFailure
-        Disposable disposable = mRiversApi.getImage(id)
+        Disposable disposable = mRepository.getImage(id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(image -> {
                     mView.setImage(image);
@@ -54,7 +54,7 @@ public final class EditSectionPresenter implements EditSectionContract.Presenter
 
     @Override
     public void updateSection(@NonNull Section.Builder builder) {
-        Disposable disposable = mRiversApi.updateSection(builder)
+        Disposable disposable = mRepository.updateSection(builder)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mView::onUpdateSectionSuccess, mView::onUpdateSectionFailure);
 

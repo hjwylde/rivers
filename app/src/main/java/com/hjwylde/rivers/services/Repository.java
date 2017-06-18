@@ -10,7 +10,7 @@ import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
-public interface RiversApi {
+public interface Repository {
     // TODO (hjw): more generic return types
 
     @NonNull

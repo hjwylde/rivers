@@ -215,7 +215,7 @@ public final class EditSectionActivity extends BaseActivity implements EditSecti
             }
         });
 
-        mPresenter = new EditSectionPresenter(this, RiversApplication.getRiversService());
+        mPresenter = new EditSectionPresenter(this, RiversApplication.getRepository());
 
         mSectionBuilder = (Section.DefaultBuilder) getIntent().getSerializableExtra(INTENT_SECTION_BUILDER);
         refreshSection();

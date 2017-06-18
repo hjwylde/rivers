@@ -8,8 +8,8 @@ import com.couchbase.lite.Database;
 import com.couchbase.lite.DatabaseOptions;
 import com.couchbase.lite.Manager;
 import com.couchbase.lite.android.AndroidContext;
-import com.hjwylde.rivers.db.services.LocalRiversService;
-import com.hjwylde.rivers.services.RiversApi;
+import com.hjwylde.rivers.db.services.CouchbaseRepository;
+import com.hjwylde.rivers.services.Repository;
 
 import java.io.IOException;
 
@@ -18,11 +18,11 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 public class RiversApplication extends Application {
     private static Database mDatabase;
 
-    private static RiversApi mLocalRiversService;
+    private static Repository mRepository;
 
     @NonNull
-    public static RiversApi getRiversService() {
-        return mLocalRiversService;
+    public static Repository getRepository() {
+        return mRepository;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class RiversApplication extends Application {
 
         setUpDatabase();
 
-        setUpLocalRiversService();
+        setUpRepository();
     }
 
     private void setUpCalligraphy() {
@@ -58,7 +58,7 @@ public class RiversApplication extends Application {
         }
     }
 
-    private void setUpLocalRiversService() {
-        mLocalRiversService = new LocalRiversService.Builder().database(mDatabase).build();
+    private void setUpRepository() {
+        mRepository = new CouchbaseRepository.Builder().database(mDatabase).build();
     }
 }

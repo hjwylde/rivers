@@ -14,7 +14,7 @@ import com.hjwylde.rivers.db.util.SectionQuery;
 import com.hjwylde.rivers.db.views.SectionsView;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
-import com.hjwylde.rivers.services.RiversApi;
+import com.hjwylde.rivers.services.Repository;
 
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
@@ -23,11 +23,11 @@ import io.reactivex.Single;
 
 import static java.util.Objects.requireNonNull;
 
-public final class LocalRiversService implements RiversApi {
+public final class CouchbaseRepository implements Repository {
     @NonNull
     private final Database mDatabase;
 
-    private LocalRiversService(@NonNull Database database) {
+    private CouchbaseRepository(@NonNull Database database) {
         mDatabase = requireNonNull(database);
     }
 
@@ -166,11 +166,11 @@ public final class LocalRiversService implements RiversApi {
     public static final class Builder {
         private Database mDatabase;
 
-        public RiversApi build() {
-            return new LocalRiversService(mDatabase);
+        public Repository build() {
+            return new CouchbaseRepository(mDatabase);
         }
 
-        public LocalRiversService.Builder database(Database database) {
+        public CouchbaseRepository.Builder database(Database database) {
             mDatabase = database;
 
             return this;

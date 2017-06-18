@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
-import com.hjwylde.rivers.services.RiversApi;
+import com.hjwylde.rivers.services.Repository;
 import com.hjwylde.rivers.ui.contracts.CreateSectionContract;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -15,18 +15,18 @@ import static java.util.Objects.requireNonNull;
 
 public final class CreateSectionPresenter implements CreateSectionContract.Presenter {
     private final CreateSectionContract.View mView;
-    private final RiversApi mRiversApi;
+    private final Repository mRepository;
 
     private final CompositeDisposable mDisposables = new CompositeDisposable();
 
-    public CreateSectionPresenter(@NonNull CreateSectionContract.View view, @NonNull RiversApi riversApi) {
+    public CreateSectionPresenter(@NonNull CreateSectionContract.View view, @NonNull Repository repository) {
         mView = requireNonNull(view);
-        mRiversApi = requireNonNull(riversApi);
+        mRepository = requireNonNull(repository);
     }
 
     @Override
     public void createImage(@NonNull Image.Builder builder) {
-        Disposable disposable = mRiversApi.createImage(builder)
+        Disposable disposable = mRepository.createImage(builder)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mView::onCreateImageSuccess, mView::onCreateImageFailure);
 
@@ -35,7 +35,7 @@ public final class CreateSectionPresenter implements CreateSectionContract.Prese
 
     @Override
     public void createSection(@NonNull Section.Builder builder) {
-        Disposable disposable = mRiversApi.createSection(builder)
+        Disposable disposable = mRepository.createSection(builder)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mView::onCreateSectionSuccess, mView::onCreateImageFailure);
 
@@ -44,7 +44,7 @@ public final class CreateSectionPresenter implements CreateSectionContract.Prese
 
     @Override
     public void getImage(@NonNull String id) {
-        Disposable disposable = mRiversApi.getImage(id)
+        Disposable disposable = mRepository.getImage(id)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(image -> {
                     mView.setImage(image);
