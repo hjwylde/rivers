@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.Document;
-import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.QueryEnumerator;
 import com.couchbase.lite.QueryRow;
 import com.couchbase.lite.View;
@@ -17,14 +16,9 @@ import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.services.RiversApi;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Single;
 
 import static java.util.Objects.requireNonNull;
@@ -135,42 +129,24 @@ public final class LocalRiversService implements RiversApi {
 
     @NonNull
     @Override
-    public Observable<List<Section>> streamSections() {
-        // TODO (hjw): this has potential to use a lot of memory
+    public Observable<Section> getSections() {
         View view = SectionsView.getInstance(mDatabase);
-        LiveQuery query = view.createQuery().toLiveQuery();
 
-        QueryObserver<List<Section>> observer = new QueryObserver<List<Section>>() {
-            private List<ObservableEmitter<List<Section>>> mSubscribers = new ArrayList<>();
+        return Observable
+                .<Document>create(emitter -> {
+                    try {
+                        QueryEnumerator result = view.createQuery().run();
 
-            private List<Section> mSections = new ArrayList<>();
+                        for (QueryRow row : result) {
+                            emitter.onNext(row.getDocument());
+                        }
 
-            @Override
-            public void changed(LiveQuery.ChangeEvent event) {
-                mSections = new ArrayList<>();
-                for (QueryRow row : event.getRows()) {
-                    mSections.add(new SectionDocument(row.getDocument()));
-                }
-
-                for (ObservableEmitter<List<Section>> subscriber : mSubscribers) {
-                    subscriber.onNext(mSections);
-                }
-            }
-
-            @Override
-            public void subscribe(ObservableEmitter<List<Section>> subscriber) throws Exception {
-                mSubscribers.add(subscriber);
-
-                if (!mSections.isEmpty()) {
-                    subscriber.onNext(mSections);
-                }
-            }
-        };
-
-        query.addChangeListener(observer);
-        query.start();
-
-        return Observable.create(observer);
+                        emitter.onComplete();
+                    } catch (CouchbaseLiteException e) {
+                        emitter.onError(e);
+                    }
+                })
+                .map(SectionDocument::new);
     }
 
     @NonNull
@@ -185,9 +161,6 @@ public final class LocalRiversService implements RiversApi {
         } catch (CouchbaseLiteException e) {
             return Single.error(e);
         }
-    }
-
-    private interface QueryObserver<T> extends LiveQuery.ChangeListener, ObservableOnSubscribe<T> {
     }
 
     public static final class Builder {

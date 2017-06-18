@@ -49,6 +49,6 @@ public interface MapsContract {
 
         void getSectionSuggestions(@NonNull String query);
 
-        void streamSections();
+        void getSections();
     }
 }

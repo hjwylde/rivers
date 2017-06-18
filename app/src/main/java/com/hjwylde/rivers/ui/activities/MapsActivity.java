@@ -386,7 +386,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
         loadImage();
 
-        mPresenter.streamSections();
+        mPresenter.getSections();
     }
 
     @Override

@@ -5,8 +5,6 @@ import android.support.annotation.NonNull;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 
-import java.util.List;
-
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
@@ -33,9 +31,8 @@ public interface RiversApi {
     @NonNull
     Maybe<Section> getSection(@NonNull String id);
 
-    // TODO (hjw): Flowable
     @NonNull
-    Observable<List<Section>> streamSections();
+    Observable<Section> getSections();
 
     @NonNull
     Single<Section> updateSection(@NonNull Section.Builder builder);

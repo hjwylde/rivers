@@ -67,9 +67,10 @@ public final class MapsPresenter implements MapsContract.Presenter {
     }
 
     @Override
-    public void streamSections() {
-        Disposable disposable = mRiversApi.streamSections()
+    public void getSections() {
+        Disposable disposable = mRiversApi.getSections()
                 .observeOn(AndroidSchedulers.mainThread())
+                .toList()
                 .subscribe(sections -> {
                     mView.setSections(sections);
                     mView.refreshMap();
