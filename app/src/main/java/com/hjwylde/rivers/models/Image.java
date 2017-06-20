@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
 public interface Image {
+    @NonNull
     static DefaultBuilder builder() {
         return new DefaultBuilder();
     }

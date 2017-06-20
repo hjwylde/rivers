@@ -2,10 +2,13 @@ package com.hjwylde.rivers.ui.presenters;
 
 import android.support.annotation.NonNull;
 
+import com.hjwylde.rivers.ui.util.SectionQuery;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.services.Repository;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
 import com.hjwylde.rivers.ui.util.SectionSuggestion;
+
+import java.util.ArrayList;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -56,8 +59,16 @@ public final class MapsPresenter implements MapsContract.Presenter {
 
     @Override
     public void getSectionSuggestions(@NonNull String query) {
-        Disposable disposable = mRepository.findSection(query)
+        if (query.length() <= 2) {
+            mView.setSectionSuggestions(new ArrayList<>());
+            return;
+        }
+
+        SectionQuery sectionQuery = new SectionQuery(query);
+
+        Disposable disposable = mRepository.getSections()
                 .observeOn(AndroidSchedulers.mainThread())
+                .filter(sectionQuery::test)
                 .map(SectionSuggestion::new)
                 .take(5)
                 .toList()

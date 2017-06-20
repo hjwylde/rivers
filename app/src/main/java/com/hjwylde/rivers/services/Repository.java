@@ -23,9 +23,6 @@ public interface Repository {
     Completable deleteSection(@NonNull Section section);
 
     @NonNull
-    Observable<Section> findSection(@NonNull String query);
-
-    @NonNull
     Maybe<Image> getImage(@NonNull String id);
 
     @NonNull

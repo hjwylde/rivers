@@ -10,7 +10,6 @@ import com.couchbase.lite.QueryRow;
 import com.couchbase.lite.View;
 import com.hjwylde.rivers.db.models.ImageDocument;
 import com.hjwylde.rivers.db.models.SectionDocument;
-import com.hjwylde.rivers.db.util.SectionQuery;
 import com.hjwylde.rivers.db.views.SectionsView;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
@@ -73,30 +72,6 @@ public final class CouchbaseRepository implements Repository {
         } catch (CouchbaseLiteException e) {
             return Completable.error(e);
         }
-    }
-
-    @NonNull
-    @Override
-    public Observable<Section> findSection(@NonNull String query) {
-        SectionQuery sectionQuery = new SectionQuery(query);
-        View view = SectionsView.getInstance(mDatabase);
-
-        return Observable
-                .<Document>create(emitter -> {
-                    try {
-                        QueryEnumerator result = view.createQuery().run();
-
-                        for (QueryRow row : result) {
-                            emitter.onNext(row.getDocument());
-                        }
-
-                        emitter.onComplete();
-                    } catch (CouchbaseLiteException e) {
-                        emitter.onError(e);
-                    }
-                })
-                .<Section>map(SectionDocument::new)
-                .filter(sectionQuery::test);
     }
 
     @NonNull

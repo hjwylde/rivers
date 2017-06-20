@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public interface Section {
+    @NonNull
     static DefaultBuilder builder() {
         return new DefaultBuilder();
     }
