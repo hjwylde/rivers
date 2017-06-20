@@ -105,12 +105,6 @@ public final class SectionDocument extends BaseDocument implements Section {
             super(database, TYPE);
         }
 
-        @NonNull
-        @Override
-        public SectionDocument build() throws CouchbaseLiteException {
-            return new SectionDocument(createOrUpdate());
-        }
-
         public Builder copy(@NonNull Section.Builder builder) {
             id(builder.id());
             subtitle(builder.subtitle());
@@ -122,6 +116,12 @@ public final class SectionDocument extends BaseDocument implements Section {
             duration(builder.duration());
 
             return this;
+        }
+
+        @NonNull
+        @Override
+        public SectionDocument create() throws CouchbaseLiteException {
+            return new SectionDocument(createDocument());
         }
 
         @NonNull
@@ -248,6 +248,12 @@ public final class SectionDocument extends BaseDocument implements Section {
         @Override
         public String title() {
             return (String) mProperties.get(PROPERTY_TITLE);
+        }
+
+        @NonNull
+        @Override
+        public SectionDocument update() throws CouchbaseLiteException {
+            return new SectionDocument(updateDocument());
         }
 
         @Override

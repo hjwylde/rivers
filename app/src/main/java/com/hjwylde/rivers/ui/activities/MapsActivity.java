@@ -346,7 +346,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
             mBottomSheetBehavior.setPeekHeight(titleContainer.getHeight());
         });
 
-        mPresenter = new MapsPresenter(this, RiversApplication.getRiversService());
+        mPresenter = new MapsPresenter(this, RiversApplication.getRepository());
     }
 
     @Override
@@ -386,7 +386,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
         loadImage();
 
-        mPresenter.streamSections();
+        mPresenter.getSections();
     }
 
     @Override
@@ -403,7 +403,9 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
         outState.putBoolean(STATE_CREATE_SECTION_MODE_ACTIVE, mCreateSectionMode != null && mCreateSectionMode.isActive());
 
-        outState.putString(STATE_SECTION_ID, mSection.getId());
+        if (mSection != null) {
+            outState.putString(STATE_SECTION_ID, mSection.getId());
+        }
     }
 
     private void animateImageIn(@NonNull View imageView) {

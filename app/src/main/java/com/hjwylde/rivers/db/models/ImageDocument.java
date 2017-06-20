@@ -39,17 +39,17 @@ public final class ImageDocument extends BaseDocument implements Image {
         }
 
         @NonNull
-        @Override
-        public ImageDocument build() throws CouchbaseLiteException {
-            return new ImageDocument(createOrUpdate());
-        }
-
-        @NonNull
         public Builder copy(@NonNull Image.Builder builder) {
             id(builder.id());
             data(builder.data());
 
             return this;
+        }
+
+        @NonNull
+        @Override
+        public ImageDocument create() throws CouchbaseLiteException {
+            return new ImageDocument(createDocument());
         }
 
         @NonNull
@@ -71,6 +71,12 @@ public final class ImageDocument extends BaseDocument implements Image {
             mProperties.put(PROPERTY_ID, id);
 
             return this;
+        }
+
+        @NonNull
+        @Override
+        public ImageDocument update() throws CouchbaseLiteException {
+            return new ImageDocument(updateDocument());
         }
 
         @Override

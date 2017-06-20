@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
 public interface Image {
+    @NonNull
     static DefaultBuilder builder() {
         return new DefaultBuilder();
     }
@@ -42,9 +43,6 @@ public interface Image {
             return data(data);
         }
 
-        @NonNull
-        Image build() throws Exception;
-
         String data();
 
         @NonNull
@@ -63,12 +61,6 @@ public interface Image {
         private String mData;
 
         private DefaultBuilder() {
-        }
-
-        @NonNull
-        @Override
-        public Image build() {
-            throw new UnsupportedOperationException();
         }
 
         @NonNull

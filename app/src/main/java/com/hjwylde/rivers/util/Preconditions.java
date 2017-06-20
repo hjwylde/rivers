@@ -6,7 +6,7 @@ public final class Preconditions {
 
     public static void requireTrue(boolean condition) {
         if (!condition) {
-            throw new IllegalArgumentException();
+            throw new IllegalStateException();
         }
     }
 }

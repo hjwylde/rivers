@@ -4,99 +4,58 @@ import android.support.annotation.NonNull;
 
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
-import com.hjwylde.rivers.services.RiversApi;
+import com.hjwylde.rivers.services.Repository;
 import com.hjwylde.rivers.ui.contracts.CreateSectionContract;
 
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 import static java.util.Objects.requireNonNull;
 
 public final class CreateSectionPresenter implements CreateSectionContract.Presenter {
     private final CreateSectionContract.View mView;
-    private final RiversApi mRiversApi;
+    private final Repository mRepository;
 
-    private final CompositeSubscription mSubscriptions = new CompositeSubscription();
+    private final CompositeDisposable mDisposables = new CompositeDisposable();
 
-    public CreateSectionPresenter(@NonNull CreateSectionContract.View view, @NonNull RiversApi riversApi) {
+    public CreateSectionPresenter(@NonNull CreateSectionContract.View view, @NonNull Repository repository) {
         mView = requireNonNull(view);
-        mRiversApi = requireNonNull(riversApi);
+        mRepository = requireNonNull(repository);
     }
 
     @Override
     public void createImage(@NonNull Image.Builder builder) {
-        Subscription subscription = mRiversApi.createImage(builder)
+        Disposable disposable = mRepository.createImage(builder)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Image>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+                .subscribe(mView::onCreateImageSuccess, mView::onCreateImageFailure);
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.onCreateImageFailure(e);
-                    }
-
-                    @Override
-                    public void onNext(Image image) {
-                        mView.onCreateImageSuccess(image);
-                    }
-                });
-
-        mSubscriptions.add(subscription);
+        mDisposables.add(disposable);
     }
 
     @Override
     public void createSection(@NonNull Section.Builder builder) {
-        Subscription subscription = mRiversApi.createSection(builder)
+        Disposable disposable = mRepository.createSection(builder)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Section>() {
-                    @Override
-                    public void onCompleted() {
-                    }
+                .subscribe(mView::onCreateSectionSuccess, mView::onCreateImageFailure);
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.onCreateSectionFailure(e);
-                    }
-
-                    @Override
-                    public void onNext(Section section) {
-                        mView.onCreateSectionSuccess(section);
-                    }
-                });
-
-        mSubscriptions.add(subscription);
+        mDisposables.add(disposable);
     }
 
     @Override
     public void getImage(@NonNull String id) {
-        Subscription subscription = mRiversApi.getImage(id)
+        Disposable disposable = mRepository.getImage(id)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Image>() {
-                    @Override
-                    public void onCompleted() {
-                        mView.refreshImage();
-                    }
+                .subscribe(image -> {
+                    mView.setImage(image);
+                    mView.refreshImage();
+                }, mView::onGetImageFailure);
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.onGetImageFailure(e);
-                    }
-
-                    @Override
-                    public void onNext(Image image) {
-                        mView.setImage(image);
-                    }
-                });
-
-        mSubscriptions.add(subscription);
+        mDisposables.add(disposable);
     }
 
     @Override
     public void unsubscribe() {
-        mSubscriptions.clear();
+        mDisposables.clear();
     }
 }
