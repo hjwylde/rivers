@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.hjwylde.rivers.util.Preconditions.requireTrue;
 import static java.util.Objects.requireNonNull;
 
 abstract public class BaseDocument {
@@ -73,27 +74,22 @@ abstract public class BaseDocument {
             mProperties.put(PROPERTY_TYPE, type);
         }
 
-        public String id() {
+        abstract public BaseDocument create() throws CouchbaseLiteException;
+
+        public final String id() {
             return (String) mProperties.get(PROPERTY_ID);
         }
 
-        public String type() {
+        public final String type() {
             return (String) mProperties.get(PROPERTY_TYPE);
         }
 
-        protected Document createOrUpdate() throws CouchbaseLiteException {
+        abstract public BaseDocument update() throws CouchbaseLiteException;
+
+        protected final Document createDocument() throws CouchbaseLiteException {
+            requireTrue(!mProperties.containsKey(PROPERTY_ID));
             validate();
 
-            if (id() == null) {
-                return create();
-            } else {
-                return update();
-            }
-        }
-
-        abstract protected void validate();
-
-        private Document create() throws CouchbaseLiteException {
             mProperties.put(PROPERTY_ID, UUID.randomUUID().toString());
 
             Document document = mDatabase.getDocument(id());
@@ -102,7 +98,10 @@ abstract public class BaseDocument {
             return document;
         }
 
-        private Document update() throws CouchbaseLiteException {
+        protected final Document updateDocument() throws CouchbaseLiteException {
+            requireTrue(mProperties.containsKey(PROPERTY_ID));
+            validate();
+
             Document document = mDatabase.getExistingDocument(id());
             document.update(newRevision -> {
                 newRevision.setProperties(mProperties);
@@ -112,5 +111,7 @@ abstract public class BaseDocument {
 
             return document;
         }
+
+        abstract protected void validate();
     }
 }

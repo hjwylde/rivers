@@ -43,9 +43,6 @@ public interface Image {
             return data(data);
         }
 
-        @NonNull
-        Image build() throws Exception;
-
         String data();
 
         @NonNull
@@ -64,12 +61,6 @@ public interface Image {
         private String mData;
 
         private DefaultBuilder() {
-        }
-
-        @NonNull
-        @Override
-        public Image build() {
-            throw new UnsupportedOperationException();
         }
 
         @NonNull

@@ -36,7 +36,7 @@ public final class CouchbaseRepository implements Repository {
         ImageDocument.Builder documentBuilder = ImageDocument.builder(mDatabase).copy(builder);
 
         try {
-            ImageDocument imageDocument = documentBuilder.build();
+            ImageDocument imageDocument = documentBuilder.create();
 
             return Single.just(imageDocument);
         } catch (CouchbaseLiteException e) {
@@ -50,7 +50,7 @@ public final class CouchbaseRepository implements Repository {
         SectionDocument.Builder documentBuilder = SectionDocument.builder(mDatabase).copy(builder);
 
         try {
-            SectionDocument sectionDocument = documentBuilder.build();
+            SectionDocument sectionDocument = documentBuilder.create();
 
             return Single.just(sectionDocument);
         } catch (CouchbaseLiteException e) {
@@ -130,7 +130,7 @@ public final class CouchbaseRepository implements Repository {
         SectionDocument.Builder documentBuilder = SectionDocument.builder(mDatabase).copy(builder);
 
         try {
-            SectionDocument sectionDocument = documentBuilder.build();
+            SectionDocument sectionDocument = documentBuilder.update();
 
             return Single.just(sectionDocument);
         } catch (CouchbaseLiteException e) {

@@ -37,9 +37,6 @@ public interface Section {
     String getTitle();
 
     interface Builder {
-        @NonNull
-        Section build() throws Exception;
-
         String description();
 
         @NonNull
@@ -100,12 +97,6 @@ public interface Section {
         private String mDuration;
 
         private DefaultBuilder() {
-        }
-
-        @NonNull
-        @Override
-        public Section build() {
-            throw new UnsupportedOperationException();
         }
 
         public DefaultBuilder copy(@NonNull Section section) {
