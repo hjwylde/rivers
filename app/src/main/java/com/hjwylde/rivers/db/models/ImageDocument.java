@@ -83,7 +83,7 @@ public final class ImageDocument extends BaseDocument implements Image {
         protected void validate() {
             requireTrue(TYPE.equals(type()));
 
-            requireNonNull(mProperties.get(PROPERTY_DATA));
+            requireNonNull(data());
         }
     }
 }

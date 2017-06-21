@@ -101,6 +101,7 @@ public interface Section {
 
         public DefaultBuilder copy(@NonNull Section section) {
             id(section.getId());
+            title(section.getTitle());
             subtitle(section.getSubtitle());
             description(section.getDescription());
             putIn(section.getPutIn());
