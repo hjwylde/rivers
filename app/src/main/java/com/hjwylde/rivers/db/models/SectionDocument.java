@@ -107,6 +107,7 @@ public final class SectionDocument extends BaseDocument implements Section {
 
         public Builder copy(@NonNull Section.Builder builder) {
             id(builder.id());
+            title(builder.title());
             subtitle(builder.subtitle());
             description(builder.description());
             putIn(builder.putIn());
@@ -258,7 +259,7 @@ public final class SectionDocument extends BaseDocument implements Section {
 
         @Override
         protected void validate() {
-
+            // TODO (hjw)
         }
     }
 }

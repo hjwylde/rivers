@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.hjwylde.rivers.util.Preconditions.requireTrue;
+import static com.hjwylde.rivers.util.Preconditions.requireNull;
 import static java.util.Objects.requireNonNull;
 
 abstract public class BaseDocument {
@@ -87,7 +87,7 @@ abstract public class BaseDocument {
         abstract public BaseDocument update() throws CouchbaseLiteException;
 
         protected final Document createDocument() throws CouchbaseLiteException {
-            requireTrue(!mProperties.containsKey(PROPERTY_ID));
+            requireNull(id());
             validate();
 
             mProperties.put(PROPERTY_ID, UUID.randomUUID().toString());
@@ -99,7 +99,7 @@ abstract public class BaseDocument {
         }
 
         protected final Document updateDocument() throws CouchbaseLiteException {
-            requireTrue(mProperties.containsKey(PROPERTY_ID));
+            requireNonNull(id());
             validate();
 
             Document document = mDatabase.getExistingDocument(id());
