@@ -55,10 +55,12 @@ public class RiversApplication extends Application {
         try {
             Manager manager = new Manager(new AndroidContext(getApplicationContext()), Manager.DEFAULT_OPTIONS);
 
+            String name = getString(R.string.database_name);
+
             DatabaseOptions options = new DatabaseOptions();
             options.setCreate(true);
 
-            mDatabase = manager.openDatabase("rivers", options);
+            mDatabase = manager.openDatabase(name, options);
         } catch (IOException | CouchbaseLiteException e) {
             Log.e(TAG, e.getMessage(), e);
 
@@ -68,7 +70,8 @@ public class RiversApplication extends Application {
 
     private void setUpDatabaseReplicators() {
         try {
-            URL url = new URL("http://45.32.247.9:4984/db");
+            String spec = getString(R.string.database_url);
+            URL url = new URL(spec);
 
             Replication push = mDatabase.createPushReplication(url);
             Replication pull = mDatabase.createPullReplication(url);
@@ -80,6 +83,8 @@ public class RiversApplication extends Application {
             pull.start();
         } catch (MalformedURLException e) {
             Log.e(TAG, e.getMessage(), e);
+
+            // TODO (hjw): panic
         }
     }
 
