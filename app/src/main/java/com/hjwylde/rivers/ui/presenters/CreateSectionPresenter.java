@@ -37,19 +37,7 @@ public final class CreateSectionPresenter implements CreateSectionContract.Prese
     public void createSection(@NonNull Section.Builder builder) {
         Disposable disposable = mRepository.createSection(builder)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mView::onCreateSectionSuccess, mView::onCreateImageFailure);
-
-        mDisposables.add(disposable);
-    }
-
-    @Override
-    public void getImage(@NonNull String id) {
-        Disposable disposable = mRepository.getImage(id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(image -> {
-                    mView.setImage(image);
-                    mView.refreshImage();
-                }, mView::onGetImageFailure);
+                .subscribe(mView::onCreateSectionSuccess, mView::onCreateSectionFailure);
 
         mDisposables.add(disposable);
     }

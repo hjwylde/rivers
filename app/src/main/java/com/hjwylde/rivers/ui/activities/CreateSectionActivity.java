@@ -1,5 +1,7 @@
 package com.hjwylde.rivers.ui.activities;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -27,6 +29,7 @@ import com.hjwylde.rivers.ui.contracts.CreateSectionContract;
 import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
 import com.hjwylde.rivers.ui.presenters.CreateSectionPresenter;
 import com.hjwylde.rivers.ui.util.SoftInput;
+import com.hjwylde.rivers.ui.viewModels.CreateSectionViewModel;
 
 import java.io.IOException;
 
@@ -63,6 +66,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     @BindView(R.id.description)
     EditText mDescriptionView;
 
+    private CreateSectionViewModel mViewModel;
     private CreateSectionContract.Presenter mPresenter;
 
     private Section.DefaultBuilder mSectionBuilder = Section.builder();
@@ -114,15 +118,6 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     public void onCreateSectionSuccess(@NonNull Section section) {
         setResult(RESULT_OK);
         finish();
-    }
-
-    @Override
-    public void onGetImageFailure(@NonNull Throwable t) {
-        Log.w(TAG, t.getMessage(), t);
-
-        // Should I assume that this can never occur?
-
-        // TODO (hjw): report/retry
     }
 
     @Override
@@ -196,6 +191,9 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mViewModel = ViewModelProviders.of(this).get(CreateSectionViewModel.class);
+        mViewModel.getImage().observe(this, onCreateImageObserver());
+
         mPresenter = new CreateSectionPresenter(this, RiversApplication.getRepository());
 
         LatLng putIn = getIntent().getParcelableExtra(INTENT_PUT_IN);
@@ -216,16 +214,11 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         mSectionBuilder = (Section.DefaultBuilder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
         refreshSection();
 
-        refreshFocus();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (mSectionBuilder.imageId() != null && mImage == null) {
-            mPresenter.getImage(mSectionBuilder.imageId());
+        if (mSectionBuilder.imageId() != null) {
+            mViewModel.getImage(mSectionBuilder.imageId());
         }
+
+        refreshFocus();
     }
 
     @Override
@@ -274,6 +267,22 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
 
         mImageView.startAnimation(animation);
+    }
+
+    @NonNull
+    private Observer<Image> onCreateImageObserver() {
+        return image -> {
+            if (image == null) {
+                // TODO (hjw): is this necessary?
+                // mImageView.setImageResource(R.drawable.bm_create_section);
+                return;
+            }
+
+            mImageView.setImageBitmap(image.getBitmap());
+
+            Animation animation = AnimationUtils.loadAnimation(CreateSectionActivity.this, R.anim.fade_image_in);
+            mImageView.startAnimation(animation);
+        };
     }
 
     private void onCreateSectionClick() {

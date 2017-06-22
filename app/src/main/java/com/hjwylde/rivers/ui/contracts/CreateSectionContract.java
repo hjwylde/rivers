@@ -15,8 +15,6 @@ public interface CreateSectionContract {
 
         void onCreateSectionSuccess(@NonNull Section section);
 
-        void onGetImageFailure(@NonNull Throwable t);
-
         void refreshImage();
 
         void setImage(@NonNull Image image);
@@ -26,7 +24,5 @@ public interface CreateSectionContract {
         void createImage(@NonNull Image.Builder image);
 
         void createSection(@NonNull Section.Builder builder);
-
-        void getImage(@NonNull String id);
     }
 }
