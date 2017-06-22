@@ -271,6 +271,12 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
                 // });
             }
         });
+        mSearchView.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.openSettings:
+                    onOpenSettingsClick();
+            }
+        });
 
         Toolbar sectionToolbar = findTById(R.id.sectionToolbar);
         sectionToolbar.inflateMenu(R.menu.menu_section);
@@ -434,6 +440,12 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         intent.putExtra(EditSectionActivity.INTENT_SECTION_BUILDER, Section.builder().copy(mSection));
 
         startActivityForResult(intent, REQUEST_CODE_SECTION_EDITED);
+    }
+
+    private void onOpenSettingsClick() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+
+        startActivity(intent);
     }
 
     private void onSectionCreated() {

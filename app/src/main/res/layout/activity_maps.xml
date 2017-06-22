@@ -14,14 +14,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        app:floatingSearch_searchHint="@string/label_search"
-        app:floatingSearch_searchBarMarginLeft="@dimen/toolbar_margin"
-        app:floatingSearch_searchBarMarginTop="@dimen/toolbar_margin"
-        app:floatingSearch_searchBarMarginRight="@dimen/toolbar_margin"
-        app:floatingSearch_suggestionsListAnimDuration="250"
-        app:floatingSearch_showSearchKey="false"
+        app:floatingSearch_close_search_on_keyboard_dismiss="true"
         app:floatingSearch_leftActionMode="showSearch"
-        app:floatingSearch_close_search_on_keyboard_dismiss="true" />
+        app:floatingSearch_menu="@menu/menu_maps_section"
+        app:floatingSearch_searchBarMarginLeft="@dimen/toolbar_margin"
+        app:floatingSearch_searchBarMarginRight="@dimen/toolbar_margin"
+        app:floatingSearch_searchBarMarginTop="@dimen/toolbar_margin"
+        app:floatingSearch_searchHint="@string/label_search"
+        app:floatingSearch_showSearchKey="false"
+        app:floatingSearch_suggestionsListAnimDuration="250"
+        app:theme="@style/Theme.Rivers.Light.PopupOverlay"/>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"

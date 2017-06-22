@@ -69,7 +69,7 @@ public final class CreateSectionMode implements ActionMode.Callback {
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         MenuInflater inflater = mode.getMenuInflater();
-        inflater.inflate(R.menu.menu_maps_action_mode, menu);
+        inflater.inflate(R.menu.menu_maps_create_section_mode, menu);
 
         getFloatingActionButton().hide();
         animateCenterMarkerIn();
