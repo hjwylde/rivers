@@ -3,9 +3,9 @@ package com.hjwylde.lifecycle;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
-public class LiveAction extends LiveData<CompletableResult> {
-    protected void postComplete(Object... unused) {
-        postValue(CompletableResult.ok());
+public class LiveAction<T> extends LiveData<CompletableResult<T>> {
+    protected void postComplete(T result) {
+        postValue(CompletableResult.ok(result));
     }
 
     protected void postError(@NonNull Throwable t) {

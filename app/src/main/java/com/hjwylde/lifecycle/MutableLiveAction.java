@@ -2,10 +2,10 @@ package com.hjwylde.lifecycle;
 
 import android.support.annotation.NonNull;
 
-public final class MutableLiveAction extends LiveAction {
+public final class MutableLiveAction<T> extends LiveAction<T> {
     @Override
-    public void postComplete(Object... unused) {
-        super.postComplete(unused);
+    public void postComplete(T result) {
+        super.postComplete(result);
     }
 
     @Override

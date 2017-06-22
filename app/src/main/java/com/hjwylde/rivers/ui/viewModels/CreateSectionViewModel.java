@@ -20,10 +20,22 @@ public final class CreateSectionViewModel extends ViewModel {
     private final Repository mRepository = RiversApplication.getRepository();
     private final CompositeDisposable mDisposables = new CompositeDisposable();
 
-    private final MutableLiveAction mCreateSection = new MutableLiveAction();
+    private final MutableLiveAction<Section> mCreateSection = new MutableLiveAction<>();
+    private final MutableLiveAction<Image> mCreateImage = new MutableLiveAction<>();
     private final MutableLiveData<Image> mImage = new MutableLiveData<>();
 
-    public LiveAction createSection(@NonNull Section.Builder builder) {
+    @NonNull
+    public LiveAction<Image> createImage(@NonNull Image.Builder builder) {
+        Disposable disposable = mRepository.createImage(builder)
+                .subscribe(mCreateImage::postComplete, mCreateImage::postError);
+
+        mDisposables.add(disposable);
+
+        return mCreateImage;
+    }
+
+    @NonNull
+    public LiveAction<Section> createSection(@NonNull Section.Builder builder) {
         Disposable disposable = mRepository.createSection(builder)
                 .subscribe(mCreateSection::postComplete, mCreateSection::postError);
 
@@ -41,11 +53,6 @@ public final class CreateSectionViewModel extends ViewModel {
             mDisposables.add(disposable);
         }
 
-        return mImage;
-    }
-
-    @NonNull
-    public LiveData<Image> getImage() {
         return mImage;
     }
 

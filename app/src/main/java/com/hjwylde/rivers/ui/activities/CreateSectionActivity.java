@@ -23,12 +23,9 @@ import android.widget.ImageView;
 import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.lifecycle.CompletableResult;
 import com.hjwylde.rivers.R;
-import com.hjwylde.rivers.RiversApplication;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
-import com.hjwylde.rivers.ui.contracts.CreateSectionContract;
 import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
-import com.hjwylde.rivers.ui.presenters.CreateSectionPresenter;
 import com.hjwylde.rivers.ui.util.SoftInput;
 import com.hjwylde.rivers.ui.viewModels.CreateSectionViewModel;
 
@@ -39,9 +36,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
-import static java.util.Objects.requireNonNull;
-
-public final class CreateSectionActivity extends BaseActivity implements CreateSectionContract.View {
+public final class CreateSectionActivity extends BaseActivity {
     public static final String INTENT_PUT_IN = "putIn";
 
     private static final String TAG = CreateSectionActivity.class.getSimpleName();
@@ -68,28 +63,8 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     EditText mDescriptionView;
 
     private CreateSectionViewModel mViewModel;
-    private CreateSectionContract.Presenter mPresenter;
 
     private Section.DefaultBuilder mSectionBuilder = Section.builder();
-    private Image mImage;
-
-    @Override
-    public void onCreateImageFailure(@NonNull Throwable t) {
-        Log.w(TAG, t.getMessage(), t);
-
-        // Should I assume that this can never occur?
-
-        Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onCreateImage, Snackbar.LENGTH_LONG);
-        snackbar.show();
-    }
-
-    @Override
-    public void onCreateImageSuccess(@NonNull Image image) {
-        mSectionBuilder.imageId(image.getId());
-
-        setImage(image);
-        refreshImage();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -115,22 +90,6 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     }
 
     @Override
-    public void refreshImage() {
-        if (mImage != null) {
-            mImageView.setImageBitmap(mImage.getBitmap());
-
-            animateImageIn();
-        } else {
-            mImageView.setImageResource(R.drawable.bm_create_section);
-        }
-    }
-
-    @Override
-    public void setImage(@NonNull Image image) {
-        mImage = requireNonNull(image);
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -152,9 +111,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
 
                     onImageSelected(bitmap);
                 } catch (IOException e) {
-                    Log.w(TAG, e.getMessage(), e);
-
-                    // TODO (hjw): report
+                    onCreateImageFailure(e);
                 }
         }
     }
@@ -171,19 +128,9 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mViewModel = ViewModelProviders.of(this).get(CreateSectionViewModel.class);
-        mViewModel.getImage().observe(this, onCreateImageObserver());
-
-        mPresenter = new CreateSectionPresenter(this, RiversApplication.getRepository());
 
         LatLng putIn = getIntent().getParcelableExtra(INTENT_PUT_IN);
         mSectionBuilder.putIn(putIn);
-    }
-
-    @Override
-    protected void onPause() {
-        mPresenter.unsubscribe();
-
-        super.onPause();
     }
 
     @Override
@@ -194,7 +141,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         refreshSection();
 
         if (mSectionBuilder.imageId() != null) {
-            mViewModel.getImage(mSectionBuilder.imageId());
+            mViewModel.getImage(mSectionBuilder.imageId()).observe(this, onGetImageObserver());
         }
 
         refreshFocus();
@@ -242,25 +189,27 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         mSectionBuilder.title(text.toString());
     }
 
-    private void animateImageIn() {
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
+    private void onCreateImageFailure(@NonNull Throwable t) {
+        Log.w(TAG, t.getMessage(), t);
 
-        mImageView.startAnimation(animation);
+        Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onCreateImage, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     @NonNull
-    private Observer<Image> onCreateImageObserver() {
-        return image -> {
-            if (image == null) {
-                // TODO (hjw): is this necessary?
-                // mImageView.setImageResource(R.drawable.bm_create_section);
-                return;
+    private Observer<CompletableResult<Image>> onCreateImageObserver() {
+        return result -> {
+            switch (result.code()) {
+                case OK:
+                    Image image = result.getResult();
+
+                    mSectionBuilder.imageId(image.getId());
+
+                    refreshImage(image);
+                    break;
+                case ERROR:
+                    onCreateImageFailure(result.getThrowable());
             }
-
-            mImageView.setImageBitmap(image.getBitmap());
-
-            Animation animation = AnimationUtils.loadAnimation(CreateSectionActivity.this, R.anim.fade_image_in);
-            mImageView.startAnimation(animation);
         };
     }
 
@@ -286,7 +235,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     }
 
     @NonNull
-    private Observer<CompletableResult> onCreateSectionObserver() {
+    private Observer<CompletableResult<Section>> onCreateSectionObserver() {
         return result -> {
             switch (result.code()) {
                 case OK:
@@ -299,11 +248,20 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         };
     }
 
+    @NonNull
+    private Observer<Image> onGetImageObserver() {
+        return image -> {
+            if (image != null) {
+                refreshImage(image);
+            }
+        };
+    }
+
     private void onImageSelected(@NonNull Bitmap bitmap) {
         Image.Builder builder = Image.builder();
         builder.bitmap(bitmap);
 
-        mPresenter.createImage(builder);
+        mViewModel.createImage(builder).observe(this, onCreateImageObserver());
     }
 
     private void refreshFocus() {
@@ -312,6 +270,13 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
             EditText editText = (EditText) view;
             editText.setSelection(editText.getText().length());
         }
+    }
+
+    private void refreshImage(@NonNull Image image) {
+        mImageView.setImageBitmap(image.getBitmap());
+
+        Animation animation = AnimationUtils.loadAnimation(CreateSectionActivity.this, R.anim.fade_image_in);
+        mImageView.startAnimation(animation);
     }
 
     private void refreshSection() {
