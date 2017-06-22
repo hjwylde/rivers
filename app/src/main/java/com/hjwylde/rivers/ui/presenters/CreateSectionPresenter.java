@@ -3,7 +3,6 @@ package com.hjwylde.rivers.ui.presenters;
 import android.support.annotation.NonNull;
 
 import com.hjwylde.rivers.models.Image;
-import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.services.Repository;
 import com.hjwylde.rivers.ui.contracts.CreateSectionContract;
 
@@ -29,15 +28,6 @@ public final class CreateSectionPresenter implements CreateSectionContract.Prese
         Disposable disposable = mRepository.createImage(builder)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mView::onCreateImageSuccess, mView::onCreateImageFailure);
-
-        mDisposables.add(disposable);
-    }
-
-    @Override
-    public void createSection(@NonNull Section.Builder builder) {
-        Disposable disposable = mRepository.createSection(builder)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mView::onCreateSectionSuccess, mView::onCreateSectionFailure);
 
         mDisposables.add(disposable);
     }

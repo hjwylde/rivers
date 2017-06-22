@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.hjwylde.lifecycle.CompletableResult;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
 import com.hjwylde.rivers.models.Image;
@@ -96,28 +97,6 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         inflater.inflate(R.menu.menu_create_section, menu);
 
         return true;
-    }
-
-    @Override
-    public void onCreateSectionFailure(@NonNull Throwable t) {
-        Log.w(TAG, t.getMessage(), t);
-
-        final Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onCreateSection, Snackbar.LENGTH_LONG);
-        snackbar.setAction(R.string.action_retryCreateSection, view -> {
-            if (snackbar.isShown()) {
-                snackbar.dismiss();
-            }
-
-            onCreateSectionClick();
-        });
-
-        snackbar.show();
-    }
-
-    @Override
-    public void onCreateSectionSuccess(@NonNull Section section) {
-        setResult(RESULT_OK);
-        finish();
     }
 
     @Override
@@ -288,7 +267,36 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     private void onCreateSectionClick() {
         SoftInput.hide(this);
 
-        mPresenter.createSection(mSectionBuilder);
+        mViewModel.createSection(mSectionBuilder).observe(this, onCreateSectionObserver());
+    }
+
+    private void onCreateSectionFailure(@NonNull Throwable t) {
+        Log.w(TAG, t.getMessage(), t);
+
+        final Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onCreateSection, Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.action_retryCreateSection, view -> {
+            if (snackbar.isShown()) {
+                snackbar.dismiss();
+            }
+
+            onCreateSectionClick();
+        });
+
+        snackbar.show();
+    }
+
+    @NonNull
+    private Observer<CompletableResult> onCreateSectionObserver() {
+        return result -> {
+            switch (result.code()) {
+                case OK:
+                    setResult(RESULT_OK);
+                    finish();
+                    break;
+                case ERROR:
+                    onCreateSectionFailure(result.getThrowable());
+            }
+        };
     }
 
     private void onImageSelected(@NonNull Bitmap bitmap) {
