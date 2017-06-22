@@ -8,7 +8,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,34 +26,55 @@ import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.contracts.CreateSectionContract;
 import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
 import com.hjwylde.rivers.ui.presenters.CreateSectionPresenter;
-import com.hjwylde.rivers.ui.util.NullTextWatcher;
 import com.hjwylde.rivers.ui.util.SoftInput;
 
 import java.io.IOException;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 import static java.util.Objects.requireNonNull;
 
 public final class CreateSectionActivity extends BaseActivity implements CreateSectionContract.View {
     public static final String INTENT_PUT_IN = "putIn";
 
-    private static final String TAG = MapsActivity.class.getSimpleName();
+    private static final String TAG = CreateSectionActivity.class.getSimpleName();
 
     private static final String STATE_SECTION_BUILDER = "sectionBuilder";
+
+    @BindView(R.id.root_container)
+    View mRootView;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.image)
+    ImageView mImageView;
+    @BindView(R.id.title)
+    EditText mTitleView;
+    @BindView(R.id.subtitle)
+    EditText mSubtitleView;
+    @BindView(R.id.grade)
+    EditText mGradeView;
+    @BindView(R.id.length)
+    EditText mLengthView;
+    @BindView(R.id.duration)
+    EditText mDurationView;
+    @BindView(R.id.description)
+    EditText mDescriptionView;
 
     private CreateSectionContract.Presenter mPresenter;
 
     private Section.DefaultBuilder mSectionBuilder = Section.builder();
     private Image mImage;
 
-    public void onCameraClick(@NonNull View view) {
-        new SelectImageDialog.Builder(this).create().show();
-    }
-
     @Override
     public void onCreateImageFailure(@NonNull Throwable t) {
         Log.w(TAG, t.getMessage(), t);
 
-        Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onCreateImage, Snackbar.LENGTH_LONG);
+        // Should I assume that this can never occur?
+
+        Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onCreateImage, Snackbar.LENGTH_LONG);
         snackbar.show();
     }
 
@@ -78,7 +98,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     public void onCreateSectionFailure(@NonNull Throwable t) {
         Log.w(TAG, t.getMessage(), t);
 
-        final Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onCreateSection, Snackbar.LENGTH_LONG);
+        final Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onCreateSection, Snackbar.LENGTH_LONG);
         snackbar.setAction(R.string.action_retryCreateSection, view -> {
             if (snackbar.isShown()) {
                 snackbar.dismiss();
@@ -100,6 +120,8 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     public void onGetImageFailure(@NonNull Throwable t) {
         Log.w(TAG, t.getMessage(), t);
 
+        // Should I assume that this can never occur?
+
         // TODO (hjw): report/retry
     }
 
@@ -120,14 +142,12 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
 
     @Override
     public void refreshImage() {
-        ImageView imageView = findTById(R.id.image);
-
         if (mImage != null) {
-            imageView.setImageBitmap(mImage.getBitmap());
+            mImageView.setImageBitmap(mImage.getBitmap());
 
-            animateImageIn(imageView);
+            animateImageIn();
         } else {
-            imageView.setImageResource(R.drawable.bm_create_section);
+            mImageView.setImageResource(R.drawable.bm_create_section);
         }
     }
 
@@ -171,46 +191,10 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
 
         setContentView(R.layout.activity_create_section);
 
-        Toolbar toolbar = findTById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ButterKnife.bind(this);
 
-        findEditTextById(R.id.title).addTextChangedListener(new NullTextWatcher() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mSectionBuilder.title(editable.toString());
-            }
-        });
-        findEditTextById(R.id.subtitle).addTextChangedListener(new NullTextWatcher() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mSectionBuilder.subtitle(editable.toString());
-            }
-        });
-        findEditTextById(R.id.grade).addTextChangedListener(new NullTextWatcher() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mSectionBuilder.grade(editable.toString());
-            }
-        });
-        findEditTextById(R.id.length).addTextChangedListener(new NullTextWatcher() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mSectionBuilder.length(editable.toString());
-            }
-        });
-        findEditTextById(R.id.duration).addTextChangedListener(new NullTextWatcher() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mSectionBuilder.duration(editable.toString());
-            }
-        });
-        findEditTextById(R.id.description).addTextChangedListener(new NullTextWatcher() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mSectionBuilder.description(editable.toString());
-            }
-        });
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mPresenter = new CreateSectionPresenter(this, RiversApplication.getRepository());
 
@@ -239,7 +223,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     protected void onResume() {
         super.onResume();
 
-        if (mSectionBuilder != null && mSectionBuilder.imageId() != null && mImage == null) {
+        if (mSectionBuilder.imageId() != null && mImage == null) {
             mPresenter.getImage(mSectionBuilder.imageId());
         }
     }
@@ -251,10 +235,45 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         outState.putSerializable(STATE_SECTION_BUILDER, mSectionBuilder);
     }
 
-    private void animateImageIn(@NonNull View imageView) {
+    @OnClick(R.id.camera)
+    void onCameraClick() {
+        new SelectImageDialog.Builder(this).create().show();
+    }
+
+    @OnTextChanged(R.id.description)
+    void onDescriptionTextChanged(@NonNull CharSequence text) {
+        mSectionBuilder.description(text.toString());
+    }
+
+    @OnTextChanged(R.id.duration)
+    void onDurationTextChanged(@NonNull CharSequence text) {
+        mSectionBuilder.duration(text.toString());
+    }
+
+    @OnTextChanged(R.id.grade)
+    void onGradeTextChanged(@NonNull CharSequence text) {
+        mSectionBuilder.grade(text.toString());
+    }
+
+    @OnTextChanged(R.id.length)
+    void onLengthTextChanged(@NonNull CharSequence text) {
+        mSectionBuilder.length(text.toString());
+    }
+
+    @OnTextChanged(R.id.subtitle)
+    void onSubtitleTextChanged(@NonNull CharSequence text) {
+        mSectionBuilder.subtitle(text.toString());
+    }
+
+    @OnTextChanged(R.id.title)
+    void onTitleTextChanged(@NonNull CharSequence text) {
+        mSectionBuilder.title(text.toString());
+    }
+
+    private void animateImageIn() {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
 
-        imageView.startAnimation(animation);
+        mImageView.startAnimation(animation);
     }
 
     private void onCreateSectionClick() {
@@ -263,7 +282,7 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
         mPresenter.createSection(mSectionBuilder);
     }
 
-    private void onImageSelected(Bitmap bitmap) {
+    private void onImageSelected(@NonNull Bitmap bitmap) {
         Image.Builder builder = Image.builder();
         builder.bitmap(bitmap);
 
@@ -279,11 +298,11 @@ public final class CreateSectionActivity extends BaseActivity implements CreateS
     }
 
     private void refreshSection() {
-        findTextViewById(R.id.title).setText(mSectionBuilder.title());
-        findTextViewById(R.id.subtitle).setText(mSectionBuilder.subtitle());
-        findTextViewById(R.id.grade).setText(mSectionBuilder.grade());
-        findTextViewById(R.id.length).setText(mSectionBuilder.length());
-        findTextViewById(R.id.duration).setText(mSectionBuilder.duration());
-        findTextViewById(R.id.description).setText(mSectionBuilder.description());
+        mTitleView.setText(mSectionBuilder.title());
+        mSubtitleView.setText(mSectionBuilder.subtitle());
+        mGradeView.setText(mSectionBuilder.grade());
+        mLengthView.setText(mSectionBuilder.length());
+        mDurationView.setText(mSectionBuilder.duration());
+        mDescriptionView.setText(mSectionBuilder.description());
     }
 }
