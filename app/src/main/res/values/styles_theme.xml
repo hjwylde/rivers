@@ -39,6 +39,7 @@
     <style name="Theme.Rivers.Light.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="Theme.Rivers.SplashScreen">
+        <item name="colorPrimaryDark">@color/scrim40</item>
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 </resources>
