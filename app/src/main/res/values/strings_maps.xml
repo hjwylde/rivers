@@ -2,10 +2,11 @@
 <resources>
     <string name="title_activity_maps">Rivers</string>
 
+    <string name="action_openSettings">Settings</string>
     <string name="action_next">NEXT</string>
 
     <string name="info_onSectionCreated">Created</string>
     <string name="info_onSectionDeleted">Deleted</string>
 
-    <string name="label_search">Search...</string>
+    <string name="label_search">Search&#8230;</string>
 </resources>
