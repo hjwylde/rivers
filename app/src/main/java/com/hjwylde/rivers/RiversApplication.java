@@ -74,9 +74,9 @@ public class RiversApplication extends Application {
             URL url = new URL(spec);
 
             Replication push = mDatabase.createPushReplication(url);
-            Replication pull = mDatabase.createPullReplication(url);
-
             push.setContinuous(true);
+
+            Replication pull = mDatabase.createPullReplication(url);
             pull.setContinuous(true);
 
             push.start();
