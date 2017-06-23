@@ -6,11 +6,11 @@ import android.support.annotation.Nullable;
 
 import com.hjwylde.rivers.R;
 
-public final class SettingsFragment extends PreferenceFragment {
+public final class LicensesFragment extends PreferenceFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        addPreferencesFromResource(R.xml.setting_preferences);
+        addPreferencesFromResource(R.xml.license_preferences);
     }
 }

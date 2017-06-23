@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_licenses">Open source licenses</string>
+
+    <string name="pref_title_android_arch_lifecycle_compiler">Android Architecture Components (Compiler)</string>
+    <string name="pref_title_android_arch_lifecycle_runtime">Android Architecture Components (Runtime)</string>
+    <string name="pref_title_android_arch_lifecycle_extensions">Android Architecture Components (Extensions)</string>
+    <string name="pref_title_com_actinarium_aligned_aligned">Aligned</string>
+    <string name="pref_title_com_android_support_appcompat_v7">v7 Support Library (appcompat)</string>
+    <string name="pref_title_com_android_support_design">Design Support Library</string>
+    <string name="pref_title_com_couchbase_lite_couchbase_lite_android">Couchbase Lite</string>
+    <string name="pref_title_com_github_arimorty_floatingsearchview">Floating Search View</string>
+    <string name="pref_title_com_google_android_gms_play_services_maps">Google Play Services (maps)</string>
+    <string name="pref_title_com_google_maps_android_android_maps_utils">Google Maps Android Utils</string>
+    <string name="pref_title_com_jakewharton_butterknife_compiler">Butter Knife</string>
+    <string name="pref_title_io_ractivex_rxjava2_rxandroid">RxAndroid</string>
+    <string name="pref_title_io_ractivex_rxjava2_rxjava">RxJava</string>
+    <string name="pref_title_net_ltgt_errorprone">Error Prone</string>
+    <string name="pref_title_uk_co_chrisjenx_calligraphy">Calligraphy</string>
+</resources>
