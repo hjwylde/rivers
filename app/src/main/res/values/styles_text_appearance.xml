@@ -19,6 +19,12 @@
         <item name="leading">24dp</item>
     </style>
 
+    <style name="TextAppearance.Rivers.Body.Medium" parent="TextAppearance.AppCompat.Body2">
+        <item name="android:textColorPrimary">@color/text_primaryLight</item>
+        <item name="fontPath">fonts/OpenSans-SemiBold.ttf</item>
+        <item name="leading">20dp</item>
+    </style>
+
     <style name="TextAppearance.Rivers.Body" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textColorPrimary">@color/text_primaryLight</item>
         <item name="fontPath">fonts/OpenSans-Regular.ttf</item>
