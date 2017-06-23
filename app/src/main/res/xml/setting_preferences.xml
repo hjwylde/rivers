@@ -5,5 +5,10 @@
 
         <com.hjwylde.rivers.ui.preferences.VersionPreference
             android:title="@string/pref_title_version"/>
+
+        <Preference
+            android:title="@string/pref_title_licenses">
+            <intent android:action=".ui.activities.LicensesActivity"/>
+        </Preference>
     </PreferenceCategory>
 </PreferenceScreen>

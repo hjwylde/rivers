@@ -58,7 +58,19 @@
         <activity
             android:name=".ui.activities.SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:parentActivityName=".ui.activities.MapsActivity"
             android:theme="@style/Theme.Rivers.Dark">
+        </activity>
+        <activity
+            android:name=".ui.activities.LicensesActivity"
+            android:label="@string/title_activity_licenses"
+            android:parentActivityName=".ui.activities.SettingsActivity"
+            android:theme="@style/Theme.Rivers.Dark">
+            <intent-filter>
+                <action android:name=".ui.activities.LicensesActivity"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
     </application>
 

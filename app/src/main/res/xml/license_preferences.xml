@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- TODO (hjw): move intents to Java code and don't use a preferences activity, use a list -->
+    <Preference
+        android:title="@string/pref_title_android_arch_lifecycle_compiler">
+        <!-- TODO (hjw): find the license -->
+    </Preference>
+    <Preference
+        android:title="@string/pref_title_android_arch_lifecycle_runtime">
+        <!-- TODO (hjw): find the license -->
+    </Preference>
+    <Preference
+        android:title="@string/pref_title_android_arch_lifecycle_extensions">
+        <!-- TODO (hjw): find the license -->
+    </Preference>
+    <Preference
+        android:title="@string/pref_title_com_actinarium_aligned_aligned">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/Actinarium/Aligned/blob/master/LICENSE"/>
+    </Preference>
+    <Preference
+        android:title="@string/pref_title_com_android_support_appcompat_v7">
+        <!-- TODO (hjw): find the license -->
+    </Preference>
+    <Preference
+        android:title="@string/pref_title_com_android_support_design">
+        <!-- TODO (hjw): find the license -->
+    </Preference>
+    <Preference
+        android:title="@string/pref_title_com_couchbase_lite_couchbase_lite_android">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/couchbase/couchbase-lite-android/blob/master/LICENSE.TXT"/>
+    </Preference>
+    <Preference
+        android:title="@string/pref_title_com_github_arimorty_floatingsearchview">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/arimorty/floatingsearchview/blob/master/LICENSE.txt"/>
+    </Preference>
+    <Preference
+        android:title="@string/pref_title_com_google_android_gms_play_services_maps">
+        <!-- TODO (hjw): find the license -->
+    </Preference>
+    <Preference
+        android:title="@string/pref_title_com_google_maps_android_android_maps_utils">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/googlemaps/android-maps-utils/blob/master/LICENSE"/>
+    </Preference>
+    <Preference
+        android:title="@string/pref_title_com_jakewharton_butterknife_compiler">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/JakeWharton/butterknife/blob/master/LICENSE.txt"/>
+    </Preference>
+    <Preference
+        android:title="@string/pref_title_io_ractivex_rxjava2_rxandroid">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/ReactiveX/RxAndroid/blob/2.x/LICENSE"/>
+    </Preference>
+    <Preference
+        android:title="@string/pref_title_io_ractivex_rxjava2_rxjava">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/ReactiveX/RxJava/blob/2.x/LICENSE"/>
+    </Preference>
+    <Preference
+        android:title="@string/pref_title_net_ltgt_errorprone">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/google/error-prone/blob/master/COPYING"/>
+    </Preference>
+    <Preference
+        android:title="@string/pref_title_uk_co_chrisjenx_calligraphy">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/chrisjenx/Calligraphy/blob/master/LICENSE"/>
+    </Preference>
+</PreferenceScreen>
