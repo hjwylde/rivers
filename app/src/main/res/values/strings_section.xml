@@ -3,6 +3,7 @@
     <string name="action_editSection">Edit</string>
     <string name="action_deleteSection">Delete</string>
     <string name="action_retryDeleteSection">Retry</string>
+    <string name="action_readMore">Read more</string>
 
     <string name="info_onSectionEdited">Saved</string>
 
