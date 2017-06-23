@@ -9,7 +9,7 @@
 
     <style name="TextAppearance.Rivers.Headline" parent="TextAppearance.AppCompat.Headline">
         <item name="android:textColorPrimary">@color/text_primaryLight</item>
-        <item name="fontPath">fonts/OpenSans-Regular.ttf</item>
+        <item name="fontPath">fonts/Raleway-SemiBold.ttf</item>
         <item name="leading">32dp</item>
     </style>
 

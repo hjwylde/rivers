@@ -20,9 +20,7 @@ public final class SectionQuery {
     }
 
     private String getInput(Section section) {
-        StringBuilder input = new StringBuilder();
-        input.append(section.getTitle());
-
+        StringBuilder input = new StringBuilder(section.getTitle());
         if (section.getSubtitle() != null) {
             input.append(", ");
             input.append(section.getSubtitle());

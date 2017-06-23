@@ -492,6 +492,13 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         findTextViewById(R.id.title).setText(mSection.getTitle());
         findTextViewById(R.id.subtitle).setText(mSection.getSubtitle());
 
+        if (mSection.getDescription() != null && !mSection.getDescription().isEmpty()) {
+            findTextViewById(R.id.description).setText(mSection.getDescription());
+            findViewById(R.id.description_container).setVisibility(View.VISIBLE);
+        } else {
+            findViewById(R.id.description_container).setVisibility(View.GONE);
+        }
+
         if (mSection.getGrade() != null && !mSection.getGrade().isEmpty()) {
             findTextViewById(R.id.grade).setText(mSection.getGrade());
             findViewById(R.id.grade_container).setVisibility(View.VISIBLE);
@@ -510,8 +517,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         } else {
             findViewById(R.id.duration_container).setVisibility(View.GONE);
         }
-
-        findTextViewById(R.id.description).setText(mSection.getDescription());
     }
 
     private void setSection(@NonNull Section section) {
