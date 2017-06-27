@@ -87,7 +87,7 @@ public final class ClusterRenderer<T extends ClusterItem> extends DefaultCluster
 
     @ColorInt
     private int getMarkerColor() {
-        return ContextCompat.getColor(mContext, R.color.accent);
+        return ContextCompat.getColor(mContext, R.color.primaryAccent);
     }
 
     @NonNull

@@ -33,6 +33,9 @@ import com.hjwylde.rivers.ui.util.SectionSuggestion;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 import static java.util.Objects.requireNonNull;
 
 public final class MapsActivity extends BaseActivity implements MapsContract.View, View.OnClickListener {
@@ -63,10 +66,18 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     @Override
     public void createSection(@NonNull LatLng putIn) {
-        Intent intent = new Intent(MapsActivity.this, CreateSectionActivity.class);
+        Intent intent = new Intent(this, CreateSectionActivity.class);
         intent.putExtra(CreateSectionActivity.INTENT_PUT_IN, putIn);
 
         startActivityForResult(intent, REQUEST_CODE_SECTION_CREATED);
+    }
+
+    @OnClick(R.id.description_container)
+    void onDescriptionContainerClick() {
+        Intent intent = new Intent(this, SectionDescriptionActivity.class);
+        intent.putExtra(SectionDescriptionActivity.INTENT_SECTION_ID, mSection.getId());
+
+        startActivity(intent);
     }
 
     @Override
@@ -238,6 +249,8 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_maps);
+
+        ButterKnife.bind(this);
 
         mSearchView = findTById(R.id.floating_search_view);
         mSearchView.setOnQueryChangeListener((oldQuery, newQuery) -> {

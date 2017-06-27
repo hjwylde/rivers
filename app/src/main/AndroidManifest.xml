@@ -41,6 +41,7 @@
             android:parentActivityName=".ui.activities.MapsActivity"
             android:theme="@style/Theme.Rivers.Light.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateVisible">
+            <!-- TODO (hjw): do we need this support declaration? -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hjwylde.rivers.ui.activities.MapsActivity"/>
@@ -51,6 +52,17 @@
             android:parentActivityName=".ui.activities.MapsActivity"
             android:theme="@style/Theme.Rivers.Light.NoActionBar.Popup"
             android:windowSoftInputMode="adjustResize|stateHidden">
+            <!-- TODO (hjw): do we need this support declaration? -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.hjwylde.rivers.ui.activities.MapsActivity"/>
+        </activity>
+        <activity
+            android:name=".ui.activities.SectionDescriptionActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".ui.activities.MapsActivity"
+            android:theme="@style/Theme.Rivers.Dark.NoActionBar">
+            <!-- TODO (hjw): do we need this support declaration? -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hjwylde.rivers.ui.activities.MapsActivity"/>
@@ -60,12 +72,21 @@
             android:label="@string/title_activity_settings"
             android:parentActivityName=".ui.activities.MapsActivity"
             android:theme="@style/Theme.Rivers.Dark">
+            <!-- TODO (hjw): do we need this support declaration? -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.hjwylde.rivers.ui.activities.MapsActivity"/>
         </activity>
         <activity
             android:name=".ui.activities.LicensesActivity"
             android:label="@string/title_activity_licenses"
             android:parentActivityName=".ui.activities.SettingsActivity"
             android:theme="@style/Theme.Rivers.Dark">
+            <!-- TODO (hjw): do we need this support declaration? -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.hjwylde.rivers.ui.activities.SettingsActivity"/>
+            <!-- TODO (hjw): remove this once onClick is handled in code -->
             <intent-filter>
                 <action android:name=".ui.activities.LicensesActivity"/>
 

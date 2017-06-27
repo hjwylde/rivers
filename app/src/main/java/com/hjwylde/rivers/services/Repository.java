@@ -6,6 +6,7 @@ import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 
 import io.reactivex.Completable;
+import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -30,6 +31,9 @@ public interface Repository {
 
     @NonNull
     Observable<Section> getSections();
+
+    @NonNull
+    Flowable<Section> streamSection(@NonNull String id);
 
     @NonNull
     Single<Section> updateSection(@NonNull Section.Builder builder);
