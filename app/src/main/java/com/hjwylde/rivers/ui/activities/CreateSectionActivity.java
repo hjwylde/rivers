@@ -61,10 +61,39 @@ public final class CreateSectionActivity extends BaseActivity {
     EditText mDurationView;
     @BindView(R.id.description)
     EditText mDescriptionView;
-
-    private CreateSectionViewModel mViewModel;
+    Animation mFadeImageInAnimation;
 
     private Section.DefaultBuilder mSectionBuilder = Section.builder();
+
+    private CreateSectionViewModel mViewModel;
+    private Observer<CompletableResult<Image>> mOnCreateImageObserver = result -> {
+        switch (result.code()) {
+            case OK:
+                Image image = result.getResult();
+
+                mSectionBuilder.imageId(image.getId());
+
+                refreshImage(image);
+                break;
+            case ERROR:
+                onCreateImageFailure(result.getThrowable());
+        }
+    };
+    private Observer<CompletableResult<Section>> mOnCreateSectionObserver = result -> {
+        switch (result.code()) {
+            case OK:
+                setResult(RESULT_OK);
+                finish();
+                break;
+            case ERROR:
+                onCreateSectionFailure(result.getThrowable());
+        }
+    };
+    private Observer<Image> mOnGetImageObserver = image -> {
+        if (image != null) {
+            refreshImage(image);
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -123,28 +152,22 @@ public final class CreateSectionActivity extends BaseActivity {
         setContentView(R.layout.activity_create_section);
 
         ButterKnife.bind(this);
+        mFadeImageInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mViewModel = ViewModelProviders.of(this).get(CreateSectionViewModel.class);
 
-        LatLng putIn = getIntent().getParcelableExtra(INTENT_PUT_IN);
-        mSectionBuilder.putIn(putIn);
-    }
+        if (savedInstanceState != null) {
+            mSectionBuilder = (Section.DefaultBuilder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
+            refreshSection();
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        mSectionBuilder = (Section.DefaultBuilder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
-        refreshSection();
-
-        if (mSectionBuilder.imageId() != null) {
-            mViewModel.getImage(mSectionBuilder.imageId()).observe(this, onGetImageObserver());
+            refreshFocus();
+        } else {
+            LatLng putIn = getIntent().getParcelableExtra(INTENT_PUT_IN);
+            mSectionBuilder.putIn(putIn);
         }
-
-        refreshFocus();
     }
 
     @Override
@@ -152,6 +175,15 @@ public final class CreateSectionActivity extends BaseActivity {
         super.onSaveInstanceState(outState);
 
         outState.putSerializable(STATE_SECTION_BUILDER, mSectionBuilder);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (mSectionBuilder.imageId() != null) {
+            mViewModel.getImage(mSectionBuilder.imageId()).observe(this, mOnGetImageObserver);
+        }
     }
 
     @OnClick(R.id.camera)
@@ -196,27 +228,10 @@ public final class CreateSectionActivity extends BaseActivity {
         snackbar.show();
     }
 
-    @NonNull
-    private Observer<CompletableResult<Image>> onCreateImageObserver() {
-        return result -> {
-            switch (result.code()) {
-                case OK:
-                    Image image = result.getResult();
-
-                    mSectionBuilder.imageId(image.getId());
-
-                    refreshImage(image);
-                    break;
-                case ERROR:
-                    onCreateImageFailure(result.getThrowable());
-            }
-        };
-    }
-
     private void onCreateSectionClick() {
         SoftInput.hide(this);
 
-        mViewModel.createSection(mSectionBuilder).observe(this, onCreateSectionObserver());
+        mViewModel.createSection(mSectionBuilder).observe(this, mOnCreateSectionObserver);
     }
 
     private void onCreateSectionFailure(@NonNull Throwable t) {
@@ -234,34 +249,11 @@ public final class CreateSectionActivity extends BaseActivity {
         snackbar.show();
     }
 
-    @NonNull
-    private Observer<CompletableResult<Section>> onCreateSectionObserver() {
-        return result -> {
-            switch (result.code()) {
-                case OK:
-                    setResult(RESULT_OK);
-                    finish();
-                    break;
-                case ERROR:
-                    onCreateSectionFailure(result.getThrowable());
-            }
-        };
-    }
-
-    @NonNull
-    private Observer<Image> onGetImageObserver() {
-        return image -> {
-            if (image != null) {
-                refreshImage(image);
-            }
-        };
-    }
-
     private void onImageSelected(@NonNull Bitmap bitmap) {
         Image.Builder builder = Image.builder();
         builder.bitmap(bitmap);
 
-        mViewModel.createImage(builder).observe(this, onCreateImageObserver());
+        mViewModel.createImage(builder).observe(this, mOnCreateImageObserver);
     }
 
     private void refreshFocus() {
@@ -275,8 +267,7 @@ public final class CreateSectionActivity extends BaseActivity {
     private void refreshImage(@NonNull Image image) {
         mImageView.setImageBitmap(image.getBitmap());
 
-        Animation animation = AnimationUtils.loadAnimation(CreateSectionActivity.this, R.anim.fade_image_in);
-        mImageView.startAnimation(animation);
+        mImageView.startAnimation(mFadeImageInAnimation);
     }
 
     private void refreshSection() {
