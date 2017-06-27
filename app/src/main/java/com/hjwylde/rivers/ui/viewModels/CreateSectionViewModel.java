@@ -58,6 +58,6 @@ public final class CreateSectionViewModel extends ViewModel {
 
     @Override
     protected void onCleared() {
-        mDisposables.dispose();
+        mDisposables.clear();
     }
 }

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.Document;
+import com.couchbase.lite.LiveQuery;
 import com.couchbase.lite.QueryEnumerator;
 import com.couchbase.lite.QueryRow;
 import com.couchbase.lite.View;
@@ -15,7 +16,11 @@ import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.services.Repository;
 
+import java.util.Collections;
+
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
+import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -121,6 +126,28 @@ public final class CouchbaseRepository implements Repository {
                         emitter.onError(e);
                     }
                 })
+                .map(SectionDocument::new);
+    }
+
+    @NonNull
+    @Override
+    public Flowable<Section> streamSection(@NonNull String id) {
+        View view = SectionsView.getInstance(mDatabase);
+
+        return Flowable
+                .<Document>create(emitter -> {
+                    LiveQuery query = view.createQuery().toLiveQuery();
+                    query.setKeys(Collections.singletonList(id));
+                    query.addChangeListener(event -> {
+                        for (QueryRow row : event.getRows()) {
+                            emitter.onNext(row.getDocument());
+                        }
+                    });
+
+                    emitter.setCancellable(query::stop);
+
+                    query.run();
+                }, BackpressureStrategy.LATEST)
                 .map(SectionDocument::new);
     }
 

@@ -64,7 +64,8 @@ public class RiversApplication extends Application {
         } catch (IOException | CouchbaseLiteException e) {
             Log.e(TAG, e.getMessage(), e);
 
-            // TODO (hjw): panic
+            // TODO (hjw): if this is a permission exception, then an error should be displayed to
+            // the user. Otherwise, re-raise the exception.
         }
     }
 
@@ -84,7 +85,7 @@ public class RiversApplication extends Application {
         } catch (MalformedURLException e) {
             Log.e(TAG, e.getMessage(), e);
 
-            // TODO (hjw): panic
+            // TODO (hjw): re-raise the error, we should never get a malformed URL exception
         }
     }
 

@@ -33,6 +33,9 @@ import com.hjwylde.rivers.ui.util.SectionSuggestion;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 import static java.util.Objects.requireNonNull;
 
 public final class MapsActivity extends BaseActivity implements MapsContract.View, View.OnClickListener {
@@ -63,10 +66,18 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     @Override
     public void createSection(@NonNull LatLng putIn) {
-        Intent intent = new Intent(MapsActivity.this, CreateSectionActivity.class);
+        Intent intent = new Intent(this, CreateSectionActivity.class);
         intent.putExtra(CreateSectionActivity.INTENT_PUT_IN, putIn);
 
         startActivityForResult(intent, REQUEST_CODE_SECTION_CREATED);
+    }
+
+    @OnClick(R.id.description_container)
+    void onDescriptionContainerClick() {
+        Intent intent = new Intent(this, SectionDescriptionActivity.class);
+        intent.putExtra(SectionDescriptionActivity.INTENT_SECTION_ID, mSection.getId());
+
+        startActivity(intent);
     }
 
     @Override
@@ -238,6 +249,8 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_maps);
+
+        ButterKnife.bind(this);
 
         mSearchView = findTById(R.id.floating_search_view);
         mSearchView.setOnQueryChangeListener((oldQuery, newQuery) -> {
@@ -492,6 +505,13 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         findTextViewById(R.id.title).setText(mSection.getTitle());
         findTextViewById(R.id.subtitle).setText(mSection.getSubtitle());
 
+        if (mSection.getDescription() != null && !mSection.getDescription().isEmpty()) {
+            findTextViewById(R.id.description).setText(mSection.getDescription());
+            findViewById(R.id.description_container).setVisibility(View.VISIBLE);
+        } else {
+            findViewById(R.id.description_container).setVisibility(View.GONE);
+        }
+
         if (mSection.getGrade() != null && !mSection.getGrade().isEmpty()) {
             findTextViewById(R.id.grade).setText(mSection.getGrade());
             findViewById(R.id.grade_container).setVisibility(View.VISIBLE);
@@ -510,8 +530,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         } else {
             findViewById(R.id.duration_container).setVisibility(View.GONE);
         }
-
-        findTextViewById(R.id.description).setText(mSection.getDescription());
     }
 
     private void setSection(@NonNull Section section) {

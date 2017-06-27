@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="imageHeight">240dp</dimen>
+
+    <dimen name="infoContainerMargin">20dp</dimen>
+    <dimen name="iconSize">24dp</dimen>
+    <dimen name="iconMargin">8dp</dimen>
 </resources>

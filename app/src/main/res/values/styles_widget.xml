@@ -5,9 +5,9 @@
 
     <style name="Widget.Rivers.TextInputLayout.Dark" parent="Widget.Design.TextInputLayout">
         <item name="android:textColorHint">@color/text_secondaryDark</item>
-        <item name="colorAccent">@color/accentLight</item>
+        <item name="colorAccent">@color/primaryAccentLight</item>
         <item name="colorControlNormal">@color/text_secondaryDark</item>
-        <item name="colorControlActivated">@color/accentLight</item>
-        <item name="colorControlHighlight">@color/accentLight</item>
+        <item name="colorControlActivated">@color/primaryAccentLight</item>
+        <item name="colorControlHighlight">@color/primaryAccentLight</item>
     </style>
 </resources>
