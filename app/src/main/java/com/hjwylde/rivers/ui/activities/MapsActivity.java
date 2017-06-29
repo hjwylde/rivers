@@ -1,6 +1,7 @@
 package com.hjwylde.rivers.ui.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -70,14 +71,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         intent.putExtra(CreateSectionActivity.INTENT_PUT_IN, putIn);
 
         startActivityForResult(intent, REQUEST_CODE_SECTION_CREATED);
-    }
-
-    @OnClick(R.id.description_container)
-    void onDescriptionContainerClick() {
-        Intent intent = new Intent(this, SectionDescriptionActivity.class);
-        intent.putExtra(SectionDescriptionActivity.INTENT_SECTION_ID, mSection.getId());
-
-        startActivity(intent);
     }
 
     @Override
@@ -288,6 +281,9 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
             switch (item.getItemId()) {
                 case R.id.openSettings:
                     onOpenSettingsClick();
+                    break;
+                case R.id.sendFeedback:
+                    onSendFeedbackClick();
             }
         });
 
@@ -427,6 +423,14 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         }
     }
 
+    @OnClick(R.id.description_container)
+    void onDescriptionContainerClick() {
+        Intent intent = new Intent(this, SectionDescriptionActivity.class);
+        intent.putExtra(SectionDescriptionActivity.INTENT_SECTION_ID, mSection.getId());
+
+        startActivity(intent);
+    }
+
     private void animateImageIn(@NonNull View imageView) {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
 
@@ -476,6 +480,15 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
         Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.info_onSectionEdited, Snackbar.LENGTH_LONG);
         snackbar.show();
+    }
+
+    private void onSendFeedbackClick() {
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:"));
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.info_feedbackEmail)});
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.info_feedbackSubject));
+
+        startActivity(intent);
     }
 
     private void refreshFloatingActionButton() {

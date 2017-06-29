@@ -6,4 +6,9 @@
         android:id="@+id/openSettings"
         android:title="@string/action_openSettings"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/sendFeedback"
+        android:title="@string/action_sendFeedback"
+        app:showAsAction="never"/>
 </menu>
