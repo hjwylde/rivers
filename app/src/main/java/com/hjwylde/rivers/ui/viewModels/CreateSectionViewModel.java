@@ -16,7 +16,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 public final class CreateSectionViewModel extends ViewModel {
-    // TODO (hjw): inject this
     private final Repository mRepository = RiversApplication.getRepository();
     private final CompositeDisposable mDisposables = new CompositeDisposable();
 

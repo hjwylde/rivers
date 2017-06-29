@@ -66,7 +66,6 @@
             android:label="@string/title_activity_licenses"
             android:parentActivityName=".ui.activities.SettingsActivity"
             android:theme="@style/Theme.Rivers.Dark">
-            <!-- TODO (hjw): remove this once onClick is handled in code -->
             <intent-filter>
                 <action android:name=".ui.activities.LicensesActivity"/>
 

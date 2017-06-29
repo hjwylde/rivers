@@ -85,7 +85,7 @@ public class RiversApplication extends Application {
         } catch (MalformedURLException e) {
             Log.e(TAG, e.getMessage(), e);
 
-            // TODO (hjw): re-raise the error, we should never get a malformed URL exception
+            throw new RuntimeException(e);
         }
     }
 

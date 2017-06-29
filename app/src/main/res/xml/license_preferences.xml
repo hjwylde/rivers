@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- TODO (hjw): move intents to Java code and don't use a preferences activity, use a list -->
     <Preference
         android:title="@string/pref_title_android_arch_lifecycle_compiler">
-        <!-- TODO (hjw): find the license -->
     </Preference>
     <Preference
         android:title="@string/pref_title_android_arch_lifecycle_runtime">
-        <!-- TODO (hjw): find the license -->
     </Preference>
     <Preference
         android:title="@string/pref_title_android_arch_lifecycle_extensions">
-        <!-- TODO (hjw): find the license -->
     </Preference>
     <Preference
         android:title="@string/pref_title_com_actinarium_aligned_aligned">
@@ -21,11 +17,9 @@
     </Preference>
     <Preference
         android:title="@string/pref_title_com_android_support_appcompat_v7">
-        <!-- TODO (hjw): find the license -->
     </Preference>
     <Preference
         android:title="@string/pref_title_com_android_support_design">
-        <!-- TODO (hjw): find the license -->
     </Preference>
     <Preference
         android:title="@string/pref_title_com_couchbase_lite_couchbase_lite_android">
@@ -41,7 +35,6 @@
     </Preference>
     <Preference
         android:title="@string/pref_title_com_google_android_gms_play_services_maps">
-        <!-- TODO (hjw): find the license -->
     </Preference>
     <Preference
         android:title="@string/pref_title_com_google_maps_android_android_maps_utils">
