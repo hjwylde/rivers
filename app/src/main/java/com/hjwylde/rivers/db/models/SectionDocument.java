@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.hjwylde.rivers.util.Preconditions.requireTrue;
+import static java.util.Objects.requireNonNull;
 
 public final class SectionDocument extends BaseDocument implements Section {
     @NonNull
@@ -259,7 +260,11 @@ public final class SectionDocument extends BaseDocument implements Section {
 
         @Override
         protected void validate() {
-            // TODO (hjw)
+            requireTrue(TYPE.equals(type()));
+
+            requireNonNull(title());
+            requireNonNull(putIn());
+            requireNonNull(imageId());
         }
     }
 }
