@@ -263,6 +263,7 @@ public final class SectionDocument extends BaseDocument implements Section {
             requireTrue(TYPE.equals(type()));
 
             requireNonNull(title());
+            requireNonNull(subtitle());
             requireNonNull(putIn());
             requireNonNull(imageId());
         }
