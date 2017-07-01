@@ -2,10 +2,10 @@ package com.hjwylde.rivers.ui.presenters;
 
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.ui.util.SectionQuery;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.services.Repository;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
+import com.hjwylde.rivers.ui.util.SectionQuery;
 import com.hjwylde.rivers.ui.util.SectionSuggestion;
 
 import java.util.ArrayList;
