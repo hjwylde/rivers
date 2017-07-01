@@ -29,11 +29,7 @@ public final class SectionDescriptionActivity extends BaseActivity {
     TextView mDescriptionView;
 
     private SectionDescriptionViewModel mViewModel;
-    private Observer<Section> mOnGetSectionObserver = section -> {
-        if (section != null) {
-            refreshSection(section);
-        }
-    };
+    private Observer<Section> mOnGetSectionObserver = new OnGetSectionObserver();
 
     private String mSectionId;
 
@@ -68,9 +64,18 @@ public final class SectionDescriptionActivity extends BaseActivity {
         mViewModel.getSection(mSectionId).observe(this, mOnGetSectionObserver);
     }
 
-    private void refreshSection(@NonNull Section section) {
-        mTitleView.setText(section.getTitle());
-        mSubtitleView.setText(section.getSubtitle());
-        mDescriptionView.setText(section.getDescription());
+    private final class OnGetSectionObserver implements Observer<Section> {
+        @Override
+        public void onChanged(@Nullable Section section) {
+            if (section != null) {
+                refreshSection(section);
+            }
+        }
+
+        private void refreshSection(@NonNull Section section) {
+            mTitleView.setText(section.getTitle());
+            mSubtitleView.setText(section.getSubtitle());
+            mDescriptionView.setText(section.getDescription());
+        }
     }
 }
