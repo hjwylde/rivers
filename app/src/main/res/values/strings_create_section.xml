@@ -7,4 +7,11 @@
 
     <string name="error_onCreateSection">Unable to create</string>
     <string name="error_onCreateImage">Unable to save image</string>
+
+    <string name="hint_title">River name</string>
+    <string name="hint_subtitle">Section</string>
+    <string name="hint_grade"/>
+    <string name="hint_length"/>
+    <string name="hint_duration"/>
+    <string name="hint_description">Description</string>
 </resources>
