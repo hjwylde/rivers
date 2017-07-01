@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -63,37 +64,12 @@ public final class CreateSectionActivity extends BaseActivity {
     EditText mDescriptionView;
     Animation mFadeImageInAnimation;
 
-    private Section.DefaultBuilder mSectionBuilder = Section.builder();
-
     private CreateSectionViewModel mViewModel;
-    private Observer<CompletableResult<Image>> mOnCreateImageObserver = result -> {
-        switch (result.code()) {
-            case OK:
-                Image image = result.getResult();
+    private Observer<CompletableResult<Image>> mOnCreateImageObserver = new OnCreateImageObserver();
+    private Observer<CompletableResult<Section>> mOnCreateSectionObserver = new OnCreateSectionObserver();
+    private Observer<Image> mOnGetImageObserver = new OnGetImageObserver();
 
-                mSectionBuilder.imageId(image.getId());
-
-                refreshImage(image);
-                break;
-            case ERROR:
-                onCreateImageFailure(result.getThrowable());
-        }
-    };
-    private Observer<CompletableResult<Section>> mOnCreateSectionObserver = result -> {
-        switch (result.code()) {
-            case OK:
-                setResult(RESULT_OK);
-                finish();
-                break;
-            case ERROR:
-                onCreateSectionFailure(result.getThrowable());
-        }
-    };
-    private Observer<Image> mOnGetImageObserver = image -> {
-        if (image != null) {
-            refreshImage(image);
-        }
-    };
+    private Section.DefaultBuilder mSectionBuilder = Section.builder();
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -234,21 +210,6 @@ public final class CreateSectionActivity extends BaseActivity {
         mViewModel.createSection(mSectionBuilder).observe(this, mOnCreateSectionObserver);
     }
 
-    private void onCreateSectionFailure(@NonNull Throwable t) {
-        Log.w(TAG, t.getMessage(), t);
-
-        final Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onCreateSection, Snackbar.LENGTH_LONG);
-        snackbar.setAction(R.string.action_retryCreateSection, view -> {
-            if (snackbar.isShown()) {
-                snackbar.dismiss();
-            }
-
-            onCreateSectionClick();
-        });
-
-        snackbar.show();
-    }
-
     private void onImageSelected(@NonNull Bitmap bitmap) {
         Image.Builder builder = Image.builder();
         builder.bitmap(bitmap);
@@ -266,7 +227,6 @@ public final class CreateSectionActivity extends BaseActivity {
 
     private void refreshImage(@NonNull Image image) {
         mImageView.setImageBitmap(image.getBitmap());
-
         mImageView.startAnimation(mFadeImageInAnimation);
     }
 
@@ -277,5 +237,66 @@ public final class CreateSectionActivity extends BaseActivity {
         mLengthView.setText(mSectionBuilder.length());
         mDurationView.setText(mSectionBuilder.duration());
         mDescriptionView.setText(mSectionBuilder.description());
+    }
+
+    private final class OnCreateImageObserver implements Observer<CompletableResult<Image>> {
+        @Override
+        public void onChanged(@Nullable CompletableResult<Image> result) {
+            switch (result.code()) {
+                case OK:
+                    onSuccess(result.getResult());
+                    break;
+                case ERROR:
+                    onCreateImageFailure(result.getThrowable());
+            }
+        }
+
+        private void onSuccess(@NonNull Image image) {
+            mSectionBuilder.imageId(image.getId());
+
+            refreshImage(image);
+        }
+    }
+
+    private final class OnCreateSectionObserver implements Observer<CompletableResult<Section>> {
+        @Override
+        public void onChanged(@Nullable CompletableResult<Section> result) {
+            switch (result.code()) {
+                case OK:
+                    onSuccess();
+                    break;
+                case ERROR:
+                    onFailure(result.getThrowable());
+            }
+        }
+
+        private void onFailure(@NonNull Throwable t) {
+            Log.w(TAG, t.getMessage(), t);
+
+            Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onCreateSection, Snackbar.LENGTH_LONG);
+            snackbar.setAction(R.string.action_retryCreateSection, view -> {
+                if (snackbar.isShown()) {
+                    snackbar.dismiss();
+                }
+
+                onCreateSectionClick();
+            });
+
+            snackbar.show();
+        }
+
+        private void onSuccess() {
+            setResult(RESULT_OK);
+            finish();
+        }
+    }
+
+    private final class OnGetImageObserver implements Observer<Image> {
+        @Override
+        public void onChanged(@Nullable Image image) {
+            if (image != null) {
+                refreshImage(image);
+            }
+        }
     }
 }
