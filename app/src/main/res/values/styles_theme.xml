@@ -1,48 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Rivers" parent="Theme.AppCompat.Light.DarkActionBar"/>
+    <style name="Theme.Rivers" parent="Theme.AppCompat"/>
 
-    <style name="Theme.Rivers.Blue.Dark.NoActionBar" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.Rivers.Blue.Dark" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/secondaryAccent</item>
     </style>
 
-    <style name="Theme.Rivers.Blue.Light.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/secondaryAccent</item>
+    <style name="Theme.Rivers.Blue.Dark.NoActionBar">
+        <item name="windowActionBar">false</item>
         <item name="windowActionModeOverlay">true</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Rivers.Red">
+    <style name="Theme.Rivers.Blue.Light" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/secondaryAccent</item>
+    </style>
+
+    <style name="Theme.Rivers.Blue.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Rivers.Red.Dark" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/primaryAccent</item>
     </style>
 
-    <style name="Theme.Rivers.Red.Dark"/>
-
-    <style name="Theme.Rivers.Red.Dark.NoActionBar" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/primaryAccent</item>
+    <style name="Theme.Rivers.Red.Dark.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Rivers.Red.Dark.NoActionBar.Translucent" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.Rivers.Red.Dark.NoActionBar.Translucent">
         <item name="android:windowTranslucentStatus">true</item>
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/primaryAccent</item>
-        <item name="windowActionModeOverlay">true</item>
     </style>
 
-    <style name="Theme.Rivers.Red.Light.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.Rivers.Red.Light" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/primaryAccent</item>
+    </style>
+
+    <style name="Theme.Rivers.Red.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
         <item name="windowActionModeOverlay">true</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="Theme.Rivers.Red.Light.NoActionBar.Popup">
