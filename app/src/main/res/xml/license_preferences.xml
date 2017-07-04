@@ -49,6 +49,12 @@
             android:data="https://github.com/JakeWharton/butterknife/blob/master/LICENSE.txt"/>
     </Preference>
     <Preference
+        android:title="@string/pref_title_com_mobsandgeeks_android_saripaar">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/ragunathjawahar/android-saripaar#license"/>
+    </Preference>
+    <Preference
         android:title="@string/pref_title_io_ractivex_rxjava2_rxandroid">
         <intent
             android:action="android.intent.action.VIEW"
