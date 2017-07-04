@@ -2,43 +2,55 @@
 <resources>
 
     <style name="TextAppearance.Rivers.Display" parent="TextAppearance.AppCompat.Display1">
-        <item name="android:textColorSecondary">@color/text_secondaryLight</item>
+        <item name="android:textColor">@color/text_secondaryLight</item>
         <item name="fontPath">fonts/Raleway-Regular.ttf</item>
         <item name="leading">40dp</item>
     </style>
 
     <style name="TextAppearance.Rivers.Headline" parent="TextAppearance.AppCompat.Headline">
-        <item name="android:textColorPrimary">@color/text_primaryLight</item>
+        <item name="android:textColor">@color/text_primaryLight</item>
         <item name="fontPath">fonts/Raleway-Regular.ttf</item>
         <item name="leading">32dp</item>
     </style>
 
     <style name="TextAppearance.Rivers.Headline.Medium" parent="TextAppearance.AppCompat.Headline">
-        <item name="android:textColorPrimary">@color/text_primaryLight</item>
+        <item name="android:textColor">@color/text_primaryLight</item>
         <item name="fontPath">fonts/Raleway-SemiBold.ttf</item>
         <item name="leading">32dp</item>
     </style>
 
     <style name="TextAppearance.Rivers.Subheading" parent="TextAppearance.AppCompat.Subhead">
-        <item name="android:textColorPrimary">@color/text_primaryLight</item>
+        <item name="android:textColor">@color/text_primaryLight</item>
         <item name="fontPath">fonts/OpenSans-Regular.ttf</item>
         <item name="leading">24dp</item>
     </style>
 
     <style name="TextAppearance.Rivers.Body" parent="TextAppearance.AppCompat.Body1">
-        <item name="android:textColorPrimary">@color/text_primaryLight</item>
+        <item name="android:textColor">@color/text_primaryLight</item>
         <item name="fontPath">fonts/OpenSans-Regular.ttf</item>
         <item name="leading">20dp</item>
     </style>
 
     <style name="TextAppearance.Rivers.Body.Medium" parent="TextAppearance.AppCompat.Body2">
-        <item name="android:textColorPrimary">@color/text_primaryLight</item>
+        <item name="android:textColor">@color/text_primaryLight</item>
         <item name="fontPath">fonts/OpenSans-SemiBold.ttf</item>
         <item name="leading">20dp</item>
     </style>
 
     <style name="TextAppearance.Rivers.Caption" parent="TextAppearance.AppCompat.Caption">
-        <item name="android:textColorSecondary">@color/text_secondaryLight</item>
+        <item name="android:textColor">@color/text_secondaryLight</item>
+        <item name="fontPath">fonts/Raleway-Regular.ttf</item>
+        <item name="leading">16dp</item>
+    </style>
+
+    <style name="TextAppearance.Rivers.Hint" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@color/text_teriaryLight</item>
+        <item name="fontPath">fonts/Raleway-Regular.ttf</item>
+        <item name="leading">16dp</item>
+    </style>
+
+    <style name="TextAppearance.Rivers.Error" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@color/error</item>
         <item name="fontPath">fonts/Raleway-Regular.ttf</item>
         <item name="leading">16dp</item>
     </style>

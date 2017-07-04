@@ -10,6 +10,8 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -29,8 +31,13 @@ import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
 import com.hjwylde.rivers.ui.util.SoftInput;
 import com.hjwylde.rivers.ui.viewModels.CreateSectionViewModel;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Length;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.io.IOException;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,16 +58,27 @@ public final class CreateSectionActivity extends BaseActivity {
     @BindView(R.id.image)
     ImageView mImageView;
     @BindView(R.id.title)
-    EditText mTitleView;
+    @NotEmpty(messageResId = R.string.error_titleEmpty)
+    @Length(max = 30, messageResId = R.string.error_titleTooLong)
+    TextInputEditText mTitleText;
+    @BindView(R.id.title_layout)
+    TextInputLayout mTitleLayout;
+    @NotEmpty(messageResId = R.string.error_subtitleEmpty)
+    @Length(max = 50, messageResId = R.string.error_subtitleTooLong)
     @BindView(R.id.subtitle)
-    EditText mSubtitleView;
+    TextInputEditText mSubtitleText;
+    @BindView(R.id.subtitle_layout)
+    TextInputLayout mSubtitleLayout;
     @BindView(R.id.grade)
-    EditText mGradeView;
+    EditText mGradeText;
     @BindView(R.id.length)
-    EditText mLengthView;
+    EditText mLengthText;
     @BindView(R.id.duration)
-    EditText mDurationView;
+    EditText mDurationText;
     Animation mFadeImageInAnimation;
+
+    private Validator mValidator;
+    private Validator.ValidationListener mValidationListener = new OnValidationListener();
 
     private CreateSectionViewModel mViewModel;
     private Observer<CompletableResult<Image>> mOnCreateImageObserver = new OnCreateImageObserver();
@@ -128,6 +146,9 @@ public final class CreateSectionActivity extends BaseActivity {
         ButterKnife.bind(this);
         mFadeImageInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
 
+        mValidator = new Validator(this);
+        mValidator.setValidationListener(mValidationListener);
+
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -182,11 +203,15 @@ public final class CreateSectionActivity extends BaseActivity {
 
     @OnTextChanged(R.id.subtitle)
     void onSubtitleTextChanged(@NonNull CharSequence text) {
+        mSubtitleLayout.setError(null);
+
         mSectionBuilder.subtitle(text.toString());
     }
 
     @OnTextChanged(R.id.title)
     void onTitleTextChanged(@NonNull CharSequence text) {
+        mTitleLayout.setError(null);
+
         mSectionBuilder.title(text.toString());
     }
 
@@ -200,7 +225,7 @@ public final class CreateSectionActivity extends BaseActivity {
     private void onCreateSectionClick() {
         SoftInput.hide(this);
 
-        mViewModel.createSection(mSectionBuilder).observe(this, mOnCreateSectionObserver);
+        mValidator.validate(true);
     }
 
     private void onImageSelected(@NonNull Bitmap bitmap) {
@@ -224,11 +249,11 @@ public final class CreateSectionActivity extends BaseActivity {
     }
 
     private void refreshSection() {
-        mTitleView.setText(mSectionBuilder.title());
-        mSubtitleView.setText(mSectionBuilder.subtitle());
-        mGradeView.setText(mSectionBuilder.grade());
-        mLengthView.setText(mSectionBuilder.length());
-        mDurationView.setText(mSectionBuilder.duration());
+        mTitleText.setText(mSectionBuilder.title());
+        mSubtitleText.setText(mSectionBuilder.subtitle());
+        mGradeText.setText(mSectionBuilder.grade());
+        mLengthText.setText(mSectionBuilder.length());
+        mDurationText.setText(mSectionBuilder.duration());
     }
 
     private final class OnCreateImageObserver implements Observer<CompletableResult<Image>> {
@@ -289,6 +314,25 @@ public final class CreateSectionActivity extends BaseActivity {
             if (image != null) {
                 refreshImage(image);
             }
+        }
+    }
+
+    private final class OnValidationListener implements Validator.ValidationListener {
+        @Override
+        public void onValidationFailed(List<ValidationError> errors) {
+            for (ValidationError error : errors) {
+                TextInputEditText editText = (TextInputEditText) error.getView();
+                TextInputLayout layout = (TextInputLayout) editText.getParent().getParent();
+
+                String message = error.getCollatedErrorMessage(CreateSectionActivity.this);
+
+                layout.setError(message);
+            }
+        }
+
+        @Override
+        public void onValidationSucceeded() {
+            mViewModel.createSection(mSectionBuilder).observe(CreateSectionActivity.this, mOnCreateSectionObserver);
         }
     }
 }
