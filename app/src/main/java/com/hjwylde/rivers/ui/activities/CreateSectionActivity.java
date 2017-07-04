@@ -58,13 +58,13 @@ public final class CreateSectionActivity extends BaseActivity {
     @BindView(R.id.image)
     ImageView mImageView;
     @BindView(R.id.title)
-    @NotEmpty
-    @Length(max = 30)
+    @NotEmpty(messageResId = R.string.error_titleEmpty)
+    @Length(max = 30, messageResId = R.string.error_titleTooLong)
     TextInputEditText mTitleText;
     @BindView(R.id.title_layout)
     TextInputLayout mTitleLayout;
-    @NotEmpty
-    @Length(max = 50)
+    @NotEmpty(messageResId = R.string.error_subtitleEmpty)
+    @Length(max = 50, messageResId = R.string.error_subtitleTooLong)
     @BindView(R.id.subtitle)
     TextInputEditText mSubtitleText;
     @BindView(R.id.subtitle_layout)
