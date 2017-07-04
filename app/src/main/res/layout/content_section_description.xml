@@ -7,7 +7,7 @@
 
     <com.actinarium.aligned.TextView
         android:id="@+id/title"
-        style="@style/TextAppearance.Rivers.Headline"
+        style="@style/TextAppearance.Rivers.Headline.Medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"

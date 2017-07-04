@@ -5,7 +5,9 @@
     <color name="primaryAccent">#FF5252</color>
     <color name="primaryAccentLight">#FF8A80</color>
 
+    <color name="secondaryAccent">#448AFF</color>
+    <color name="secondaryAccentLight">#82B1FF</color>
+
     <!-- TODO (hjw): is this secondary? how many uses? -->
     <color name="secondary">#607D8B</color>
-    <color name="secondaryAccent">#448AFF</color>
 </resources>

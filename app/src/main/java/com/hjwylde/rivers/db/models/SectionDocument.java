@@ -265,7 +265,6 @@ public final class SectionDocument extends BaseDocument implements Section {
             requireNonNull(title());
             requireNonNull(subtitle());
             requireNonNull(putIn());
-            requireNonNull(imageId());
         }
     }
 }

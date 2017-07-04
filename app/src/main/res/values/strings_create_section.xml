@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_activity_createSection"></string>
+    <string name="title_activity_createSection"/>
 
     <string name="action_createSection">CREATE</string>
     <string name="action_retryCreateSection">Retry</string>
@@ -8,10 +8,9 @@
     <string name="error_onCreateSection">Unable to create</string>
     <string name="error_onCreateImage">Unable to save image</string>
 
-    <string name="hint_title">River name</string>
-    <string name="hint_subtitle">Section</string>
-    <string name="hint_grade"/>
-    <string name="hint_length"/>
-    <string name="hint_duration"/>
-    <string name="hint_description">Description</string>
+    <string name="hint_title">Kaituna</string>
+    <string name="hint_subtitle">Okere Falls</string>
+    <string name="hint_grade">3+</string>
+    <string name="hint_length">1.1 km</string>
+    <string name="hint_duration">30-60 mins</string>
 </resources>

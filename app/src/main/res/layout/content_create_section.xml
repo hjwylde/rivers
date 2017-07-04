@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:background="@android:color/white"
               android:orientation="vertical">
 
     <FrameLayout
@@ -18,7 +19,7 @@
         <FrameLayout
             android:layout_width="@dimen/cameraSize"
             android:layout_height="@dimen/cameraSize"
-            android:layout_gravity="bottom|right"
+            android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/camera_margin">
 
             <ImageView
@@ -39,7 +40,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary"
         android:orientation="vertical"
         android:paddingBottom="@dimen/text_marginVertical"
         android:paddingLeft="@dimen/text_marginHorizontal"
@@ -48,13 +48,12 @@
 
         <EditText
             android:id="@+id/title"
-            style="@style/TextAppearance.Rivers.Display"
+            style="@style/TextAppearance.Rivers.Headline.Medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_title"
             android:inputType="text|textCapWords"
-            android:textColor="@color/text_primaryDark"
-            android:theme="@style/Widget.Rivers.TextInputLayout.Dark"/>
+            android:textColor="@color/text_secondaryLight"/>
 
         <EditText
             android:id="@+id/subtitle"
@@ -63,110 +62,96 @@
             android:layout_height="wrap_content"
             android:hint="@string/hint_subtitle"
             android:inputType="text|textCapSentences"
-            android:nextFocusDown="@+id/grade"
-            android:textColor="@color/text_primaryDark"
-            android:theme="@style/Widget.Rivers.TextInputLayout.Dark"/>
+            android:nextFocusDown="@+id/grade"/>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/text_marginVertical"
-        android:layout_marginLeft="@dimen/text_marginHorizontal"
-        android:layout_marginRight="@dimen/text_marginHorizontal"
-        android:layout_marginTop="@dimen/text_marginVertical"
-        android:baselineAligned="false">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/grade"
-                style="@style/TextAppearance.Rivers.Headline"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:hint="@string/hint_grade"
-                android:inputType="text|textNoSuggestions"
-                android:nextFocusDown="@+id/length"/>
-
-            <com.actinarium.aligned.TextView
-                style="@style/TextAppearance.Rivers.Caption"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFeatureSettings="smcp"
-                android:text="@string/label_grade"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/text_gutter"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/length"
-                style="@style/TextAppearance.Rivers.Headline"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:hint="@string/hint_length"
-                android:inputType="text|textNoSuggestions"
-                android:nextFocusDown="@+id/duration"/>
-
-            <com.actinarium.aligned.TextView
-                style="@style/TextAppearance.Rivers.Caption"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFeatureSettings="smcp"
-                android:text="@string/label_length"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/text_gutter"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/duration"
-                style="@style/TextAppearance.Rivers.Headline"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:hint="@string/hint_duration"
-                android:inputType="text|textNoSuggestions"/>
-
-            <com.actinarium.aligned.TextView
-                style="@style/TextAppearance.Rivers.Caption"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFeatureSettings="smcp"
-                android:text="@string/label_duration"/>
-        </LinearLayout>
     </LinearLayout>
 
     <include layout="@layout/divider"/>
 
-    <EditText
-        android:id="@+id/description"
-        style="@style/TextAppearance.Rivers.Body"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/text_marginVertical"
-        android:layout_marginLeft="@dimen/text_marginHorizontal"
-        android:layout_marginRight="@dimen/text_marginHorizontal"
-        android:layout_marginTop="@dimen/text_marginVertical"
-        android:hint="@string/hint_description"
-        android:inputType="textMultiLine|textCapSentences"/>
+        android:paddingBottom="@dimen/infoContainerMargin"
+        android:paddingTop="@dimen/infoContainerMargin">
 
+        <LinearLayout
+            android:id="@+id/grade_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:baselineAligned="false"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/iconSize"
+                android:layout_height="@dimen/iconSize"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/iconMargin"
+                android:src="@drawable/ic_shield_outline"
+                android:tint="@color/text_primaryLight"/>
+
+            <EditText
+                android:id="@+id/grade"
+                style="@style/TextAppearance.Rivers.Body.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/hint_grade"
+                android:inputType="text|textNoSuggestions"
+                android:minEms="2"
+                android:nextFocusDown="@+id/length"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/length_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/iconSize"
+                android:layout_height="@dimen/iconSize"
+                android:layout_marginEnd="@dimen/iconMargin"
+                android:src="@drawable/ic_ruler"
+                android:tint="@color/text_primaryLight"/>
+
+            <EditText
+                android:id="@+id/length"
+                style="@style/TextAppearance.Rivers.Body.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/hint_length"
+                android:inputType="text|textNoSuggestions"
+                android:minEms="2"
+                android:nextFocusDown="@+id/duration"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/duration_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/iconSize"
+                android:layout_height="@dimen/iconSize"
+                android:layout_marginEnd="@dimen/iconMargin"
+                android:src="@drawable/ic_timer"
+                android:tint="@color/text_primaryLight"/>
+
+            <EditText
+                android:id="@+id/duration"
+                style="@style/TextAppearance.Rivers.Body.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/hint_duration"
+                android:inputType="text|textNoSuggestions"
+                android:minEms="2"/>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

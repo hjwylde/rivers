@@ -3,10 +3,10 @@
 
     <style name="Widget.Rivers.TextInputLayout" parent="Widget.Design.TextInputLayout"/>
 
-    <style name="Widget.Rivers.TextInputLayout.Dark" parent="Widget.Design.TextInputLayout">
-        <item name="android:textColorHint">@color/text_secondaryDark</item>
+    <style name="Widget.Rivers.TextInputLayout.Dark">
+        <item name="android:textColorHint">@color/text_teriaryDark</item>
         <item name="colorAccent">@color/primaryAccentLight</item>
-        <item name="colorControlNormal">@color/text_secondaryDark</item>
+        <item name="colorControlNormal">@color/text_teriaryDark</item>
         <item name="colorControlActivated">@color/primaryAccentLight</item>
         <item name="colorControlHighlight">@color/primaryAccentLight</item>
     </style>
