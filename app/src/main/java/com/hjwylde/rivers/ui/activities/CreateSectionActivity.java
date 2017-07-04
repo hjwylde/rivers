@@ -29,8 +29,13 @@ import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
 import com.hjwylde.rivers.ui.util.SoftInput;
 import com.hjwylde.rivers.ui.viewModels.CreateSectionViewModel;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Length;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.io.IOException;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +56,11 @@ public final class CreateSectionActivity extends BaseActivity {
     @BindView(R.id.image)
     ImageView mImageView;
     @BindView(R.id.title)
+    @NotEmpty
+    @Length(max = 30)
     EditText mTitleView;
+    @NotEmpty
+    @Length(max = 50)
     @BindView(R.id.subtitle)
     EditText mSubtitleView;
     @BindView(R.id.grade)
@@ -61,6 +70,9 @@ public final class CreateSectionActivity extends BaseActivity {
     @BindView(R.id.duration)
     EditText mDurationView;
     Animation mFadeImageInAnimation;
+
+    private Validator mValidator;
+    private Validator.ValidationListener mValidationListener = new OnValidationListener();
 
     private CreateSectionViewModel mViewModel;
     private Observer<CompletableResult<Image>> mOnCreateImageObserver = new OnCreateImageObserver();
@@ -127,6 +139,9 @@ public final class CreateSectionActivity extends BaseActivity {
 
         ButterKnife.bind(this);
         mFadeImageInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
+
+        mValidator = new Validator(this);
+        mValidator.setValidationListener(mValidationListener);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -200,7 +215,7 @@ public final class CreateSectionActivity extends BaseActivity {
     private void onCreateSectionClick() {
         SoftInput.hide(this);
 
-        mViewModel.createSection(mSectionBuilder).observe(this, mOnCreateSectionObserver);
+        mValidator.validate(true);
     }
 
     private void onImageSelected(@NonNull Bitmap bitmap) {
@@ -289,6 +304,23 @@ public final class CreateSectionActivity extends BaseActivity {
             if (image != null) {
                 refreshImage(image);
             }
+        }
+    }
+
+    private final class OnValidationListener implements Validator.ValidationListener {
+        @Override
+        public void onValidationFailed(List<ValidationError> errors) {
+            for (ValidationError error : errors) {
+                EditText editTextView = (EditText) error.getView();
+                String message = error.getCollatedErrorMessage(CreateSectionActivity.this);
+
+                editTextView.setError(message);
+            }
+        }
+
+        @Override
+        public void onValidationSucceeded() {
+            mViewModel.createSection(mSectionBuilder).observe(CreateSectionActivity.this, mOnCreateSectionObserver);
         }
     }
 }
