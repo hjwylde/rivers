@@ -10,6 +10,8 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -58,11 +60,15 @@ public final class CreateSectionActivity extends BaseActivity {
     @BindView(R.id.title)
     @NotEmpty
     @Length(max = 30)
-    EditText mTitleView;
+    TextInputEditText mTitleView;
+    @BindView(R.id.title_layout)
+    TextInputLayout mTitleLayout;
     @NotEmpty
     @Length(max = 50)
     @BindView(R.id.subtitle)
-    EditText mSubtitleView;
+    TextInputEditText mSubtitleView;
+    @BindView(R.id.subtitle_layout)
+    TextInputLayout mSubtitleLayout;
     @BindView(R.id.grade)
     EditText mGradeView;
     @BindView(R.id.length)
@@ -197,11 +203,15 @@ public final class CreateSectionActivity extends BaseActivity {
 
     @OnTextChanged(R.id.subtitle)
     void onSubtitleTextChanged(@NonNull CharSequence text) {
+        mSubtitleLayout.setError(null);
+
         mSectionBuilder.subtitle(text.toString());
     }
 
     @OnTextChanged(R.id.title)
     void onTitleTextChanged(@NonNull CharSequence text) {
+        mTitleLayout.setError(null);
+
         mSectionBuilder.title(text.toString());
     }
 
@@ -311,10 +321,12 @@ public final class CreateSectionActivity extends BaseActivity {
         @Override
         public void onValidationFailed(List<ValidationError> errors) {
             for (ValidationError error : errors) {
-                EditText editTextView = (EditText) error.getView();
+                TextInputEditText editText = (TextInputEditText) error.getView();
+                TextInputLayout layout = (TextInputLayout) editText.getParent().getParent();
+
                 String message = error.getCollatedErrorMessage(CreateSectionActivity.this);
 
-                editTextView.setError(message);
+                layout.setError(message);
             }
         }
 

@@ -42,4 +42,14 @@
         <item name="fontPath">fonts/Raleway-Regular.ttf</item>
         <item name="leading">16dp</item>
     </style>
+
+    <style name="TextAppearance.Rivers.Hint" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColorSecondary">@color/text_teriaryLight</item>
+        <item name="fontPath">fonts/Raleway-Regular.ttf</item>
+    </style>
+
+    <style name="TextAppearance.Rivers.Error" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textColorSecondary">@color/error</item>
+        <item name="fontPath">fonts/Raleway-Regular.ttf</item>
+    </style>
 </resources>
