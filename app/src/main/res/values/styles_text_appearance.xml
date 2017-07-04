@@ -46,10 +46,12 @@
     <style name="TextAppearance.Rivers.Hint" parent="TextAppearance.AppCompat.Caption">
         <item name="android:textColor">@color/text_teriaryLight</item>
         <item name="fontPath">fonts/Raleway-Regular.ttf</item>
+        <item name="leading">16dp</item>
     </style>
 
     <style name="TextAppearance.Rivers.Error" parent="TextAppearance.AppCompat.Caption">
         <item name="android:textColor">@color/error</item>
         <item name="fontPath">fonts/Raleway-Regular.ttf</item>
+        <item name="leading">16dp</item>
     </style>
 </resources>
