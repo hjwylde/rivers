@@ -5,12 +5,12 @@
                                                  android:id="@+id/root_container"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
+                                                 android:background="@color/background"
                                                  tools:context="com.hjwylde.rivers.ui.activities.CreateSectionActivity">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white">
+        android:layout_height="match_parent">
 
         <include layout="@layout/content_create_section"/>
 

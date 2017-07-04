@@ -6,4 +6,6 @@
     <string name="action_retryUpdateSection">Retry</string>
 
     <string name="error_onUpdateSection">Unable to save</string>
+
+    <string name="hint_description">Description</string>
 </resources>

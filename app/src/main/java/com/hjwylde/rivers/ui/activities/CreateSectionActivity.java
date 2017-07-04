@@ -60,8 +60,6 @@ public final class CreateSectionActivity extends BaseActivity {
     EditText mLengthView;
     @BindView(R.id.duration)
     EditText mDurationView;
-    @BindView(R.id.description)
-    EditText mDescriptionView;
     Animation mFadeImageInAnimation;
 
     private CreateSectionViewModel mViewModel;
@@ -167,11 +165,6 @@ public final class CreateSectionActivity extends BaseActivity {
         new SelectImageDialog.Builder(this).create().show();
     }
 
-    @OnTextChanged(R.id.description)
-    void onDescriptionTextChanged(@NonNull CharSequence text) {
-        mSectionBuilder.description(text.toString());
-    }
-
     @OnTextChanged(R.id.duration)
     void onDurationTextChanged(@NonNull CharSequence text) {
         mSectionBuilder.duration(text.toString());
@@ -236,7 +229,6 @@ public final class CreateSectionActivity extends BaseActivity {
         mGradeView.setText(mSectionBuilder.grade());
         mLengthView.setText(mSectionBuilder.length());
         mDurationView.setText(mSectionBuilder.duration());
-        mDescriptionView.setText(mSectionBuilder.description());
     }
 
     private final class OnCreateImageObserver implements Observer<CompletableResult<Image>> {
