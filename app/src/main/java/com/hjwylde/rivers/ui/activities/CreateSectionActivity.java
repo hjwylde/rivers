@@ -60,21 +60,21 @@ public final class CreateSectionActivity extends BaseActivity {
     @BindView(R.id.title)
     @NotEmpty
     @Length(max = 30)
-    TextInputEditText mTitleView;
+    TextInputEditText mTitleText;
     @BindView(R.id.title_layout)
     TextInputLayout mTitleLayout;
     @NotEmpty
     @Length(max = 50)
     @BindView(R.id.subtitle)
-    TextInputEditText mSubtitleView;
+    TextInputEditText mSubtitleText;
     @BindView(R.id.subtitle_layout)
     TextInputLayout mSubtitleLayout;
     @BindView(R.id.grade)
-    EditText mGradeView;
+    EditText mGradeText;
     @BindView(R.id.length)
-    EditText mLengthView;
+    EditText mLengthText;
     @BindView(R.id.duration)
-    EditText mDurationView;
+    EditText mDurationText;
     Animation mFadeImageInAnimation;
 
     private Validator mValidator;
@@ -249,11 +249,11 @@ public final class CreateSectionActivity extends BaseActivity {
     }
 
     private void refreshSection() {
-        mTitleView.setText(mSectionBuilder.title());
-        mSubtitleView.setText(mSectionBuilder.subtitle());
-        mGradeView.setText(mSectionBuilder.grade());
-        mLengthView.setText(mSectionBuilder.length());
-        mDurationView.setText(mSectionBuilder.duration());
+        mTitleText.setText(mSectionBuilder.title());
+        mSubtitleText.setText(mSectionBuilder.subtitle());
+        mGradeText.setText(mSectionBuilder.grade());
+        mLengthText.setText(mSectionBuilder.length());
+        mDurationText.setText(mSectionBuilder.duration());
     }
 
     private final class OnCreateImageObserver implements Observer<CompletableResult<Image>> {
