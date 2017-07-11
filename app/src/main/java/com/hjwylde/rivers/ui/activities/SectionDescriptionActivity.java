@@ -29,6 +29,7 @@ public final class SectionDescriptionActivity extends BaseActivity {
     TextView mDescriptionView;
 
     private SectionDescriptionViewModel mViewModel;
+    // TODO (hjw): remove this
     private Observer<Section> mOnGetSectionObserver = new OnGetSectionObserver();
 
     private String mSectionId;

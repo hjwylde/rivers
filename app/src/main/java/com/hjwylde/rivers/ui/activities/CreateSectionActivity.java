@@ -24,7 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.hjwylde.lifecycle.CompletableResult;
+import com.hjwylde.reactivex.observers.LifecycleBoundSingleObserver;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
@@ -81,8 +81,7 @@ public final class CreateSectionActivity extends BaseActivity {
     private Validator.ValidationListener mValidationListener = new OnValidationListener();
 
     private CreateSectionViewModel mViewModel;
-    private Observer<CompletableResult<Image>> mOnCreateImageObserver = new OnCreateImageObserver();
-    private Observer<CompletableResult<Section>> mOnCreateSectionObserver = new OnCreateSectionObserver();
+    // TODO (hjw): remove these
     private Observer<Image> mOnGetImageObserver = new OnGetImageObserver();
 
     private Section.DefaultBuilder mSectionBuilder = Section.builder();
@@ -232,7 +231,8 @@ public final class CreateSectionActivity extends BaseActivity {
         Image.Builder builder = Image.builder();
         builder.bitmap(bitmap);
 
-        mViewModel.createImage(builder).observe(this, mOnCreateImageObserver);
+        mViewModel.createImage(builder)
+                .subscribe(new OnCreateImageObserver());
     }
 
     private void refreshFocus() {
@@ -256,38 +256,31 @@ public final class CreateSectionActivity extends BaseActivity {
         mDurationText.setText(mSectionBuilder.duration());
     }
 
-    private final class OnCreateImageObserver implements Observer<CompletableResult<Image>> {
-        @Override
-        public void onChanged(@Nullable CompletableResult<Image> result) {
-            switch (result.code()) {
-                case OK:
-                    onSuccess(result.getResult());
-                    break;
-                case ERROR:
-                    onCreateImageFailure(result.getThrowable());
-            }
+    private final class OnCreateImageObserver extends LifecycleBoundSingleObserver<Image> {
+        public OnCreateImageObserver() {
+            super(CreateSectionActivity.this);
         }
 
-        private void onSuccess(@NonNull Image image) {
+        @Override
+        public void onError(Throwable t) {
+            onCreateImageFailure(t);
+        }
+
+        @Override
+        public void onSuccess(Image image) {
             mSectionBuilder.imageId(image.getId());
 
             refreshImage(image);
         }
     }
 
-    private final class OnCreateSectionObserver implements Observer<CompletableResult<Section>> {
-        @Override
-        public void onChanged(@Nullable CompletableResult<Section> result) {
-            switch (result.code()) {
-                case OK:
-                    onSuccess();
-                    break;
-                case ERROR:
-                    onFailure(result.getThrowable());
-            }
+    private final class OnCreateSectionObserver extends LifecycleBoundSingleObserver<Section> {
+        public OnCreateSectionObserver() {
+            super(CreateSectionActivity.this);
         }
 
-        private void onFailure(@NonNull Throwable t) {
+        @Override
+        public void onError(Throwable t) {
             Log.w(TAG, t.getMessage(), t);
 
             Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onCreateSection, Snackbar.LENGTH_LONG);
@@ -302,7 +295,8 @@ public final class CreateSectionActivity extends BaseActivity {
             snackbar.show();
         }
 
-        private void onSuccess() {
+        @Override
+        public void onSuccess(Section section) {
             setResult(RESULT_OK);
             finish();
         }
@@ -332,7 +326,8 @@ public final class CreateSectionActivity extends BaseActivity {
 
         @Override
         public void onValidationSucceeded() {
-            mViewModel.createSection(mSectionBuilder).observe(CreateSectionActivity.this, mOnCreateSectionObserver);
+            mViewModel.createSection(mSectionBuilder)
+                    .subscribe(new OnCreateSectionObserver());
         }
     }
 }
