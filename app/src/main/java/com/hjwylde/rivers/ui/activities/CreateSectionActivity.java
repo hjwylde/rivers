@@ -33,7 +33,6 @@ import com.hjwylde.rivers.ui.util.SoftInput;
 import com.hjwylde.rivers.ui.viewModels.CreateSectionViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.Length;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.io.IOException;
@@ -59,12 +58,10 @@ public final class CreateSectionActivity extends BaseActivity {
     ImageView mImageView;
     @BindView(R.id.title)
     @NotEmpty(messageResId = R.string.error_titleEmpty)
-    @Length(max = 30, messageResId = R.string.error_titleTooLong)
     TextInputEditText mTitleText;
     @BindView(R.id.title_layout)
     TextInputLayout mTitleLayout;
     @NotEmpty(messageResId = R.string.error_subtitleEmpty)
-    @Length(max = 50, messageResId = R.string.error_subtitleTooLong)
     @BindView(R.id.subtitle)
     TextInputEditText mSubtitleText;
     @BindView(R.id.subtitle_layout)
@@ -203,6 +200,7 @@ public final class CreateSectionActivity extends BaseActivity {
     @OnTextChanged(R.id.subtitle)
     void onSubtitleTextChanged(@NonNull CharSequence text) {
         mSubtitleLayout.setError(null);
+        mSubtitleLayout.setErrorEnabled(false);
 
         mSectionBuilder.subtitle(text.toString());
     }
@@ -210,6 +208,7 @@ public final class CreateSectionActivity extends BaseActivity {
     @OnTextChanged(R.id.title)
     void onTitleTextChanged(@NonNull CharSequence text) {
         mTitleLayout.setError(null);
+        mTitleLayout.setErrorEnabled(false);
 
         mSectionBuilder.title(text.toString());
     }
