@@ -22,7 +22,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
-import com.hjwylde.rivers.ui.util.ClusterRenderer;
+import com.hjwylde.rivers.ui.util.SectionClusterRenderer;
 import com.hjwylde.rivers.ui.util.SectionMarker;
 
 import java.util.Collection;
@@ -99,13 +99,13 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         mClusterManager.setOnClusterItemClickListener(this);
         mClusterManager.setOnClusterClickListener(this);
 
-        final ClusterRenderer<SectionMarker> clusterRenderer = new ClusterRenderer<>(getContext(), mMap, mClusterManager);
-        clusterRenderer.setMinClusterSize(1);
-        mClusterManager.setRenderer(clusterRenderer);
+        final SectionClusterRenderer<SectionMarker> sectionClusterRenderer = new SectionClusterRenderer<>(getContext(), mMap, mClusterManager);
+        sectionClusterRenderer.setMinClusterSize(1);
+        mClusterManager.setRenderer(sectionClusterRenderer);
 
         mMap.setOnCameraIdleListener(() -> {
             mClusterManager.onCameraIdle();
-            clusterRenderer.onCameraIdle();
+            sectionClusterRenderer.onCameraIdle();
         });
         mMap.setOnMarkerClickListener(mOnMarkerClickListener);
         mMap.setOnMapClickListener(new DefaultOnMapClickListener());
@@ -144,7 +144,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         mClusterManager.clearItems();
 
         for (Section section : sections) {
-            mClusterManager.addItem(new SectionMarker(section.getId(), section.getPutIn()));
+            mClusterManager.addItem(new SectionMarker(section.getId(), section.getPutIn(), Section.Grade.from(section.getGrade())));
         }
 
         mClusterManager.cluster();
