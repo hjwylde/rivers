@@ -2,14 +2,9 @@
 <resources>
     <color name="primary">#607d8b</color>
     <color name="primaryDark">#455A64</color>
-    <color name="primaryAccent">#448AFF</color>
-    <color name="primaryAccentLight">#82B1FF</color>
 
     <color name="secondaryAccent">#40C4FF</color>
     <color name="secondaryAccentLight">#80D8FF</color>
 
     <color name="error">#D32F2F</color>
-
-    <!-- TODO (hjw): is this secondary? how many uses? -->
-    <color name="secondary">#607D8B</color>
 </resources>

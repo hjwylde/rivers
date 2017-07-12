@@ -11,7 +11,7 @@
         android:id="@+id/image_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/secondary">
+        android:background="@color/primary">
 
         <ImageView
             android:id="@+id/image"

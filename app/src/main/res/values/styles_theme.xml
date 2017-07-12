@@ -30,7 +30,7 @@
     <style name="Theme.Rivers.Red.Dark" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/primaryAccent</item>
+        <item name="colorAccent">@color/secondaryAccent</item>
     </style>
 
     <style name="Theme.Rivers.Red.Dark.NoActionBar">
@@ -46,7 +46,7 @@
     <style name="Theme.Rivers.Red.Light" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/primaryAccent</item>
+        <item name="colorAccent">@color/secondaryAccent</item>
     </style>
 
     <style name="Theme.Rivers.Red.Light.NoActionBar">
