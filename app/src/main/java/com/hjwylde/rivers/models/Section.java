@@ -40,9 +40,9 @@ public interface Section {
         Unknown, I, II, III, IV, V;
 
         public static Grade from(String range) {
-            char[] grades = range.replaceAll("[^1-5]", "").toCharArray();
+            if (range != null && range.matches(".*[1-5].*")) {
+                char[] grades = range.replaceAll("[^1-5]", "").toCharArray();
 
-            if (grades.length != 0) {
                 return from(grades[0]);
             } else {
                 return Unknown;
