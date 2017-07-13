@@ -81,9 +81,7 @@ public final class SectionDescriptionActivity extends BaseActivity {
 
         @Override
         public void onNext(Section section) {
-            if (section != null) {
-                refreshSection(section);
-            }
+            refreshSection(section);
         }
 
         private void refreshSection(@NonNull Section section) {

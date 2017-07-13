@@ -1,6 +1,5 @@
 package com.hjwylde.rivers.ui.activities;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -24,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.hjwylde.reactivex.observers.LifecycleBoundMaybeObserver;
 import com.hjwylde.reactivex.observers.LifecycleBoundSingleObserver;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.models.Image;
@@ -78,8 +77,6 @@ public final class CreateSectionActivity extends BaseActivity {
     private Validator.ValidationListener mValidationListener = new OnValidationListener();
 
     private CreateSectionViewModel mViewModel;
-    // TODO (hjw): remove these
-    private Observer<Image> mOnGetImageObserver = new OnGetImageObserver();
 
     private Section.DefaultBuilder mSectionBuilder = Section.builder();
 
@@ -173,7 +170,8 @@ public final class CreateSectionActivity extends BaseActivity {
         super.onStart();
 
         if (mSectionBuilder.imageId() != null) {
-            mViewModel.getImage(mSectionBuilder.imageId()).observe(this, mOnGetImageObserver);
+            mViewModel.getImage(mSectionBuilder.imageId())
+                    .subscribe(new OnGetImageObserver());
         }
     }
 
@@ -301,12 +299,24 @@ public final class CreateSectionActivity extends BaseActivity {
         }
     }
 
-    private final class OnGetImageObserver implements Observer<Image> {
+    private final class OnGetImageObserver extends LifecycleBoundMaybeObserver<Image> {
+        public OnGetImageObserver() {
+            super(CreateSectionActivity.this);
+        }
+
         @Override
-        public void onChanged(@Nullable Image image) {
-            if (image != null) {
-                refreshImage(image);
-            }
+        public void onComplete() {
+            // Do nothing
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            // TODO (hjw)
+        }
+
+        @Override
+        public void onSuccess(Image image) {
+            refreshImage(image);
         }
     }
 
