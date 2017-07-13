@@ -1,12 +1,12 @@
 package com.hjwylde.rivers.ui.activities;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.actinarium.aligned.TextView;
+import com.hjwylde.reactivex.observers.LifecycleBoundObserver;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.viewModels.SectionDescriptionViewModel;
@@ -29,8 +29,6 @@ public final class SectionDescriptionActivity extends BaseActivity {
     TextView mDescriptionView;
 
     private SectionDescriptionViewModel mViewModel;
-    // TODO (hjw): remove this
-    private Observer<Section> mOnGetSectionObserver = new OnGetSectionObserver();
 
     private String mSectionId;
 
@@ -62,12 +60,27 @@ public final class SectionDescriptionActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
 
-        mViewModel.getSection(mSectionId).observe(this, mOnGetSectionObserver);
+        mViewModel.getSection(mSectionId)
+                .subscribe(new OnGetSectionObserver());
     }
 
-    private final class OnGetSectionObserver implements Observer<Section> {
+    private final class OnGetSectionObserver extends LifecycleBoundObserver<Section> {
+        public OnGetSectionObserver() {
+            super(SectionDescriptionActivity.this);
+        }
+
         @Override
-        public void onChanged(@Nullable Section section) {
+        public void onComplete() {
+            // Do nothing
+        }
+
+        @Override
+        public void onError(Throwable t) {
+            // TODO (hjw)
+        }
+
+        @Override
+        public void onNext(Section section) {
             if (section != null) {
                 refreshSection(section);
             }

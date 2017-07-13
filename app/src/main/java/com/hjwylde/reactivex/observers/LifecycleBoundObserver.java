@@ -6,7 +6,7 @@ import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.support.annotation.NonNull;
 
-import io.reactivex.SingleObserver;
+import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 import static com.hjwylde.rivers.util.Preconditions.requireNull;
@@ -14,13 +14,13 @@ import static com.hjwylde.rivers.util.Preconditions.requireTrue;
 import static java.util.Objects.requireNonNull;
 
 @SuppressWarnings("unused")
-abstract public class LifecycleBoundSingleObserver<T> implements LifecycleObserver, SingleObserver<T> {
+abstract public class LifecycleBoundObserver<T> implements Observer<T>, LifecycleObserver {
     private Lifecycle mLifecycle;
 
     private Disposable mDisposable;
     private Lifecycle.State mBirth;
 
-    public LifecycleBoundSingleObserver(@NonNull LifecycleOwner owner) {
+    public LifecycleBoundObserver(@NonNull LifecycleOwner owner) {
         mLifecycle = owner.getLifecycle();
         mLifecycle.addObserver(this);
     }
