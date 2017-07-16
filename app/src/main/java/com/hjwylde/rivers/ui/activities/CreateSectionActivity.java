@@ -254,7 +254,7 @@ public final class CreateSectionActivity extends BaseActivity {
     }
 
     private final class OnCreateImageObserver extends LifecycleBoundSingleObserver<Image> {
-        public OnCreateImageObserver() {
+        OnCreateImageObserver() {
             super(CreateSectionActivity.this);
         }
 
@@ -272,7 +272,7 @@ public final class CreateSectionActivity extends BaseActivity {
     }
 
     private final class OnCreateSectionObserver extends LifecycleBoundSingleObserver<Section> {
-        public OnCreateSectionObserver() {
+        OnCreateSectionObserver() {
             super(CreateSectionActivity.this);
         }
 
@@ -300,7 +300,7 @@ public final class CreateSectionActivity extends BaseActivity {
     }
 
     private final class OnGetImageObserver extends LifecycleBoundMaybeObserver<Image> {
-        public OnGetImageObserver() {
+        OnGetImageObserver() {
             super(CreateSectionActivity.this);
         }
 
@@ -310,7 +310,7 @@ public final class CreateSectionActivity extends BaseActivity {
         }
 
         @Override
-        public void onError(Throwable e) {
+        public void onError(Throwable t) {
             // TODO (hjw)
         }
 

@@ -65,7 +65,7 @@ public final class SectionDescriptionActivity extends BaseActivity {
     }
 
     private final class OnGetSectionObserver extends LifecycleBoundObserver<Section> {
-        public OnGetSectionObserver() {
+        OnGetSectionObserver() {
             super(SectionDescriptionActivity.this);
         }
 
