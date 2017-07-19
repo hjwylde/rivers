@@ -290,9 +290,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         Toolbar sectionToolbar = findTById(R.id.sectionToolbar);
         sectionToolbar.inflateMenu(R.menu.menu_section);
         sectionToolbar.setNavigationIcon(R.drawable.ic_arrow_left);
-        sectionToolbar.setNavigationOnClickListener(view -> {
-            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        });
+        sectionToolbar.setNavigationOnClickListener(view -> mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN));
         sectionToolbar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.ic_dots_vertical));
         sectionToolbar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
@@ -331,9 +329,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
                 float collapsedY = bottomSheet.getHeight() - mBottomSheetBehavior.getPeekHeight();
                 float expandedRatio = (collapsedY - bottomSheet.getY()) / collapsedY;
 
-                int imageHeight = (int) Math.max(mExpandedHeight * expandedRatio, 0);
-
-                mImageContainer.getLayoutParams().height = (int) imageHeight;
+                mImageContainer.getLayoutParams().height = (int) Math.max(mExpandedHeight * expandedRatio, 0);
                 mImageContainer.requestLayout();
             }
 
@@ -357,9 +353,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         });
 
         final View titleContainer = findViewById(R.id.title_container);
-        titleContainer.post(() -> {
-            mBottomSheetBehavior.setPeekHeight(titleContainer.getHeight());
-        });
+        titleContainer.post(() -> mBottomSheetBehavior.setPeekHeight(titleContainer.getHeight()));
 
         mPresenter = new MapsPresenter(this, RiversApplication.getRepository());
     }

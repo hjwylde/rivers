@@ -33,7 +33,6 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
     private static final int ACCESS_LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     private GoogleMap mMap;
-    private UiSettings mUiSettings;
     private ClusterManager<SectionMarker> mClusterManager;
     private DefaultOnMarkerClickListener mOnMarkerClickListener = new DefaultOnMarkerClickListener();
 
@@ -91,9 +90,9 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         mMap = googleMap;
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.maps_style));
 
-        mUiSettings = mMap.getUiSettings();
-        mUiSettings.setMapToolbarEnabled(false);
-        mUiSettings.setMyLocationButtonEnabled(false);
+        UiSettings uiSettings = mMap.getUiSettings();
+        uiSettings.setMapToolbarEnabled(false);
+        uiSettings.setMyLocationButtonEnabled(false);
 
         mClusterManager = new ClusterManager<>(getContext(), mMap);
         mClusterManager.setOnClusterItemClickListener(this);

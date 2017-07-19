@@ -8,8 +8,4 @@
     <string name="info_onSectionEdited">Saved</string>
 
     <string name="error_onDeleteSection">Unable to delete</string>
-
-    <string name="label_grade">Grade</string>
-    <string name="label_length">Length</string>
-    <string name="label_duration">Time</string>
 </resources>

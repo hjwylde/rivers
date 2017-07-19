@@ -8,13 +8,11 @@
     <string name="error_onCreateSection">Unable to create</string>
     <string name="error_onCreateImage">Unable to save image</string>
     <string name="error_titleEmpty">What\'s the rivers name?</string>
-    <string name="error_titleTooLong">Too long</string>
     <string name="error_subtitleEmpty">What\'s the sections name?</string>
-    <string name="error_subtitleTooLong">Too long</string>
 
     <string name="hint_title">Kaituna</string>
     <string name="hint_subtitle">Okere Falls</string>
     <string name="hint_grade">3+</string>
     <string name="hint_length">1.1 km</string>
-    <string name="hint_duration">30-60 mins</string>
+    <string name="hint_duration">30&#8211;60 mins</string>
 </resources>
