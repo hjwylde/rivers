@@ -74,7 +74,6 @@ public final class CreateSectionActivity extends BaseActivity {
     Animation mFadeImageInAnimation;
 
     private Validator mValidator;
-    private Validator.ValidationListener mValidationListener = new OnValidationListener();
 
     private CreateSectionViewModel mViewModel;
 
@@ -140,7 +139,7 @@ public final class CreateSectionActivity extends BaseActivity {
         mFadeImageInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
 
         mValidator = new Validator(this);
-        mValidator.setValidationListener(mValidationListener);
+        mValidator.setValidationListener(new OnValidationListener());
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -150,8 +149,6 @@ public final class CreateSectionActivity extends BaseActivity {
         if (savedInstanceState != null) {
             mSectionBuilder = (Section.DefaultBuilder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
             refreshSection();
-
-            refreshFocus();
         } else {
             LatLng putIn = getIntent().getParcelableExtra(INTENT_PUT_IN);
             mSectionBuilder.putIn(putIn);
@@ -230,14 +227,6 @@ public final class CreateSectionActivity extends BaseActivity {
 
         mViewModel.createImage(builder)
                 .subscribe(new OnCreateImageObserver());
-    }
-
-    private void refreshFocus() {
-        View view = getCurrentFocus();
-        if (view instanceof EditText) {
-            EditText editText = (EditText) view;
-            editText.setSelection(editText.getText().length());
-        }
     }
 
     private void refreshImage(@NonNull Image image) {

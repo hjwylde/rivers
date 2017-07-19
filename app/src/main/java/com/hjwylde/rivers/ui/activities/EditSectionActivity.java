@@ -9,8 +9,9 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,11 +28,19 @@ import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.dialogs.SelectImageDialog;
-import com.hjwylde.rivers.ui.util.NullTextWatcher;
 import com.hjwylde.rivers.ui.util.SoftInput;
 import com.hjwylde.rivers.ui.viewModels.EditSectionViewModel;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.io.IOException;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 public final class EditSectionActivity extends BaseActivity {
     public static final String INTENT_SECTION_BUILDER = "sectionBuilder";
@@ -41,13 +50,35 @@ public final class EditSectionActivity extends BaseActivity {
 
     private static final String STATE_SECTION_BUILDER = "sectionBuilder";
 
+    @BindView(R.id.root_container)
+    View mRootView;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.image)
+    ImageView mImageView;
+    @BindView(R.id.title)
+    @NotEmpty(messageResId = R.string.error_titleEmpty)
+    TextInputEditText mTitleText;
+    @BindView(R.id.title_layout)
+    TextInputLayout mTitleLayout;
+    @NotEmpty(messageResId = R.string.error_subtitleEmpty)
+    @BindView(R.id.subtitle)
+    TextInputEditText mSubtitleText;
+    @BindView(R.id.subtitle_layout)
+    TextInputLayout mSubtitleLayout;
+    @BindView(R.id.grade)
+    EditText mGradeText;
+    @BindView(R.id.length)
+    EditText mLengthText;
+    @BindView(R.id.duration)
+    EditText mDurationText;
+    Animation mFadeImageInAnimation;
+
+    private Validator mValidator;
+
     private EditSectionViewModel mViewModel;
 
     private Section.DefaultBuilder mSectionBuilder;
-
-    public void onCameraClick(@NonNull View view) {
-        new SelectImageDialog.Builder(this).create().show();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -107,53 +138,19 @@ public final class EditSectionActivity extends BaseActivity {
 
         setContentView(R.layout.activity_edit_section);
 
-        Toolbar toolbar = findTById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        ButterKnife.bind(this);
+        mFadeImageInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
+
+        mValidator = new Validator(this);
+        mValidator.setValidationListener(new OnValidationListener());
+
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mViewModel = ViewModelProviders.of(this).get(EditSectionViewModel.class);
 
-        findEditTextById(R.id.title).addTextChangedListener(new NullTextWatcher() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mSectionBuilder.title(editable.toString());
-            }
-        });
-        findEditTextById(R.id.subtitle).addTextChangedListener(new NullTextWatcher() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mSectionBuilder.subtitle(editable.toString());
-            }
-        });
-        findEditTextById(R.id.grade).addTextChangedListener(new NullTextWatcher() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mSectionBuilder.grade(editable.toString());
-            }
-        });
-        findEditTextById(R.id.length).addTextChangedListener(new NullTextWatcher() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mSectionBuilder.length(editable.toString());
-            }
-        });
-        findEditTextById(R.id.duration).addTextChangedListener(new NullTextWatcher() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mSectionBuilder.duration(editable.toString());
-            }
-        });
-        findEditTextById(R.id.description).addTextChangedListener(new NullTextWatcher() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mSectionBuilder.description(editable.toString());
-            }
-        });
-
         mSectionBuilder = (Section.DefaultBuilder) getIntent().getSerializableExtra(INTENT_SECTION_BUILDER);
         refreshSection();
-
-        refreshFocus();
     }
 
     @Override
@@ -162,8 +159,6 @@ public final class EditSectionActivity extends BaseActivity {
 
         mSectionBuilder = (Section.DefaultBuilder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
         refreshSection();
-
-        refreshFocus();
     }
 
     @Override
@@ -183,10 +178,40 @@ public final class EditSectionActivity extends BaseActivity {
         }
     }
 
-    private void animateImageIn(@NonNull View imageView) {
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
+    @OnClick(R.id.camera)
+    void onCameraClick() {
+        new SelectImageDialog.Builder(this).create().show();
+    }
 
-        imageView.startAnimation(animation);
+    @OnTextChanged(R.id.duration)
+    void onDurationTextChanged(@NonNull CharSequence text) {
+        mSectionBuilder.duration(text.toString());
+    }
+
+    @OnTextChanged(R.id.grade)
+    void onGradeTextChanged(@NonNull CharSequence text) {
+        mSectionBuilder.grade(text.toString());
+    }
+
+    @OnTextChanged(R.id.length)
+    void onLengthTextChanged(@NonNull CharSequence text) {
+        mSectionBuilder.length(text.toString());
+    }
+
+    @OnTextChanged(R.id.subtitle)
+    void onSubtitleTextChanged(@NonNull CharSequence text) {
+        mSubtitleLayout.setError(null);
+        mSubtitleLayout.setErrorEnabled(false);
+
+        mSectionBuilder.subtitle(text.toString());
+    }
+
+    @OnTextChanged(R.id.title)
+    void onTitleTextChanged(@NonNull CharSequence text) {
+        mTitleLayout.setError(null);
+        mTitleLayout.setErrorEnabled(false);
+
+        mSectionBuilder.title(text.toString());
     }
 
     private void onImageSelected(Bitmap bitmap) {
@@ -200,32 +225,20 @@ public final class EditSectionActivity extends BaseActivity {
     private void onUpdateSectionClick() {
         SoftInput.hide(this);
 
-        mViewModel.updateSection(mSectionBuilder)
-                .subscribe(new OnUpdateSectionObserver());
-    }
-
-    private void refreshFocus() {
-        View view = getCurrentFocus();
-        if (view instanceof EditText) {
-            EditText editText = (EditText) view;
-            editText.setSelection(editText.getText().length());
-        }
+        mValidator.validate(true);
     }
 
     private void refreshImage(@NonNull Image image) {
-        ImageView imageView = findTById(R.id.image);
-        imageView.setImageBitmap(image.getBitmap());
-
-        animateImageIn(imageView);
+        mImageView.setImageBitmap(image.getBitmap());
+        mImageView.startAnimation(mFadeImageInAnimation);
     }
 
     private void refreshSection() {
-        findTextViewById(R.id.title).setText(mSectionBuilder.title());
-        findTextViewById(R.id.subtitle).setText(mSectionBuilder.subtitle());
-        findTextViewById(R.id.grade).setText(mSectionBuilder.grade());
-        findTextViewById(R.id.length).setText(mSectionBuilder.length());
-        findTextViewById(R.id.duration).setText(mSectionBuilder.duration());
-        findTextViewById(R.id.description).setText(mSectionBuilder.description());
+        mTitleText.setText(mSectionBuilder.title());
+        mSubtitleText.setText(mSectionBuilder.subtitle());
+        mGradeText.setText(mSectionBuilder.grade());
+        mLengthText.setText(mSectionBuilder.length());
+        mDurationText.setText(mSectionBuilder.duration());
     }
 
     private final class OnCreateImageObserver extends LifecycleBoundSingleObserver<Image> {
@@ -237,7 +250,7 @@ public final class EditSectionActivity extends BaseActivity {
         public void onError(Throwable t) {
             Log.w(TAG, t.getMessage(), t);
 
-            Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onCreateImage, Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onCreateImage, Snackbar.LENGTH_LONG);
             snackbar.show();
         }
 
@@ -279,7 +292,7 @@ public final class EditSectionActivity extends BaseActivity {
         public void onError(Throwable t) {
             Log.w(TAG, t.getMessage(), t);
 
-            final Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.error_onUpdateSection, Snackbar.LENGTH_LONG);
+            final Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onUpdateSection, Snackbar.LENGTH_LONG);
             snackbar.setAction(R.string.action_retryUpdateSection, view -> {
                 if (snackbar.isShown()) {
                     snackbar.dismiss();
@@ -298,6 +311,26 @@ public final class EditSectionActivity extends BaseActivity {
 
             setResult(RESULT_OK, data);
             finish();
+        }
+    }
+
+    private final class OnValidationListener implements Validator.ValidationListener {
+        @Override
+        public void onValidationFailed(List<ValidationError> errors) {
+            for (ValidationError error : errors) {
+                TextInputEditText editText = (TextInputEditText) error.getView();
+                TextInputLayout layout = (TextInputLayout) editText.getParent().getParent();
+
+                String message = error.getCollatedErrorMessage(EditSectionActivity.this);
+
+                layout.setError(message);
+            }
+        }
+
+        @Override
+        public void onValidationSucceeded() {
+            mViewModel.updateSection(mSectionBuilder)
+                    .subscribe(new OnUpdateSectionObserver());
         }
     }
 }
