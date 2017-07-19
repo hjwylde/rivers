@@ -6,6 +6,6 @@
     <item android:bottom="50dp">
         <bitmap
             android:gravity="center"
-            android:src="@drawable/bm_launcher"/>
+            android:src="@drawable/bm_splash_screen"/>
     </item>
 </layer-list>
