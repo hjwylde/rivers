@@ -3,68 +3,44 @@
 
     <style name="Theme.Rivers" parent="Theme.AppCompat"/>
 
-    <style name="Theme.Rivers.Blue.Dark" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Theme.Rivers.Dark" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/secondaryAccent</item>
     </style>
 
-    <style name="Theme.Rivers.Blue.Dark.NoActionBar">
+    <style name="Theme.Rivers.Dark.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="Theme.Rivers.Dark.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Rivers.Blue.Light" parent="Theme.AppCompat.Light">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/secondaryAccent</item>
-    </style>
-
-    <style name="Theme.Rivers.Blue.Light.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.Rivers.Red.Dark" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/primaryAccent</item>
-    </style>
-
-    <style name="Theme.Rivers.Red.Dark.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.Rivers.Red.Dark.NoActionBar.Translucent">
+    <style name="Theme.Rivers.Dark.NoActionBar.Translucent">
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
-    <style name="Theme.Rivers.Red.Light" parent="Theme.AppCompat.Light">
+    <style name="Theme.Rivers.Light" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
-        <item name="colorAccent">@color/primaryAccent</item>
+        <item name="colorAccent">@color/secondaryAccent</item>
     </style>
 
-    <style name="Theme.Rivers.Red.Light.NoActionBar">
+    <style name="Theme.Rivers.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Rivers.Red.Light.NoActionBar.Popup">
+    <style name="Theme.Rivers.Light.NoActionBar.Popup">
         <item name="android:homeAsUpIndicator">@drawable/ic_cross</item>
     </style>
+
+    <style name="Theme.Rivers.Light.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="Theme.Rivers.SplashScreen">
         <item name="colorPrimaryDark">@color/scrim40</item>
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
-
-    <style name="Theme.Rivers.Dark.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-
-    <style name="Theme.Rivers.Light.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 </resources>

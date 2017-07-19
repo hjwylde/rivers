@@ -50,11 +50,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_marginVertical"
-            app:counterEnabled="true"
-            app:counterMaxLength="30"
-            app:counterOverflowTextAppearance="@style/TextAppearance.Rivers.Error"
-            app:counterTextAppearance="@style/TextAppearance.Rivers.Hint"
-            app:errorEnabled="true"
             app:errorTextAppearance="@style/TextAppearance.Rivers.Error"
             app:hintEnabled="false">
 
@@ -73,11 +68,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/text_marginVertical"
-            app:counterEnabled="true"
-            app:counterMaxLength="50"
-            app:counterOverflowTextAppearance="@style/TextAppearance.Rivers.Error"
-            app:counterTextAppearance="@style/TextAppearance.Rivers.Hint"
-            app:errorEnabled="true"
             app:errorTextAppearance="@style/TextAppearance.Rivers.Error"
             app:hintEnabled="false">
 

@@ -25,7 +25,6 @@
         android:layout_width="@dimen/markerSize"
         android:layout_height="@dimen/markerSize"
         android:layout_gravity="center|top"
-        android:tint="@color/primaryAccent"
         android:visibility="invisible"
         app:layout_anchor="@id/center_marker_anchor"
         app:layout_anchorGravity="top|center_horizontal"

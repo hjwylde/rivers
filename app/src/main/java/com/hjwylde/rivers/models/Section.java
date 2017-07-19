@@ -36,6 +36,37 @@ public interface Section {
     @NonNull
     String getTitle();
 
+    enum Grade {
+        Unknown, I, II, III, IV, V;
+
+        public static Grade from(String range) {
+            if (range != null && range.matches(".*[1-5].*")) {
+                char[] grades = range.replaceAll("[^1-5]", "").toCharArray();
+
+                return from(grades[0]);
+            } else {
+                return Unknown;
+            }
+        }
+
+        public static Grade from(char grade) {
+            switch (grade) {
+                case '1':
+                    return I;
+                case '2':
+                    return II;
+                case '3':
+                    return III;
+                case '4':
+                    return IV;
+                case '5':
+                    return V;
+            }
+
+            return Unknown;
+        }
+    }
+
     interface Builder {
         String description();
 

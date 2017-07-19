@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="grade_1">#FFFF00</color>
+    <color name="grade_2">#FFD740</color>
+    <color name="grade_3">#FFAB40</color>
+    <color name="grade_4">#FF6E40</color>
+    <color name="grade_5">#FF5252</color>
+    <color name="grade_unknown">#FFFFFF</color>
+</resources>

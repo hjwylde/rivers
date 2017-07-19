@@ -1,6 +1,5 @@
 package com.hjwylde.rivers.ui.activities;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -24,7 +22,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.hjwylde.lifecycle.CompletableResult;
+import com.hjwylde.reactivex.observers.LifecycleBoundMaybeObserver;
+import com.hjwylde.reactivex.observers.LifecycleBoundSingleObserver;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
@@ -33,7 +32,6 @@ import com.hjwylde.rivers.ui.util.SoftInput;
 import com.hjwylde.rivers.ui.viewModels.CreateSectionViewModel;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
-import com.mobsandgeeks.saripaar.annotation.Length;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
 import java.io.IOException;
@@ -59,12 +57,10 @@ public final class CreateSectionActivity extends BaseActivity {
     ImageView mImageView;
     @BindView(R.id.title)
     @NotEmpty(messageResId = R.string.error_titleEmpty)
-    @Length(max = 30, messageResId = R.string.error_titleTooLong)
     TextInputEditText mTitleText;
     @BindView(R.id.title_layout)
     TextInputLayout mTitleLayout;
     @NotEmpty(messageResId = R.string.error_subtitleEmpty)
-    @Length(max = 50, messageResId = R.string.error_subtitleTooLong)
     @BindView(R.id.subtitle)
     TextInputEditText mSubtitleText;
     @BindView(R.id.subtitle_layout)
@@ -78,12 +74,8 @@ public final class CreateSectionActivity extends BaseActivity {
     Animation mFadeImageInAnimation;
 
     private Validator mValidator;
-    private Validator.ValidationListener mValidationListener = new OnValidationListener();
 
     private CreateSectionViewModel mViewModel;
-    private Observer<CompletableResult<Image>> mOnCreateImageObserver = new OnCreateImageObserver();
-    private Observer<CompletableResult<Section>> mOnCreateSectionObserver = new OnCreateSectionObserver();
-    private Observer<Image> mOnGetImageObserver = new OnGetImageObserver();
 
     private Section.DefaultBuilder mSectionBuilder = Section.builder();
 
@@ -147,7 +139,7 @@ public final class CreateSectionActivity extends BaseActivity {
         mFadeImageInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
 
         mValidator = new Validator(this);
-        mValidator.setValidationListener(mValidationListener);
+        mValidator.setValidationListener(new OnValidationListener());
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -157,8 +149,6 @@ public final class CreateSectionActivity extends BaseActivity {
         if (savedInstanceState != null) {
             mSectionBuilder = (Section.DefaultBuilder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
             refreshSection();
-
-            refreshFocus();
         } else {
             LatLng putIn = getIntent().getParcelableExtra(INTENT_PUT_IN);
             mSectionBuilder.putIn(putIn);
@@ -177,7 +167,8 @@ public final class CreateSectionActivity extends BaseActivity {
         super.onStart();
 
         if (mSectionBuilder.imageId() != null) {
-            mViewModel.getImage(mSectionBuilder.imageId()).observe(this, mOnGetImageObserver);
+            mViewModel.getImage(mSectionBuilder.imageId())
+                    .subscribe(new OnGetImageObserver());
         }
     }
 
@@ -204,6 +195,7 @@ public final class CreateSectionActivity extends BaseActivity {
     @OnTextChanged(R.id.subtitle)
     void onSubtitleTextChanged(@NonNull CharSequence text) {
         mSubtitleLayout.setError(null);
+        mSubtitleLayout.setErrorEnabled(false);
 
         mSectionBuilder.subtitle(text.toString());
     }
@@ -211,6 +203,7 @@ public final class CreateSectionActivity extends BaseActivity {
     @OnTextChanged(R.id.title)
     void onTitleTextChanged(@NonNull CharSequence text) {
         mTitleLayout.setError(null);
+        mTitleLayout.setErrorEnabled(false);
 
         mSectionBuilder.title(text.toString());
     }
@@ -232,15 +225,8 @@ public final class CreateSectionActivity extends BaseActivity {
         Image.Builder builder = Image.builder();
         builder.bitmap(bitmap);
 
-        mViewModel.createImage(builder).observe(this, mOnCreateImageObserver);
-    }
-
-    private void refreshFocus() {
-        View view = getCurrentFocus();
-        if (view instanceof EditText) {
-            EditText editText = (EditText) view;
-            editText.setSelection(editText.getText().length());
-        }
+        mViewModel.createImage(builder)
+                .subscribe(new OnCreateImageObserver());
     }
 
     private void refreshImage(@NonNull Image image) {
@@ -256,38 +242,31 @@ public final class CreateSectionActivity extends BaseActivity {
         mDurationText.setText(mSectionBuilder.duration());
     }
 
-    private final class OnCreateImageObserver implements Observer<CompletableResult<Image>> {
-        @Override
-        public void onChanged(@Nullable CompletableResult<Image> result) {
-            switch (result.code()) {
-                case OK:
-                    onSuccess(result.getResult());
-                    break;
-                case ERROR:
-                    onCreateImageFailure(result.getThrowable());
-            }
+    private final class OnCreateImageObserver extends LifecycleBoundSingleObserver<Image> {
+        OnCreateImageObserver() {
+            super(CreateSectionActivity.this);
         }
 
-        private void onSuccess(@NonNull Image image) {
+        @Override
+        public void onError(Throwable t) {
+            onCreateImageFailure(t);
+        }
+
+        @Override
+        public void onSuccess(Image image) {
             mSectionBuilder.imageId(image.getId());
 
             refreshImage(image);
         }
     }
 
-    private final class OnCreateSectionObserver implements Observer<CompletableResult<Section>> {
-        @Override
-        public void onChanged(@Nullable CompletableResult<Section> result) {
-            switch (result.code()) {
-                case OK:
-                    onSuccess();
-                    break;
-                case ERROR:
-                    onFailure(result.getThrowable());
-            }
+    private final class OnCreateSectionObserver extends LifecycleBoundSingleObserver<Section> {
+        OnCreateSectionObserver() {
+            super(CreateSectionActivity.this);
         }
 
-        private void onFailure(@NonNull Throwable t) {
+        @Override
+        public void onError(Throwable t) {
             Log.w(TAG, t.getMessage(), t);
 
             Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onCreateSection, Snackbar.LENGTH_LONG);
@@ -302,18 +281,31 @@ public final class CreateSectionActivity extends BaseActivity {
             snackbar.show();
         }
 
-        private void onSuccess() {
+        @Override
+        public void onSuccess(Section section) {
             setResult(RESULT_OK);
             finish();
         }
     }
 
-    private final class OnGetImageObserver implements Observer<Image> {
+    private final class OnGetImageObserver extends LifecycleBoundMaybeObserver<Image> {
+        OnGetImageObserver() {
+            super(CreateSectionActivity.this);
+        }
+
         @Override
-        public void onChanged(@Nullable Image image) {
-            if (image != null) {
-                refreshImage(image);
-            }
+        public void onComplete() {
+            // Do nothing
+        }
+
+        @Override
+        public void onError(Throwable t) {
+            // TODO (hjw)
+        }
+
+        @Override
+        public void onSuccess(Image image) {
+            refreshImage(image);
         }
     }
 
@@ -332,7 +324,8 @@ public final class CreateSectionActivity extends BaseActivity {
 
         @Override
         public void onValidationSucceeded() {
-            mViewModel.createSection(mSectionBuilder).observe(CreateSectionActivity.this, mOnCreateSectionObserver);
+            mViewModel.createSection(mSectionBuilder)
+                    .subscribe(new OnCreateSectionObserver());
         }
     }
 }

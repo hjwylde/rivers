@@ -12,7 +12,7 @@ import io.reactivex.Maybe;
 import io.reactivex.Single;
 import io.reactivex.subjects.MaybeSubject;
 
-public final class CreateSectionViewModel extends ViewModel {
+public final class EditSectionViewModel extends ViewModel {
     private final Repository mRepository = RiversApplication.getRepository();
 
     private MaybeSubject<Image> mImageSubject = MaybeSubject.create();
@@ -23,11 +23,6 @@ public final class CreateSectionViewModel extends ViewModel {
     }
 
     @NonNull
-    public Single<Section> createSection(@NonNull Section.Builder builder) {
-        return mRepository.createSection(builder);
-    }
-
-    @NonNull
     public Maybe<Image> getImage(@NonNull String id) {
         if (mImageSubject.getValue() == null || !mImageSubject.getValue().getId().equals(id)) {
             mRepository.getImage(id)
@@ -35,6 +30,11 @@ public final class CreateSectionViewModel extends ViewModel {
         }
 
         return mImageSubject;
+    }
+
+    @NonNull
+    public Single<Section> updateSection(@NonNull Section.Builder builder) {
+        return mRepository.updateSection(builder);
     }
 
     @Override
