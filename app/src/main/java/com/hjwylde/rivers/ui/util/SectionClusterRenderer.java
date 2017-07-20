@@ -23,7 +23,7 @@ import com.hjwylde.rivers.R;
 import static java.util.Objects.requireNonNull;
 
 public final class SectionClusterRenderer<T extends SectionMarker> extends DefaultClusterRenderer<T> implements GoogleMap.OnCameraIdleListener {
-    private static final float MAX_MAP_ZOOM = 10.0f;
+    public static final float MAX_MAP_ZOOM = 10.0f;
 
     private Context mContext;
     private GoogleMap mMap;
@@ -53,7 +53,7 @@ public final class SectionClusterRenderer<T extends SectionMarker> extends Defau
 
     @Override
     protected boolean shouldRenderAsCluster(Cluster<T> cluster) {
-        return super.shouldRenderAsCluster(cluster) && mCurrentMapZoom <= MAX_MAP_ZOOM;
+        return super.shouldRenderAsCluster(cluster) && mCurrentMapZoom < MAX_MAP_ZOOM;
     }
 
     @NonNull
