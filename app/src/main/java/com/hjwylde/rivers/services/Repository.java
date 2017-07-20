@@ -12,8 +12,6 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public interface Repository {
-    // TODO (hjw): more generic return types
-
     @NonNull
     Single<Image> createImage(@NonNull Image.Builder builder);
 

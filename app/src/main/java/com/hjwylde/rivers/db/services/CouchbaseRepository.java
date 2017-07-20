@@ -28,7 +28,8 @@ import io.reactivex.Single;
 import static java.util.Objects.requireNonNull;
 
 public final class CouchbaseRepository implements Repository {
-    // TODO (hjw): move logic inside reactivex components and enable disposing of resources / cancelling actions
+    // TODO (hjw): move logic inside reactivex components and ensure the actions are not started
+    // until the component is subscribed to
 
     @NonNull
     private final Database mDatabase;

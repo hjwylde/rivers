@@ -3,7 +3,6 @@ package com.hjwylde.rivers.ui.contracts;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.util.SectionSuggestion;
 
@@ -15,25 +14,11 @@ public interface MapsContract {
 
         void createSection(@NonNull LatLng putIn);
 
-        void onDeleteSectionFailure(@NonNull Throwable t);
-
-        void onDeleteSectionSuccess();
-
-        void onGetImageFailure(@NonNull Throwable t);
-
-        void onGetSectionFailure(@NonNull Throwable t);
-
-        void onGetSectionSuccess(@NonNull Section section);
-
         void onGetSectionSuggestionsFailure(@NonNull Throwable t);
-
-        void refreshImage();
 
         void refreshMap();
 
         void selectSection(@NonNull String id);
-
-        void setImage(@NonNull Image image);
 
         void setSectionSuggestions(@NonNull List<SectionSuggestion> sectionSuggestions);
 
@@ -41,12 +26,6 @@ public interface MapsContract {
     }
 
     interface Presenter extends BaseContract.Presenter {
-        void deleteSection(@NonNull Section section);
-
-        void getImage(@NonNull String id);
-
-        void getSection(@NonNull String id);
-
         void getSectionSuggestions(@NonNull String query);
 
         void getSections();

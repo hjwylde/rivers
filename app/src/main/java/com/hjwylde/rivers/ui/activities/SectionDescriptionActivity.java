@@ -19,6 +19,8 @@ import static java.util.Objects.requireNonNull;
 public final class SectionDescriptionActivity extends BaseActivity {
     public static final String INTENT_SECTION_ID = "sectionId";
 
+    private static final String TAG = SectionDescriptionActivity.class.getSimpleName();
+
     private static final String STATE_SECTION_ID = "sectionId";
 
     @BindView(R.id.title)
@@ -75,12 +77,13 @@ public final class SectionDescriptionActivity extends BaseActivity {
         }
 
         @Override
-        public void onError(Throwable t) {
-            // TODO (hjw)
+        public void onError(@NonNull Throwable t) {
+            // This should never happen
+            throw new RuntimeException(t);
         }
 
         @Override
-        public void onNext(Section section) {
+        public void onNext(@NonNull Section section) {
             refreshSection(section);
         }
 

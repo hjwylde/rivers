@@ -60,7 +60,11 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_title"
                 android:inputType="text|textCapWords"
-                android:textColor="@color/text_secondaryLight"/>
+                android:nextFocusForward="@+id/subtitle"
+                android:textColor="@color/text_secondaryLight">
+
+                <requestFocus/>
+            </android.support.design.widget.TextInputEditText>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -77,8 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_subtitle"
-                android:inputType="text|textCapSentences"
-                android:nextFocusDown="@+id/grade"/>
+                android:inputType="text|textCapSentences"/>
         </android.support.design.widget.TextInputLayout>
 
         <include layout="@layout/divider"/>

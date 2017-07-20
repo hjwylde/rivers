@@ -2,7 +2,6 @@ package com.hjwylde.rivers.ui.presenters;
 
 import android.support.annotation.NonNull;
 
-import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.services.Repository;
 import com.hjwylde.rivers.ui.contracts.MapsContract;
 import com.hjwylde.rivers.ui.util.SectionQuery;
@@ -25,36 +24,6 @@ public final class MapsPresenter implements MapsContract.Presenter {
     public MapsPresenter(@NonNull MapsContract.View view, @NonNull Repository repository) {
         mView = requireNonNull(view);
         mRepository = requireNonNull(repository);
-    }
-
-    @Override
-    public void deleteSection(@NonNull Section section) {
-        Disposable disposable = mRepository.deleteSection(section)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mView::onDeleteSectionSuccess, mView::onDeleteSectionFailure);
-
-        mDisposables.add(disposable);
-    }
-
-    @Override
-    public void getImage(@NonNull String id) {
-        Disposable disposable = mRepository.getImage(id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(image -> {
-                    mView.setImage(image);
-                    mView.refreshImage();
-                }, mView::onGetImageFailure);
-
-        mDisposables.add(disposable);
-    }
-
-    @Override
-    public void getSection(@NonNull String id) {
-        Disposable disposable = mRepository.getSection(id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mView::onGetSectionSuccess, mView::onGetSectionFailure);
-
-        mDisposables.add(disposable);
     }
 
     @Override
