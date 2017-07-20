@@ -248,12 +248,12 @@ public final class CreateSectionActivity extends BaseActivity {
         }
 
         @Override
-        public void onError(Throwable t) {
+        public void onError(@NonNull Throwable t) {
             onCreateImageFailure(t);
         }
 
         @Override
-        public void onSuccess(Image image) {
+        public void onSuccess(@NonNull Image image) {
             mSectionBuilder.imageId(image.getId());
 
             refreshImage(image);
@@ -266,7 +266,7 @@ public final class CreateSectionActivity extends BaseActivity {
         }
 
         @Override
-        public void onError(Throwable t) {
+        public void onError(@NonNull Throwable t) {
             Log.w(TAG, t.getMessage(), t);
 
             Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onCreateSection, Snackbar.LENGTH_LONG);
@@ -282,7 +282,7 @@ public final class CreateSectionActivity extends BaseActivity {
         }
 
         @Override
-        public void onSuccess(Section section) {
+        public void onSuccess(@NonNull Section section) {
             setResult(RESULT_OK);
             finish();
         }
@@ -299,12 +299,13 @@ public final class CreateSectionActivity extends BaseActivity {
         }
 
         @Override
-        public void onError(Throwable t) {
-            // TODO (hjw)
+        public void onError(@NonNull Throwable t) {
+            // This should never happen
+            throw new RuntimeException(t);
         }
 
         @Override
-        public void onSuccess(Image image) {
+        public void onSuccess(@NonNull Image image) {
             refreshImage(image);
         }
     }

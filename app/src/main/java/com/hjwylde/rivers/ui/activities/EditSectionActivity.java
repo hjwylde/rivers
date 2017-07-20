@@ -44,7 +44,6 @@ import butterknife.OnTextChanged;
 
 public final class EditSectionActivity extends BaseActivity {
     public static final String INTENT_SECTION_BUILDER = "sectionBuilder";
-    public static final String RESULT_SECTION_ID = "sectionId";
 
     private static final String TAG = EditSectionActivity.class.getSimpleName();
 
@@ -127,7 +126,7 @@ public final class EditSectionActivity extends BaseActivity {
                 } catch (IOException e) {
                     Log.w(TAG, e.getMessage(), e);
 
-                    // TODO (hjw): report
+                    // TODO (hjw): display an error to the user
                 }
         }
     }
@@ -247,7 +246,7 @@ public final class EditSectionActivity extends BaseActivity {
         }
 
         @Override
-        public void onError(Throwable t) {
+        public void onError(@NonNull Throwable t) {
             Log.w(TAG, t.getMessage(), t);
 
             Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onCreateImage, Snackbar.LENGTH_LONG);
@@ -255,7 +254,7 @@ public final class EditSectionActivity extends BaseActivity {
         }
 
         @Override
-        public void onSuccess(Image image) {
+        public void onSuccess(@NonNull Image image) {
             mSectionBuilder.imageId(image.getId());
 
             refreshImage(image);
@@ -273,12 +272,14 @@ public final class EditSectionActivity extends BaseActivity {
         }
 
         @Override
-        public void onError(Throwable t) {
-            // TODO (hjw)
+        public void onError(@NonNull Throwable t) {
+            Log.w(TAG, t.getMessage(), t);
+
+            // TODO (hjw): display a warning to the user
         }
 
         @Override
-        public void onSuccess(Image image) {
+        public void onSuccess(@NonNull Image image) {
             refreshImage(image);
         }
     }
@@ -289,7 +290,7 @@ public final class EditSectionActivity extends BaseActivity {
         }
 
         @Override
-        public void onError(Throwable t) {
+        public void onError(@NonNull Throwable t) {
             Log.w(TAG, t.getMessage(), t);
 
             final Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onUpdateSection, Snackbar.LENGTH_LONG);
@@ -305,18 +306,15 @@ public final class EditSectionActivity extends BaseActivity {
         }
 
         @Override
-        public void onSuccess(Section section) {
-            Intent data = new Intent();
-            data.putExtra(RESULT_SECTION_ID, section.getId());
-
-            setResult(RESULT_OK, data);
+        public void onSuccess(@NonNull Section section) {
+            setResult(RESULT_OK);
             finish();
         }
     }
 
     private final class OnValidationListener implements Validator.ValidationListener {
         @Override
-        public void onValidationFailed(List<ValidationError> errors) {
+        public void onValidationFailed(@NonNull List<ValidationError> errors) {
             for (ValidationError error : errors) {
                 TextInputEditText editText = (TextInputEditText) error.getView();
                 TextInputLayout layout = (TextInputLayout) editText.getParent().getParent();
