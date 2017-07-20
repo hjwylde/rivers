@@ -28,7 +28,7 @@ public final class MapsPresenter implements MapsContract.Presenter {
 
     @Override
     public void getSectionSuggestions(@NonNull String query) {
-        if (query.length() <= 2) {
+        if (query.isEmpty()) {
             mView.setSectionSuggestions(new ArrayList<>());
             return;
         }

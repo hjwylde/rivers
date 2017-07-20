@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -26,6 +27,8 @@ import com.hjwylde.rivers.ui.util.SectionClusterRenderer;
 import com.hjwylde.rivers.ui.util.SectionMarker;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
@@ -37,6 +40,16 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
     private DefaultOnMarkerClickListener mOnMarkerClickListener = new DefaultOnMarkerClickListener();
 
     private MapsContract.View mView;
+
+    private Map<String, SectionMarker> mSectionMarkers = new HashMap<>();
+
+    public void animateCameraToSection(@NonNull String sectionId, @NonNull GoogleMap.CancelableCallback cancelableCallback) {
+        LatLng position = mSectionMarkers.get(sectionId).getPosition();
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(position, SectionClusterRenderer.MAX_MAP_ZOOM);
+
+        // TODO (hjw): select the duration based on distance from current camera location
+        mMap.animateCamera(update, 2000, cancelableCallback);
+    }
 
     public void disableOnMarkerClickListener() {
         mOnMarkerClickListener.disable();
@@ -140,10 +153,14 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         }
 
         mMap.clear();
+        mSectionMarkers.clear();
         mClusterManager.clearItems();
 
         for (Section section : sections) {
-            mClusterManager.addItem(new SectionMarker(section.getId(), section.getPutIn(), Section.Grade.from(section.getGrade())));
+            SectionMarker marker = new SectionMarker(section.getId(), section.getPutIn(), Section.Grade.from(section.getGrade()));
+
+            mSectionMarkers.put(section.getId(), marker);
+            mClusterManager.addItem(marker);
         }
 
         mClusterManager.cluster();

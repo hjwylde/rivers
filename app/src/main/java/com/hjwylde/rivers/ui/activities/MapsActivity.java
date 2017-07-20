@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
@@ -150,14 +151,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         ButterKnife.bind(this);
 
         mSearchView = findTById(R.id.floating_search_view);
-        mSearchView.setOnQueryChangeListener((oldQuery, newQuery) -> {
-            if (newQuery.isEmpty()) {
-                mSearchView.clearSuggestions();
-                return;
-            }
-
-            mPresenter.getSectionSuggestions(newQuery);
-        });
+        mSearchView.setOnQueryChangeListener((oldQuery, newQuery) -> mPresenter.getSectionSuggestions(newQuery));
         mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
             @Override
             public void onSearchAction(String currentQuery) {
@@ -165,20 +159,18 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
             @Override
             public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
-                // TODO (hjw)
-                // final String id = ((String) searchSuggestion).getSectionId();
+                String sectionId = ((SectionSuggestion) searchSuggestion).getSectionId();
 
-                // CameraUpdate update = CameraUpdateFactory.newLatLng(section.getPutIn());
-                // getMapsFragment().getMap().animateCamera(update, new GoogleMap.CancelableCallback() {
-                //     @Override
-                //     public void onCancel() {
-                //     }
+                getMapsFragment().animateCameraToSection(sectionId, new GoogleMap.CancelableCallback() {
+                    @Override
+                    public void onCancel() {
+                    }
 
-                //     @Override
-                //     public void onFinish() {
-                //         selectSection(section);
-                //     }
-                // });
+                    @Override
+                    public void onFinish() {
+                        selectSection(sectionId);
+                    }
+                });
             }
         });
         mSearchView.setOnMenuItemClickListener(item -> {
