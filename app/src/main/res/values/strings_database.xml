@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="database_name">rivers</string>
-    <string name="database_url">http://45.32.247.9:4984/db</string>
+    <string name="database_url">http://45.76.122.185:4984/vulpix</string>
+    <string name="database_password">q*k=wsawmzfG2bU_DQnXqhjxKsLZ$=Xr1j|TY*f-SYzo5ZnNu!9L0WVoy4e-=_kh0ZbMBV2@WP|t9w4c</string>
 </resources>
