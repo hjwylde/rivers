@@ -2,7 +2,6 @@ package com.hjwylde.rivers;
 
 import android.app.Application;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
@@ -22,8 +21,6 @@ import java.net.URL;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class RiversApplication extends Application {
-    private static final String TAG = RiversApplication.class.getSimpleName();
-
     private static Database mDatabase;
 
     private static Repository mRepository;
@@ -64,10 +61,9 @@ public class RiversApplication extends Application {
 
             mDatabase = manager.openDatabase(name, options);
         } catch (IOException | CouchbaseLiteException e) {
-            Log.e(TAG, e.getMessage(), e);
-
             // TODO (hjw): if this is a permission exception, then an error should be displayed to
             // the user. Otherwise, re-raise the exception.
+            throw new RuntimeException(e);
         }
     }
 
@@ -94,8 +90,6 @@ public class RiversApplication extends Application {
             push.start();
             pull.start();
         } catch (MalformedURLException e) {
-            Log.e(TAG, e.getMessage(), e);
-
             throw new RuntimeException(e);
         }
     }
