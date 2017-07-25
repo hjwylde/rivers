@@ -1,7 +1,7 @@
 package com.hjwylde.rivers.ui.activities;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -18,6 +18,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.couchbase.lite.util.IOUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.reactivex.observers.LifecycleBoundMaybeObserver;
 import com.hjwylde.reactivex.observers.LifecycleBoundSingleObserver;
@@ -31,6 +32,8 @@ import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import butterknife.BindView;
@@ -194,12 +197,19 @@ public final class CreateSectionActivity extends BaseActivity {
         mValidator.validate(true);
     }
 
-    private void onImageSelected(@NonNull Bitmap bitmap) {
-        Image.Builder builder = Image.builder();
-        builder.bitmap(bitmap);
+    private void onImageSelected(@NonNull Uri uri) {
+        try {
+            InputStream in = getContentResolver().openInputStream(uri);
+            byte[] bytes = IOUtils.toByteArray(in);
 
-        mViewModel.createImage(builder)
-                .subscribe(new OnCreateImageObserver());
+            Image.Builder builder = Image.builder();
+            builder.decodedData(bytes);
+
+            mViewModel.createImage(builder)
+                    .subscribe(new OnCreateImageObserver());
+        } catch (IOException e) {
+            onCreateImageFailure(e);
+        }
     }
 
     private void refreshImage(@NonNull Image image) {

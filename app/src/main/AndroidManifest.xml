@@ -3,9 +3,16 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.hjwylde.rivers">
 
+    <!-- Self explanatory -->
     <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Used for displaying user location on the map -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <!-- Used for reading and writing photos taken by the camera app -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".RiversApplication"

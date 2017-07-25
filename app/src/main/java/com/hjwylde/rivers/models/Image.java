@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.util.Base64;
 
-import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
 public interface Image {
@@ -33,20 +32,15 @@ public interface Image {
     String getId();
 
     interface Builder {
-        @NonNull
-        default Builder bitmap(Bitmap bitmap) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-
-            String data = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
-
-            return data(data);
-        }
-
         String data();
 
         @NonNull
         Builder data(String data);
+
+        @NonNull
+        default Builder decodedData(byte[] decodedData) {
+            return data(Base64.encodeToString(decodedData, Base64.DEFAULT));
+        }
 
         String id();
 

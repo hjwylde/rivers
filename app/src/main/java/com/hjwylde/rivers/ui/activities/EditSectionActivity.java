@@ -1,7 +1,7 @@
 package com.hjwylde.rivers.ui.activities;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +19,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.couchbase.lite.util.IOUtils;
 import com.hjwylde.reactivex.observers.LifecycleBoundMaybeObserver;
 import com.hjwylde.reactivex.observers.LifecycleBoundSingleObserver;
 import com.hjwylde.rivers.R;
@@ -31,6 +32,8 @@ import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import butterknife.BindView;
@@ -184,12 +187,21 @@ public final class EditSectionActivity extends BaseActivity {
         mSectionBuilder.title(text.toString());
     }
 
-    private void onImageSelected(Bitmap bitmap) {
-        Image.Builder builder = Image.builder();
-        builder.bitmap(bitmap);
+    private void onImageSelected(@NonNull Uri uri) {
+        try {
+            InputStream in = getContentResolver().openInputStream(uri);
+            byte[] bytes = IOUtils.toByteArray(in);
 
-        mViewModel.createImage(builder)
-                .subscribe(new OnCreateImageObserver());
+            Image.Builder builder = Image.builder();
+            builder.decodedData(bytes);
+
+            mViewModel.createImage(builder)
+                    .subscribe(new OnCreateImageObserver());
+        } catch (IOException e) {
+            Log.w(TAG, e.getMessage(), e);
+
+            // TODO (hjw)
+        }
     }
 
     private void onUpdateSectionClick() {

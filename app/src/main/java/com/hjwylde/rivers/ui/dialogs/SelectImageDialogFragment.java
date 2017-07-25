@@ -3,9 +3,9 @@ package com.hjwylde.rivers.ui.dialogs;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
@@ -13,7 +13,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,37 +23,29 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hjwylde.rivers.BuildConfig;
 import com.hjwylde.rivers.R;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 import static java.util.Objects.requireNonNull;
 
 public final class SelectImageDialogFragment extends DialogFragment {
+    private static final String TAG = SelectImageDialogFragment.class.getSimpleName();
+
+    private static final String FILE_PROVIDER_AUTHORITY = BuildConfig.APPLICATION_ID + ".fileProvider";
+
     private static final int REQUEST_CODE_PHOTO_TAKEN = 0;
     private static final int REQUEST_CODE_PHOTO_SELECTED = 1;
 
-    private final Option[] mOptions = new Option[]{
-            new Option(R.drawable.ic_camera, R.string.label_takePhoto, view -> {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-                    startActivityForResult(intent, REQUEST_CODE_PHOTO_TAKEN);
-                } else {
-                    // TODO (hjw)
-                }
-            }),
-            new Option(R.drawable.ic_image, R.string.label_selectPhoto, view -> {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-
-                startActivityForResult(intent, REQUEST_CODE_PHOTO_SELECTED);
-            }),
-    };
-
+    private Option[] mOptions;
     private ArrayAdapter<Option> mAdapter;
 
+    private File mImageFile;
     private OnImageSelectedListener mOnImageSelectedListener;
 
     @Override
@@ -59,27 +53,22 @@ public final class SelectImageDialogFragment extends DialogFragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode != RESULT_OK) {
+            cleanImageFile();
             return;
         }
 
-        Bitmap bitmap = null;
+        Uri uri = null;
 
         switch (requestCode) {
             case REQUEST_CODE_PHOTO_TAKEN:
-                bitmap = data.getParcelableExtra("data");
+                uri = getImageUri();
                 break;
             case REQUEST_CODE_PHOTO_SELECTED:
-                Uri uri = data.getData();
-
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
-                } catch (IOException e) {
-                    // TODO (hjw)
-                }
+                uri = data.getData();
         }
 
-        if (bitmap != null) {
-            mOnImageSelectedListener.onImageSelected(bitmap);
+        if (uri != null) {
+            mOnImageSelectedListener.onImageSelected(uri);
         }
 
         dismiss();
@@ -88,6 +77,32 @@ public final class SelectImageDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        mOptions = new Option[]{
+                new Option(R.drawable.ic_camera, R.string.label_takePhoto, view -> {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                    if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+                        createImageFile();
+
+                        if (mImageFile != null) {
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, getImageUri());
+
+                            startActivityForResult(intent, REQUEST_CODE_PHOTO_TAKEN);
+                        } else {
+                            // TODO (hjw)
+                        }
+                    } else {
+                        // TODO (hjw)
+                    }
+                }),
+                new Option(R.drawable.ic_image, R.string.label_selectPhoto, view -> {
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+
+                    startActivityForResult(intent, REQUEST_CODE_PHOTO_SELECTED);
+                }),
+        };
+
         mAdapter = new SelectImageAdapter(getContext(), R.layout.item_select_image_option, mOptions);
 
         AlertDialog dialog = new AlertDialog.Builder(getActivity())
@@ -109,8 +124,37 @@ public final class SelectImageDialogFragment extends DialogFragment {
         mOnImageSelectedListener = requireNonNull(listener);
     }
 
+    private void cleanImageFile() {
+        if (mImageFile == null) {
+            return;
+        }
+
+        mImageFile.delete();
+        mImageFile = null;
+    }
+
+    private void createImageFile() {
+        File dir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        String prefix = SimpleDateFormat.getDateTimeInstance().format(new Date());
+
+        try {
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            mImageFile = File.createTempFile(prefix, ".jpg", dir);
+        } catch (IOException e) {
+            Log.w(TAG, e.getMessage(), e);
+        }
+    }
+
+    @NonNull
+    private Uri getImageUri() {
+        return FileProvider.getUriForFile(getContext(), FILE_PROVIDER_AUTHORITY, mImageFile);
+    }
+
     public interface OnImageSelectedListener {
-        void onImageSelected(@NonNull Bitmap bitmap);
+        void onImageSelected(@NonNull Uri uri);
     }
 
     private static final class Option {
