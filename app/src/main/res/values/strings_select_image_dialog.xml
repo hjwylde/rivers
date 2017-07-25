@@ -2,8 +2,6 @@
 <resources>
     <string name="title_dialog_selectImage">Select section photo</string>
 
-    <array name="options_dialog_selectImage">
-        <item>Take photo</item>
-        <item>Select photo</item>
-    </array>
+    <string name="label_takePhoto">Take new</string>
+    <string name="label_selectPhoto">Select existing</string>
 </resources>
