@@ -4,5 +4,5 @@
 
     <dimen name="infoContainerMargin">20dp</dimen>
     <dimen name="iconSize">24dp</dimen>
-    <dimen name="iconMargin">8dp</dimen>
+    <dimen name="iconMargin">12dp</dimen>
 </resources>
