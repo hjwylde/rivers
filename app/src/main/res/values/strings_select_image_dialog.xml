@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_dialog_selectImage">Select section photo</string>
+    <string name="title_dialog_selectImage">Section photo</string>
 
     <string name="label_takePhoto">Take new</string>
     <string name="label_selectPhoto">Select existing</string>

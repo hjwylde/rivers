@@ -45,7 +45,6 @@ public final class SelectImageDialogFragment extends DialogFragment {
     private Option[] mOptions;
     private ArrayAdapter<Option> mAdapter;
 
-    private File mImageFile;
     private OnImageSelectedListener mOnImageSelectedListener;
 
     @Override
@@ -53,7 +52,7 @@ public final class SelectImageDialogFragment extends DialogFragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode != RESULT_OK) {
-            cleanImageFile();
+            getTakePhotoOption().cleanImageFile();
             return;
         }
 
@@ -61,7 +60,7 @@ public final class SelectImageDialogFragment extends DialogFragment {
 
         switch (requestCode) {
             case REQUEST_CODE_PHOTO_TAKEN:
-                uri = getImageUri();
+                uri = getTakePhotoOption().getImageUri();
                 break;
             case REQUEST_CODE_PHOTO_SELECTED:
                 uri = data.getData();
@@ -78,29 +77,8 @@ public final class SelectImageDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         mOptions = new Option[]{
-                new Option(R.drawable.ic_camera, R.string.label_takePhoto, view -> {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                    if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-                        createImageFile();
-
-                        if (mImageFile != null) {
-                            intent.putExtra(MediaStore.EXTRA_OUTPUT, getImageUri());
-
-                            startActivityForResult(intent, REQUEST_CODE_PHOTO_TAKEN);
-                        } else {
-                            // TODO (hjw)
-                        }
-                    } else {
-                        // TODO (hjw)
-                    }
-                }),
-                new Option(R.drawable.ic_image, R.string.label_selectPhoto, view -> {
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("image/*");
-
-                    startActivityForResult(intent, REQUEST_CODE_PHOTO_SELECTED);
-                }),
+                new TakePhotoOption(),
+                new SelectPhotoOption(),
         };
 
         mAdapter = new SelectImageAdapter(getContext(), R.layout.item_select_image_option, mOptions);
@@ -113,7 +91,7 @@ public final class SelectImageDialogFragment extends DialogFragment {
         dialog.getListView().setOnItemClickListener((parent, view, position, id) -> {
             Option option = mAdapter.getItem(position);
             if (option != null) {
-                option.mOnClickListener.onClick(view);
+                option.onClick(view);
             }
         });
 
@@ -124,52 +102,31 @@ public final class SelectImageDialogFragment extends DialogFragment {
         mOnImageSelectedListener = requireNonNull(listener);
     }
 
-    private void cleanImageFile() {
-        if (mImageFile == null) {
-            return;
-        }
-
-        mImageFile.delete();
-        mImageFile = null;
-    }
-
-    private void createImageFile() {
-        File dir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        String prefix = SimpleDateFormat.getDateTimeInstance().format(new Date());
-
-        try {
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-
-            mImageFile = File.createTempFile(prefix, ".jpg", dir);
-        } catch (IOException e) {
-            Log.w(TAG, e.getMessage(), e);
-        }
-    }
-
     @NonNull
-    private Uri getImageUri() {
-        return FileProvider.getUriForFile(getContext(), FILE_PROVIDER_AUTHORITY, mImageFile);
+    private TakePhotoOption getTakePhotoOption() {
+        for (Option option : mOptions) {
+            if (option instanceof TakePhotoOption) {
+                return (TakePhotoOption) option;
+            }
+        }
+
+        throw new IllegalStateException();
     }
+
 
     public interface OnImageSelectedListener {
         void onImageSelected(@NonNull Uri uri);
     }
 
-    private static final class Option {
+    abstract private static class Option implements View.OnClickListener {
         @DrawableRes
         final int mIconId;
         @StringRes
         final int mLabelId;
 
-        View.OnClickListener mOnClickListener;
-
-        public Option(@DrawableRes int iconId, @StringRes int labelId, @NonNull View.OnClickListener listener) {
+        Option(@DrawableRes int iconId, @StringRes int labelId) {
             mIconId = iconId;
             mLabelId = labelId;
-
-            mOnClickListener = requireNonNull(listener);
         }
     }
 
@@ -193,11 +150,82 @@ public final class SelectImageDialogFragment extends DialogFragment {
             }
 
             Option option = getItem(position);
-
-            ((ImageView) convertView.findViewById(R.id.icon)).setImageResource(option.mIconId);
-            ((TextView) convertView.findViewById(R.id.label)).setText(option.mLabelId);
+            if (option != null) {
+                ((ImageView) convertView.findViewById(R.id.icon)).setImageResource(option.mIconId);
+                ((TextView) convertView.findViewById(R.id.label)).setText(option.mLabelId);
+            }
 
             return convertView;
+        }
+    }
+
+    private final class SelectPhotoOption extends Option {
+        SelectPhotoOption() {
+            super(R.drawable.ic_image, R.string.label_selectPhoto);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+
+            startActivityForResult(intent, REQUEST_CODE_PHOTO_SELECTED);
+        }
+    }
+
+    private final class TakePhotoOption extends Option {
+        private File mImageFile;
+
+        TakePhotoOption() {
+            super(R.drawable.ic_camera, R.string.label_takePhoto);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+            if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+                createImageFile();
+
+                if (mImageFile != null) {
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, getImageUri());
+
+                    startActivityForResult(intent, REQUEST_CODE_PHOTO_TAKEN);
+                } else {
+                    // TODO (hjw)
+                }
+            } else {
+                // TODO (hjw)
+            }
+        }
+
+        void cleanImageFile() {
+            if (mImageFile == null) {
+                return;
+            }
+
+            mImageFile.delete();
+            mImageFile = null;
+        }
+
+        @NonNull
+        Uri getImageUri() {
+            return FileProvider.getUriForFile(getContext(), FILE_PROVIDER_AUTHORITY, mImageFile);
+        }
+
+        private void createImageFile() {
+            File dir = new File(getContext().getExternalCacheDir(), Environment.DIRECTORY_PICTURES);
+            String prefix = SimpleDateFormat.getDateTimeInstance().format(new Date());
+
+            try {
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+
+                mImageFile = File.createTempFile(prefix, ".jpg", dir);
+            } catch (IOException e) {
+                Log.w(TAG, e.getMessage(), e);
+            }
         }
     }
 }
