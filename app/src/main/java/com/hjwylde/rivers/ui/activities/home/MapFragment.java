@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -44,13 +45,14 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
     private GoogleMap mMap;
     private ClusterManager<SectionMarker> mClusterManager;
     private GoogleMap.OnMapClickListener mOnMapClickListener;
-    private GoogleMap.OnMarkerClickListener mOnMarkerClickListener;
     private ClusterManager.OnClusterItemClickListener<SectionMarker> mOnClusterItemClickListener;
 
     private MapViewModel mViewModel;
 
     private List<Section> mSections = new ArrayList<>();
     private Map<String, SectionMarker> mSectionMarkers = new HashMap<>();
+
+    private boolean mClickEventsEnabled = true;
 
     public void animateCameraToSection(@NonNull String sectionId, @NonNull GoogleMap.CancelableCallback cancelableCallback) {
         LatLng position = mSectionMarkers.get(sectionId).getPosition();
@@ -61,11 +63,11 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
     }
 
     public void disableOnClickEvents() {
-        mOnMarkerClickListener = marker -> true;
+        mClickEventsEnabled = false;
     }
 
     public void enableOnClickEvents() {
-        mOnMarkerClickListener = mClusterManager;
+        mClickEventsEnabled = true;
     }
 
     @Override
@@ -113,7 +115,7 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         mOnMapClickListener = requireNonNull(listener);
     }
 
-    public void setOnMarkerClickListener(@NonNull ClusterManager.OnClusterItemClickListener<SectionMarker> listener) {
+    public void setOnClusterItemClickListener(@NonNull ClusterManager.OnClusterItemClickListener<SectionMarker> listener) {
         mOnClusterItemClickListener = requireNonNull(listener);
     }
 
@@ -174,11 +176,11 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
             }
         });
         mMap.setOnMarkerClickListener(marker -> {
-            if (mOnMarkerClickListener != null) {
-                return mOnMarkerClickListener.onMarkerClick(marker);
+            if (mClickEventsEnabled) {
+                return mClusterManager.onMarkerClick(marker);
             }
 
-            return false;
+            return true;
         });
 
         if (checkAccessLocationPermission()) {
