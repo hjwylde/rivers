@@ -11,8 +11,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <!-- Used for reading and writing photos taken by the camera app -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".RiversApplication"
@@ -27,7 +27,7 @@
             android:value="@string/google_maps_key"/>
 
         <activity
-            android:name=".ui.activities.SplashActivity"
+            android:name=".ui.activities.splash.SplashActivity"
             android:label="@string/title_activity_splash"
             android:noHistory="true"
             android:theme="@style/Theme.Rivers.SplashScreen">
@@ -38,43 +38,43 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.MapsActivity"
+            android:name=".ui.activities.maps.MapsActivity"
             android:label="@string/title_activity_maps"
             android:theme="@style/Theme.Rivers.Dark.NoActionBar.Translucent">
         </activity>
         <activity
-            android:name=".ui.activities.CreateSectionActivity"
+            android:name=".ui.activities.createSection.CreateSectionActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_createSection"
-            android:parentActivityName=".ui.activities.MapsActivity"
+            android:parentActivityName=".ui.activities.maps.MapsActivity"
             android:theme="@style/Theme.Rivers.Light.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateVisible">
         </activity>
         <activity
-            android:name=".ui.activities.EditSectionActivity"
+            android:name=".ui.activities.editSection.EditSectionActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_editSection"
-            android:parentActivityName=".ui.activities.MapsActivity"
+            android:parentActivityName=".ui.activities.maps.MapsActivity"
             android:theme="@style/Theme.Rivers.Light.NoActionBar.Popup"
             android:windowSoftInputMode="adjustResize|stateHidden">
         </activity>
         <activity
-            android:name=".ui.activities.SectionDescriptionActivity"
+            android:name=".ui.activities.sectionDescription.SectionDescriptionActivity"
             android:configChanges="orientation|screenSize"
-            android:parentActivityName=".ui.activities.MapsActivity"
+            android:parentActivityName=".ui.activities.maps.MapsActivity"
             android:theme="@style/Theme.Rivers.Dark.NoActionBar">
         </activity>
         <activity
-            android:name=".ui.activities.SettingsActivity"
+            android:name=".ui.activities.settings.SettingsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".ui.activities.MapsActivity">
+            android:parentActivityName=".ui.activities.maps.MapsActivity">
         </activity>
         <activity
-            android:name=".ui.activities.LicensesActivity"
+            android:name=".ui.activities.licenses.LicensesActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_licenses"
-            android:parentActivityName=".ui.activities.SettingsActivity">
+            android:parentActivityName=".ui.activities.settings.SettingsActivity">
             <intent-filter>
                 <action android:name=".ui.activities.LicensesActivity"/>
 
