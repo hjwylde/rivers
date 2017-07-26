@@ -8,7 +8,7 @@ import com.hjwylde.rivers.ui.activities.BaseContract;
 
 import java.util.List;
 
-public interface MapsContract {
+public interface HomeContract {
     interface View extends BaseContract.View {
         void clearSelection();
 

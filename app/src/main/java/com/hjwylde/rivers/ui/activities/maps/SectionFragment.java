@@ -257,7 +257,7 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
         Intent intent = new Intent(getContext(), EditSectionActivity.class);
         intent.putExtra(EditSectionActivity.INTENT_SECTION_BUILDER, Section.builder().copy(mSection));
 
-        startActivityForResult(intent, MapsActivity.REQUEST_CODE_SECTION_EDITED);
+        startActivityForResult(intent, HomeActivity.REQUEST_CODE_SECTION_EDITED);
     }
 
     private void refreshImageContainer() {

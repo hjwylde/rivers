@@ -24,13 +24,13 @@ public final class CreateSectionMode implements ActionMode.Callback {
     private final BaseActivity mActivity;
     private final MapFragment mMapFragment;
 
-    private MapsContract.View mView;
+    private HomeContract.View mView;
 
     private ActionMode mActionMode;
 
     private boolean mActive = false;
 
-    public CreateSectionMode(@NonNull MapsActivity activity, @NonNull MapFragment mapFragment) {
+    public CreateSectionMode(@NonNull HomeActivity activity, @NonNull MapFragment mapFragment) {
         mActivity = requireNonNull(activity);
         mMapFragment = requireNonNull(mapFragment);
 
@@ -67,7 +67,7 @@ public final class CreateSectionMode implements ActionMode.Callback {
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         MenuInflater inflater = mode.getMenuInflater();
-        inflater.inflate(R.menu.menu_maps_create_section_mode, menu);
+        inflater.inflate(R.menu.menu_home_create_section_mode, menu);
 
         getFloatingActionButton().hide();
         animateCenterMarkerIn();

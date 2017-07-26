@@ -38,7 +38,7 @@ public final class MapFragment extends SupportMapFragment implements OnMapReadyC
     private ClusterManager<SectionMarker> mClusterManager;
     private DefaultOnMarkerClickListener mOnMarkerClickListener = new DefaultOnMarkerClickListener();
 
-    private MapsContract.View mView;
+    private HomeContract.View mView;
 
     private Map<String, SectionMarker> mSectionMarkers = new HashMap<>();
 
@@ -66,7 +66,7 @@ public final class MapFragment extends SupportMapFragment implements OnMapReadyC
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        mView = (MapsContract.View) activity;
+        mView = (HomeContract.View) activity;
     }
 
     @Override
@@ -100,7 +100,7 @@ public final class MapFragment extends SupportMapFragment implements OnMapReadyC
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.maps_style));
+        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_style));
 
         UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setMapToolbarEnabled(false);

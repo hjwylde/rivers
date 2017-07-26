@@ -5,9 +5,9 @@
                                                  android:id="@+id/root_container"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
-                                                 tools:context="com.hjwylde.rivers.ui.activities.maps.MapsActivity">
+                                                 tools:context="com.hjwylde.rivers.ui.activities.maps.HomeActivity">
 
-    <include layout="@layout/content_maps"/>
+    <include layout="@layout/content_home"/>
 
     <com.arlib.floatingsearchview.FloatingSearchView
         android:id="@+id/floating_search_view"
@@ -16,7 +16,7 @@
         android:fitsSystemWindows="true"
         app:floatingSearch_close_search_on_keyboard_dismiss="true"
         app:floatingSearch_leftActionMode="showSearch"
-        app:floatingSearch_menu="@menu/menu_maps_section"
+        app:floatingSearch_menu="@menu/menu_home"
         app:floatingSearch_searchBarMarginLeft="@dimen/toolbar_margin"
         app:floatingSearch_searchBarMarginRight="@dimen/toolbar_margin"
         app:floatingSearch_searchBarMarginTop="@dimen/toolbar_margin"

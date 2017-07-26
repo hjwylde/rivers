@@ -32,11 +32,11 @@ import butterknife.ButterKnife;
 import static java.util.Objects.requireNonNull;
 
 @UiThread
-public final class MapsActivity extends BaseActivity implements MapsContract.View, View.OnClickListener {
+public final class HomeActivity extends BaseActivity implements HomeContract.View, View.OnClickListener {
     static final int REQUEST_CODE_SECTION_CREATED = 0;
     static final int REQUEST_CODE_SECTION_EDITED = 1;
 
-    private static final String TAG = MapsActivity.class.getSimpleName();
+    private static final String TAG = HomeActivity.class.getSimpleName();
 
     private static final String STATE_SEARCH_VIEW = "searchView";
     private static final String STATE_CREATE_SECTION_MODE_ACTIVE = "createSectionModeActive";
@@ -45,7 +45,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     private SectionFragment mSectionFragment;
     private CreateSectionMode mCreateSectionMode;
 
-    private MapsContract.Presenter mPresenter;
+    private HomeContract.Presenter mPresenter;
 
     private List<? extends Section> mSections = new ArrayList<>();
 
@@ -147,7 +147,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_home);
 
         ButterKnife.bind(this);
 
@@ -189,7 +189,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
         initSectionFragment();
 
-        mPresenter = new MapsPresenter(this, RiversApplication.getRepository());
+        mPresenter = new HomePresenter(this, RiversApplication.getRepository());
     }
 
     @Override
