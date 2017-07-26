@@ -35,7 +35,7 @@ public final class SectionViewModel extends ViewModel {
     }
 
     @NonNull
-    public Observable<Section> getSection(@NonNull String id) {
+    public Observable<Section> streamSection(@NonNull String id) {
         if (mSectionSubject.getValue() == null || !id.equals(mSectionSubject.getValue().getId())) {
             mSectionDisposable.dispose();
 
@@ -50,7 +50,7 @@ public final class SectionViewModel extends ViewModel {
     }
 
     @NonNull
-    public Observable<Section> getSection() {
+    public Observable<Section> streamSection() {
         return mSectionSubject;
     }
 

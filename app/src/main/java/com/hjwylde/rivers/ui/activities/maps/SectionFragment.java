@@ -157,12 +157,12 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
     public void onStart() {
         super.onStart();
 
-        mViewModel.getSection()
+        mViewModel.streamSection()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new OnGetSectionObserver());
 
         if (mSectionId != null) {
-            mViewModel.getSection(mSectionId);
+            mViewModel.streamSection(mSectionId);
         }
     }
 
@@ -183,7 +183,7 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
 
         mSectionId = sectionId;
 
-        mViewModel.getSection(mSectionId);
+        mViewModel.streamSection(mSectionId);
 
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }

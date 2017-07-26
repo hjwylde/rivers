@@ -19,7 +19,7 @@ public final class SectionDescriptionViewModel extends ViewModel {
     private Disposable mSectionDisposable = DisposableObserverDecorator.decorate(mSectionSubject);
 
     @NonNull
-    public Observable<Section> getSection(@NonNull String id) {
+    public Observable<Section> streamSection(@NonNull String id) {
         if (mSectionSubject.getValue() == null || !mSectionSubject.getValue().getId().equals(id)) {
             mSectionDisposable.dispose();
 

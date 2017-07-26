@@ -64,7 +64,7 @@ public final class SectionDescriptionActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
 
-        mViewModel.getSection(mSectionId)
+        mViewModel.streamSection(mSectionId)
                 .subscribe(new OnGetSectionObserver());
     }
 
