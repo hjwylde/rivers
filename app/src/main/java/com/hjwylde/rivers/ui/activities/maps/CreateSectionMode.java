@@ -22,7 +22,7 @@ import static java.util.Objects.requireNonNull;
 
 public final class CreateSectionMode implements ActionMode.Callback {
     private final BaseActivity mActivity;
-    private final MapsFragment mMapsFragment;
+    private final MapFragment mMapFragment;
 
     private MapsContract.View mView;
 
@@ -30,9 +30,9 @@ public final class CreateSectionMode implements ActionMode.Callback {
 
     private boolean mActive = false;
 
-    public CreateSectionMode(@NonNull MapsActivity activity, @NonNull MapsFragment mapsFragment) {
+    public CreateSectionMode(@NonNull MapsActivity activity, @NonNull MapFragment mapFragment) {
         mActivity = requireNonNull(activity);
-        mMapsFragment = requireNonNull(mapsFragment);
+        mMapFragment = requireNonNull(mapFragment);
 
         mView = activity;
     }
@@ -51,7 +51,7 @@ public final class CreateSectionMode implements ActionMode.Callback {
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.next:
-                GoogleMap map = mMapsFragment.getMap();
+                GoogleMap map = mMapFragment.getMap();
 
                 if (map != null) {
                     LatLng putIn = map.getCameraPosition().target;
@@ -72,7 +72,7 @@ public final class CreateSectionMode implements ActionMode.Callback {
         getFloatingActionButton().hide();
         animateCenterMarkerIn();
 
-        mMapsFragment.disableOnMarkerClickListener();
+        mMapFragment.disableOnMarkerClickListener();
 
         mActionMode = mode;
 
@@ -86,7 +86,7 @@ public final class CreateSectionMode implements ActionMode.Callback {
         getFloatingActionButton().show();
         animateCenterMarkerOut();
 
-        mMapsFragment.enableOnMarkerClickListener();
+        mMapFragment.enableOnMarkerClickListener();
 
         mActionMode = null;
 

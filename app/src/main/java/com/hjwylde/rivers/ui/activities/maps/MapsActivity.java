@@ -106,8 +106,8 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     @Override
     public void refreshMap() {
-        MapsFragment mapsFragment = getMapsFragment();
-        mapsFragment.refreshMap(mSections);
+        MapFragment mapFragment = getMapFragment();
+        mapFragment.refreshMap(mSections);
     }
 
     @Override
@@ -162,7 +162,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
             public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
                 String sectionId = ((SectionSuggestion) searchSuggestion).getSectionId();
 
-                getMapsFragment().animateCameraToSection(sectionId, new GoogleMap.CancelableCallback() {
+                getMapFragment().animateCameraToSection(sectionId, new GoogleMap.CancelableCallback() {
                     @Override
                     public void onCancel() {
                     }
@@ -231,8 +231,8 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     @NonNull
-    private MapsFragment getMapsFragment() {
-        return (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+    private MapFragment getMapFragment() {
+        return (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
     }
 
     private void initSectionFragment() {
@@ -304,7 +304,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     private void startCreateSectionMode() {
         if (mCreateSectionMode == null) {
-            mCreateSectionMode = new CreateSectionMode(this, getMapsFragment());
+            mCreateSectionMode = new CreateSectionMode(this, getMapFragment());
         }
 
         startActionMode(mCreateSectionMode);

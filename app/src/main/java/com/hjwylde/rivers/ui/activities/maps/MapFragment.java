@@ -31,7 +31,7 @@ import java.util.Map;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 @UiThread
-public final class MapsFragment extends SupportMapFragment implements OnMapReadyCallback, ClusterManager.OnClusterItemClickListener<SectionMarker>, ClusterManager.OnClusterClickListener<SectionMarker> {
+public final class MapFragment extends SupportMapFragment implements OnMapReadyCallback, ClusterManager.OnClusterItemClickListener<SectionMarker>, ClusterManager.OnClusterClickListener<SectionMarker> {
     private static final int ACCESS_LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     private GoogleMap mMap;
