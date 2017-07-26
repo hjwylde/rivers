@@ -1,4 +1,4 @@
-package com.hjwylde.rivers.ui.activities.maps;
+package com.hjwylde.rivers.ui.activities.home;
 
 import android.content.Intent;
 import android.net.Uri;

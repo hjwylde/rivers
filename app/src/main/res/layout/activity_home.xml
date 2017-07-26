@@ -5,7 +5,7 @@
                                                  android:id="@+id/root_container"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
-                                                 tools:context="com.hjwylde.rivers.ui.activities.maps.HomeActivity">
+                                                 tools:context="com.hjwylde.rivers.ui.activities.home.HomeActivity">
 
     <include layout="@layout/content_home"/>
 
@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/section_fragment"
-        android:name="com.hjwylde.rivers.ui.activities.maps.SectionFragment"
+        android:name="com.hjwylde.rivers.ui.activities.home.SectionFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="@dimen/toolbar_elevation"/>

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hjwylde.rivers.ui.activities.maps.SectionFragment">
+    tools:context="com.hjwylde.rivers.ui.activities.home.SectionFragment">
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/bottomSheet"
@@ -25,7 +25,7 @@
         android:background="@android:color/transparent"
         android:visibility="invisible"
         app:elevation="0dp"
-        app:layout_behavior="com.hjwylde.rivers.ui.activities.maps.DropInAppBarBehavior">
+        app:layout_behavior="com.hjwylde.rivers.ui.activities.home.DropInAppBarBehavior">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"

@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.maps.HomeActivity"
+            android:name=".ui.activities.home.HomeActivity"
             android:label="@string/title_activity_maps"
             android:theme="@style/Theme.Rivers.Dark.NoActionBar.Translucent">
         </activity>
@@ -46,7 +46,7 @@
             android:name=".ui.activities.createSection.CreateSectionActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_createSection"
-            android:parentActivityName=".ui.activities.maps.HomeActivity"
+            android:parentActivityName=".ui.activities.home.HomeActivity"
             android:theme="@style/Theme.Rivers.Light.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateVisible">
         </activity>
@@ -54,21 +54,21 @@
             android:name=".ui.activities.editSection.EditSectionActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_editSection"
-            android:parentActivityName=".ui.activities.maps.HomeActivity"
+            android:parentActivityName=".ui.activities.home.HomeActivity"
             android:theme="@style/Theme.Rivers.Light.NoActionBar.Popup"
             android:windowSoftInputMode="adjustResize|stateHidden">
         </activity>
         <activity
             android:name=".ui.activities.sectionDescription.SectionDescriptionActivity"
             android:configChanges="orientation|screenSize"
-            android:parentActivityName=".ui.activities.maps.HomeActivity"
+            android:parentActivityName=".ui.activities.home.HomeActivity"
             android:theme="@style/Theme.Rivers.Dark.NoActionBar">
         </activity>
         <activity
             android:name=".ui.activities.settings.SettingsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".ui.activities.maps.HomeActivity">
+            android:parentActivityName=".ui.activities.home.HomeActivity">
         </activity>
         <activity
             android:name=".ui.activities.licenses.LicensesActivity"
