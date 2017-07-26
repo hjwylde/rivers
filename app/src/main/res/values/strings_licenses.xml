@@ -10,6 +10,7 @@
     <string name="pref_title_com_android_support_design">Design Support Library</string>
     <string name="pref_title_com_couchbase_lite_couchbase_lite_android">Couchbase Lite</string>
     <string name="pref_title_com_github_arimorty_floatingsearchview">Floating Search View</string>
+    <string name="pref_title_com_github_bumptech_glide_glide">Glide</string>
     <string name="pref_title_com_google_android_gms_play_services_maps">Google Play Services (maps)</string>
     <string name="pref_title_com_google_maps_android_android_maps_utils">Google Maps Android Utils</string>
     <string name="pref_title_com_jakewharton_butterknife_compiler">Butter Knife</string>

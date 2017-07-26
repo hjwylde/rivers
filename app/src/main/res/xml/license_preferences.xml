@@ -34,6 +34,12 @@
             android:data="https://github.com/arimorty/floatingsearchview/blob/master/LICENSE.txt"/>
     </Preference>
     <Preference
+        android:title="@string/pref_title_com_github_bumptech_glide_glide">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/bumptech/glide/blob/master/LICENSE"/>
+    </Preference>
+    <Preference
         android:title="@string/pref_title_com_google_android_gms_play_services_maps">
     </Preference>
     <Preference
