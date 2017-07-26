@@ -22,17 +22,17 @@ import static java.util.Objects.requireNonNull;
 
 public final class CreateSectionMode implements ActionMode.Callback {
     private final BaseActivity mActivity;
-    private final MapsFragment mMapsFragment;
+    private final MapFragment mMapFragment;
 
-    private MapsContract.View mView;
+    private HomeContract.View mView;
 
     private ActionMode mActionMode;
 
     private boolean mActive = false;
 
-    public CreateSectionMode(@NonNull MapsActivity activity, @NonNull MapsFragment mapsFragment) {
+    public CreateSectionMode(@NonNull HomeActivity activity, @NonNull MapFragment mapFragment) {
         mActivity = requireNonNull(activity);
-        mMapsFragment = requireNonNull(mapsFragment);
+        mMapFragment = requireNonNull(mapFragment);
 
         mView = activity;
     }
@@ -51,7 +51,7 @@ public final class CreateSectionMode implements ActionMode.Callback {
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.next:
-                GoogleMap map = mMapsFragment.getMap();
+                GoogleMap map = mMapFragment.getMap();
 
                 if (map != null) {
                     LatLng putIn = map.getCameraPosition().target;
@@ -67,12 +67,12 @@ public final class CreateSectionMode implements ActionMode.Callback {
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         MenuInflater inflater = mode.getMenuInflater();
-        inflater.inflate(R.menu.menu_maps_create_section_mode, menu);
+        inflater.inflate(R.menu.menu_home_create_section_mode, menu);
 
         getFloatingActionButton().hide();
         animateCenterMarkerIn();
 
-        mMapsFragment.disableOnMarkerClickListener();
+        mMapFragment.disableOnClickEvents();
 
         mActionMode = mode;
 
@@ -86,7 +86,7 @@ public final class CreateSectionMode implements ActionMode.Callback {
         getFloatingActionButton().show();
         animateCenterMarkerOut();
 
-        mMapsFragment.enableOnMarkerClickListener();
+        mMapFragment.enableOnClickEvents();
 
         mActionMode = null;
 

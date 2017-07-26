@@ -157,12 +157,12 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
     public void onStart() {
         super.onStart();
 
-        mViewModel.getSection()
+        mViewModel.streamSection()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new OnGetSectionObserver());
 
         if (mSectionId != null) {
-            mViewModel.getSection(mSectionId);
+            mViewModel.streamSection(mSectionId);
         }
     }
 
@@ -183,7 +183,7 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
 
         mSectionId = sectionId;
 
-        mViewModel.getSection(mSectionId);
+        mViewModel.streamSection(mSectionId);
 
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
@@ -257,7 +257,7 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
         Intent intent = new Intent(getContext(), EditSectionActivity.class);
         intent.putExtra(EditSectionActivity.INTENT_SECTION_BUILDER, Section.builder().copy(mSection));
 
-        startActivityForResult(intent, MapsActivity.REQUEST_CODE_SECTION_EDITED);
+        startActivityForResult(intent, HomeActivity.REQUEST_CODE_SECTION_EDITED);
     }
 
     private void refreshImageContainer() {

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/map"
-        android:name="com.hjwylde.rivers.ui.activities.maps.MapsFragment"
+        android:name="com.hjwylde.rivers.ui.activities.maps.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cameraTargetLat="-41.270634"

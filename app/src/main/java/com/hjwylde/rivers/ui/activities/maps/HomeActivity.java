@@ -19,40 +19,30 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
-import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.activities.BaseActivity;
 import com.hjwylde.rivers.ui.activities.createSection.CreateSectionActivity;
 import com.hjwylde.rivers.ui.activities.settings.SettingsActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 
-import static java.util.Objects.requireNonNull;
-
 @UiThread
-public final class MapsActivity extends BaseActivity implements MapsContract.View, View.OnClickListener {
+public final class HomeActivity extends BaseActivity implements HomeContract.View, View.OnClickListener {
     static final int REQUEST_CODE_SECTION_CREATED = 0;
     static final int REQUEST_CODE_SECTION_EDITED = 1;
 
-    private static final String TAG = MapsActivity.class.getSimpleName();
+    private static final String TAG = HomeActivity.class.getSimpleName();
 
     private static final String STATE_SEARCH_VIEW = "searchView";
     private static final String STATE_CREATE_SECTION_MODE_ACTIVE = "createSectionModeActive";
 
     private FloatingSearchView mSearchView;
+    private MapFragment mMapFragment;
     private SectionFragment mSectionFragment;
     private CreateSectionMode mCreateSectionMode;
 
-    private MapsContract.Presenter mPresenter;
-
-    private List<? extends Section> mSections = new ArrayList<>();
-
-    @Override
-    public void clearSelection() {
-        mSectionFragment.getBottomSheetBehavior().setState(BottomSheetBehavior.STATE_HIDDEN);
-    }
+    private HomeContract.Presenter mPresenter;
 
     @Override
     public void createSection(@NonNull LatLng putIn) {
@@ -105,12 +95,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     @Override
-    public void refreshMap() {
-        MapsFragment mapsFragment = getMapsFragment();
-        mapsFragment.refreshMap(mSections);
-    }
-
-    @Override
     public void selectSection(@NonNull String id) {
         mSectionFragment.setSectionId(id);
     }
@@ -118,11 +102,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     @Override
     public void setSectionSuggestions(@NonNull List<SectionSuggestion> sectionSuggestions) {
         mSearchView.swapSuggestions(sectionSuggestions);
-    }
-
-    @Override
-    public void setSections(@NonNull List<? extends Section> sections) {
-        mSections = requireNonNull(sections);
     }
 
     @Override
@@ -147,7 +126,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_home);
 
         ButterKnife.bind(this);
 
@@ -162,7 +141,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
             public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
                 String sectionId = ((SectionSuggestion) searchSuggestion).getSectionId();
 
-                getMapsFragment().animateCameraToSection(sectionId, new GoogleMap.CancelableCallback() {
+                mMapFragment.animateCameraToSection(sectionId, new GoogleMap.CancelableCallback() {
                     @Override
                     public void onCancel() {
                     }
@@ -187,9 +166,11 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         FloatingActionButton fab = findTById(R.id.fab);
         fab.setOnClickListener(this);
 
+        initMapFragment();
+
         initSectionFragment();
 
-        mPresenter = new MapsPresenter(this, RiversApplication.getRepository());
+        mPresenter = new HomePresenter(this, RiversApplication.getRepository());
     }
 
     @Override
@@ -214,13 +195,6 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        mPresenter.getSections();
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
@@ -230,9 +204,17 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
         outState.putBoolean(STATE_CREATE_SECTION_MODE_ACTIVE, mCreateSectionMode != null && mCreateSectionMode.isActive());
     }
 
-    @NonNull
-    private MapsFragment getMapsFragment() {
-        return (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+    private void clearSelection() {
+        mSectionFragment.getBottomSheetBehavior().setState(BottomSheetBehavior.STATE_HIDDEN);
+    }
+
+    private void initMapFragment() {
+        mMapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mMapFragment.setOnMapClickListener(position -> clearSelection());
+        mMapFragment.setOnMarkerClickListener(sectionMarker -> {
+            selectSection(sectionMarker.getId());
+            return true;
+        });
     }
 
     private void initSectionFragment() {
@@ -304,7 +286,7 @@ public final class MapsActivity extends BaseActivity implements MapsContract.Vie
 
     private void startCreateSectionMode() {
         if (mCreateSectionMode == null) {
-            mCreateSectionMode = new CreateSectionMode(this, getMapsFragment());
+            mCreateSectionMode = new CreateSectionMode(this, mMapFragment);
         }
 
         startActionMode(mCreateSectionMode);

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.UiThread;
 
 import com.hjwylde.rivers.ui.activities.BaseActivity;
-import com.hjwylde.rivers.ui.activities.maps.MapsActivity;
+import com.hjwylde.rivers.ui.activities.maps.HomeActivity;
 
 @UiThread
 public class SplashActivity extends BaseActivity {
@@ -13,7 +13,7 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = new Intent(this, MapsActivity.class);
+        Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
 
         finish();

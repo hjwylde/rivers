@@ -16,7 +16,9 @@ import com.hjwylde.rivers.models.Image;
 import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.services.Repository;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
@@ -177,6 +179,32 @@ public final class CouchbaseRepository implements Repository {
                 }, BackpressureStrategy.LATEST)
                 .subscribeOn(Schedulers.newThread())
                 .map(SectionDocument::new);
+    }
+
+    @NonNull
+    @Override
+    public Flowable<List<Section>> streamSections() {
+        return Flowable
+                .<List<Section>>create(emitter -> {
+                    requireWorkerThread();
+
+                    View view = SectionsView.getInstance(mDatabase);
+
+                    LiveQuery query = view.createQuery().toLiveQuery();
+                    query.addChangeListener(event -> {
+                        List<Section> sections = new ArrayList<>();
+                        for (QueryRow row : event.getRows()) {
+                            sections.add(new SectionDocument(row.getDocument()));
+                        }
+
+                        emitter.onNext(sections);
+                    });
+
+                    emitter.setCancellable(query::stop);
+
+                    query.run();
+                }, BackpressureStrategy.LATEST)
+                .subscribeOn(Schedulers.newThread());
     }
 
     @NonNull
