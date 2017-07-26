@@ -2,6 +2,7 @@ package com.hjwylde.rivers.ui.activities.maps;
 
 
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 import android.support.design.widget.FloatingActionButton;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -97,6 +98,7 @@ public final class CreateSectionMode implements ActionMode.Callback {
         return false;
     }
 
+    @UiThread
     private void animateCenterMarkerIn() {
         final View centerMarker = getCenterMarker();
 
@@ -111,6 +113,7 @@ public final class CreateSectionMode implements ActionMode.Callback {
         centerMarker.startAnimation(animation);
     }
 
+    @UiThread
     private void animateCenterMarkerOut() {
         final View centerMarker = getCenterMarker();
 

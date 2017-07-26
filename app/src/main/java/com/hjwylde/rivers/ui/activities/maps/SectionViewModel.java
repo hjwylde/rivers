@@ -12,6 +12,7 @@ import com.hjwylde.rivers.services.Repository;
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -23,12 +24,14 @@ public final class SectionViewModel extends ViewModel {
 
     @NonNull
     public Completable deleteSection(@NonNull Section section) {
-        return mRepository.deleteSection(section);
+        return mRepository.deleteSection(section)
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @NonNull
     public Maybe<Image> getImage(@NonNull String id) {
-        return mRepository.getImage(id);
+        return mRepository.getImage(id)
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @NonNull

@@ -1,5 +1,7 @@
 package com.hjwylde.rivers.util;
 
+import android.os.Looper;
+
 public final class Preconditions {
     private Preconditions() {
     }
@@ -14,5 +16,9 @@ public final class Preconditions {
         if (!condition) {
             throw new IllegalStateException();
         }
+    }
+
+    public static void requireWorkerThread() {
+        requireTrue(Looper.myLooper() != Looper.getMainLooper());
     }
 }

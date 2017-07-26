@@ -1,6 +1,7 @@
 package com.hjwylde.rivers.db.models;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.WorkerThread;
 
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
@@ -121,6 +122,7 @@ public final class SectionDocument extends BaseDocument implements Section {
         }
 
         @NonNull
+        @WorkerThread
         @Override
         public SectionDocument create() throws CouchbaseLiteException {
             return new SectionDocument(createDocument());
@@ -253,6 +255,7 @@ public final class SectionDocument extends BaseDocument implements Section {
         }
 
         @NonNull
+        @WorkerThread
         @Override
         public SectionDocument update() throws CouchbaseLiteException {
             return new SectionDocument(updateDocument());

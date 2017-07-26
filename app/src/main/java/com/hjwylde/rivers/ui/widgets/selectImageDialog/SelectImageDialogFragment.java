@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
+import static com.hjwylde.rivers.util.Preconditions.requireWorkerThread;
 import static java.util.Objects.requireNonNull;
 
 public final class SelectImageDialogFragment extends DialogFragment {
@@ -106,7 +107,6 @@ public final class SelectImageDialogFragment extends DialogFragment {
         throw new IllegalStateException();
     }
 
-
     public interface OnImageSelectedListener {
         void onImageSelected(@NonNull Uri uri);
     }
@@ -116,6 +116,7 @@ public final class SelectImageDialogFragment extends DialogFragment {
             super(R.drawable.ic_image, R.string.label_selectPhoto);
         }
 
+        @WorkerThread
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -132,6 +133,7 @@ public final class SelectImageDialogFragment extends DialogFragment {
             super(R.drawable.ic_camera, R.string.label_takePhoto);
         }
 
+        @WorkerThread
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -153,6 +155,8 @@ public final class SelectImageDialogFragment extends DialogFragment {
 
         @WorkerThread
         void cleanImageFile() {
+            requireWorkerThread();
+
             if (mImageFile == null) {
                 return;
             }
@@ -168,6 +172,8 @@ public final class SelectImageDialogFragment extends DialogFragment {
 
         @WorkerThread
         private void createImageFile() {
+            requireWorkerThread();
+
             File dir = new File(getContext().getExternalCacheDir(), Environment.DIRECTORY_PICTURES);
             String prefix = SimpleDateFormat.getDateTimeInstance().format(new Date());
 

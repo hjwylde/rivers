@@ -24,13 +24,12 @@ import io.reactivex.Flowable;
 import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 
+import static com.hjwylde.rivers.util.Preconditions.requireWorkerThread;
 import static java.util.Objects.requireNonNull;
 
 public final class CouchbaseRepository implements Repository {
-    // TODO (hjw): move logic inside reactivex components and ensure the actions are not started
-    // until the component is subscribed to
-
     @NonNull
     private final Database mDatabase;
 
@@ -41,82 +40,104 @@ public final class CouchbaseRepository implements Repository {
     @NonNull
     @Override
     public Single<Image> createImage(@NonNull Image.Builder builder) {
-        ImageDocument.Builder documentBuilder = ImageDocument.builder(mDatabase).copy(builder);
+        return Single.<Image>create(emitter -> {
+            requireWorkerThread();
 
-        try {
-            ImageDocument imageDocument = documentBuilder.create();
+            ImageDocument.Builder documentBuilder = ImageDocument.builder(mDatabase).copy(builder);
 
-            return Single.just(imageDocument);
-        } catch (CouchbaseLiteException e) {
-            return Single.error(e);
-        }
+            try {
+                ImageDocument imageDocument = documentBuilder.create();
+
+                emitter.onSuccess(imageDocument);
+            } catch (CouchbaseLiteException e) {
+                emitter.onError(e);
+            }
+        }).subscribeOn(Schedulers.newThread());
     }
 
     @NonNull
     @Override
     public Single<Section> createSection(@NonNull Section.Builder builder) {
-        SectionDocument.Builder documentBuilder = SectionDocument.builder(mDatabase).copy(builder);
+        return Single.<Section>create(emitter -> {
+            requireWorkerThread();
 
-        try {
-            SectionDocument sectionDocument = documentBuilder.create();
+            SectionDocument.Builder documentBuilder = SectionDocument.builder(mDatabase).copy(builder);
 
-            return Single.just(sectionDocument);
-        } catch (CouchbaseLiteException e) {
-            return Single.error(e);
-        }
+            try {
+                SectionDocument sectionDocument = documentBuilder.create();
+
+                emitter.onSuccess(sectionDocument);
+            } catch (CouchbaseLiteException e) {
+                emitter.onError(e);
+            }
+        }).subscribeOn(Schedulers.newThread());
     }
 
     @NonNull
     @Override
     public Completable deleteSection(@NonNull Section section) {
-        Document document = mDatabase.getExistingDocument(section.getId());
+        return Completable.create(emitter -> {
+            requireWorkerThread();
 
-        try {
-            if (document != null) {
-                document.delete();
+            Document document = mDatabase.getExistingDocument(section.getId());
+
+            try {
+                if (document != null) {
+                    document.delete();
+                }
+
+                emitter.onComplete();
+            } catch (CouchbaseLiteException e) {
+                emitter.onError(e);
             }
-
-            return Completable.complete();
-        } catch (CouchbaseLiteException e) {
-            return Completable.error(e);
-        }
+        }).subscribeOn(Schedulers.newThread());
     }
 
     @NonNull
     @Override
     public Maybe<Image> getImage(@NonNull String id) {
-        Document document = mDatabase.getExistingDocument(id);
+        return Maybe.<Image>create(emitter -> {
+            requireWorkerThread();
 
-        if (document != null) {
-            ImageDocument imageDocument = new ImageDocument(document);
+            Document document = mDatabase.getExistingDocument(id);
 
-            return Maybe.just(imageDocument);
-        } else {
-            return Maybe.empty();
-        }
+            if (document != null) {
+                ImageDocument imageDocument = new ImageDocument(document);
+
+                emitter.onSuccess(imageDocument);
+            } else {
+                emitter.onComplete();
+            }
+        }).subscribeOn(Schedulers.newThread());
     }
 
     @NonNull
     @Override
     public Maybe<Section> getSection(@NonNull String id) {
-        Document document = mDatabase.getExistingDocument(id);
+        return Maybe.<Section>create(emitter -> {
+            requireWorkerThread();
 
-        if (document != null) {
-            SectionDocument sectionDocument = new SectionDocument(document);
+            Document document = mDatabase.getExistingDocument(id);
 
-            return Maybe.just(sectionDocument);
-        } else {
-            return Maybe.empty();
-        }
+            if (document != null) {
+                SectionDocument sectionDocument = new SectionDocument(document);
+
+                emitter.onSuccess(sectionDocument);
+            } else {
+                emitter.onComplete();
+            }
+        }).subscribeOn(Schedulers.newThread());
     }
 
     @NonNull
     @Override
     public Observable<Section> getSections() {
-        View view = SectionsView.getInstance(mDatabase);
-
         return Observable
                 .<Document>create(emitter -> {
+                    requireWorkerThread();
+
+                    View view = SectionsView.getInstance(mDatabase);
+
                     try {
                         QueryEnumerator result = view.createQuery().run();
 
@@ -129,16 +150,19 @@ public final class CouchbaseRepository implements Repository {
                         emitter.onError(e);
                     }
                 })
+                .subscribeOn(Schedulers.newThread())
                 .map(SectionDocument::new);
     }
 
     @NonNull
     @Override
     public Flowable<Section> streamSection(@NonNull String id) {
-        View view = SectionsView.getInstance(mDatabase);
-
         return Flowable
                 .<Document>create(emitter -> {
+                    requireWorkerThread();
+
+                    View view = SectionsView.getInstance(mDatabase);
+
                     LiveQuery query = view.createQuery().toLiveQuery();
                     query.setKeys(Collections.singletonList(id));
                     query.addChangeListener(event -> {
@@ -151,21 +175,26 @@ public final class CouchbaseRepository implements Repository {
 
                     query.run();
                 }, BackpressureStrategy.LATEST)
+                .subscribeOn(Schedulers.newThread())
                 .map(SectionDocument::new);
     }
 
     @NonNull
     @Override
     public Single<Section> updateSection(@NonNull Section.Builder builder) {
-        SectionDocument.Builder documentBuilder = SectionDocument.builder(mDatabase).copy(builder);
+        return Single.<Section>create(emitter -> {
+            requireWorkerThread();
 
-        try {
-            SectionDocument sectionDocument = documentBuilder.update();
+            SectionDocument.Builder documentBuilder = SectionDocument.builder(mDatabase).copy(builder);
 
-            return Single.just(sectionDocument);
-        } catch (CouchbaseLiteException e) {
-            return Single.error(e);
-        }
+            try {
+                SectionDocument sectionDocument = documentBuilder.update();
+
+                emitter.onSuccess(sectionDocument);
+            } catch (CouchbaseLiteException e) {
+                emitter.onError(e);
+            }
+        }).subscribeOn(Schedulers.newThread());
     }
 
     public static final class Builder {

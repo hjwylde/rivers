@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -30,6 +31,7 @@ import butterknife.ButterKnife;
 
 import static java.util.Objects.requireNonNull;
 
+@UiThread
 public final class MapsActivity extends BaseActivity implements MapsContract.View, View.OnClickListener {
     static final int REQUEST_CODE_SECTION_CREATED = 0;
     static final int REQUEST_CODE_SECTION_EDITED = 1;

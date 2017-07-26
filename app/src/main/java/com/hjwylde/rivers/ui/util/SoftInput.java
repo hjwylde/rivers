@@ -2,6 +2,7 @@ package com.hjwylde.rivers.ui.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.UiThread;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -9,6 +10,7 @@ public final class SoftInput {
     private SoftInput() {
     }
 
+    @UiThread
     public static void hide(Activity activity) {
         View view = activity.getCurrentFocus();
         if (view != null) {

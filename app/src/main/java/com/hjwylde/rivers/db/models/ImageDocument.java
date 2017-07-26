@@ -1,6 +1,7 @@
 package com.hjwylde.rivers.db.models;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.WorkerThread;
 
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
@@ -47,6 +48,7 @@ public final class ImageDocument extends BaseDocument implements Image {
         }
 
         @NonNull
+        @WorkerThread
         @Override
         public ImageDocument create() throws CouchbaseLiteException {
             return new ImageDocument(createDocument());
@@ -74,6 +76,7 @@ public final class ImageDocument extends BaseDocument implements Image {
         }
 
         @NonNull
+        @WorkerThread
         @Override
         public ImageDocument update() throws CouchbaseLiteException {
             return new ImageDocument(updateDocument());

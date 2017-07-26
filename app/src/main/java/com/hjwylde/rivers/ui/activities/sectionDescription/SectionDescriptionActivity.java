@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 
 import com.actinarium.aligned.TextView;
 import com.hjwylde.reactivex.observers.LifecycleBoundObserver;
@@ -16,6 +17,7 @@ import butterknife.ButterKnife;
 
 import static java.util.Objects.requireNonNull;
 
+@UiThread
 public final class SectionDescriptionActivity extends BaseActivity {
     public static final String INTENT_SECTION_ID = "sectionId";
 
@@ -66,6 +68,7 @@ public final class SectionDescriptionActivity extends BaseActivity {
                 .subscribe(new OnGetSectionObserver());
     }
 
+    @UiThread
     private final class OnGetSectionObserver extends LifecycleBoundObserver<Section> {
         OnGetSectionObserver() {
             super(SectionDescriptionActivity.this);

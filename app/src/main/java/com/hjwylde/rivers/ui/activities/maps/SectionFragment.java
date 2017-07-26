@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import android.support.annotation.Dimension;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -41,6 +42,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import static java.util.Objects.requireNonNull;
 
+@UiThread
 public final class SectionFragment extends LifecycleFragment implements Toolbar.OnMenuItemClickListener {
     private static final String TAG = SectionFragment.class.getSimpleName();
 
@@ -267,6 +269,7 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
         mImageGroup.requestLayout();
     }
 
+    @UiThread
     private final class OnDeleteSectionObserver extends LifecycleBoundCompletableObserver {
         OnDeleteSectionObserver() {
             super(SectionFragment.this);
@@ -297,6 +300,7 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
         }
     }
 
+    @UiThread
     private final class OnGetImageObserver extends LifecycleBoundMaybeObserver<Image> {
         private final int mImageWidth = mImageView.getWidth();
 
@@ -333,6 +337,7 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
         }
     }
 
+    @UiThread
     private final class OnGetSectionObserver extends LifecycleBoundObserver<Section> {
         OnGetSectionObserver() {
             super(SectionFragment.this);
@@ -357,7 +362,6 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
 
             if (section.getImageId() != null) {
                 mViewModel.getImage(section.getImageId())
-                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new OnGetImageObserver());
             } else {
                 clearImage();

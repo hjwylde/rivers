@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.annotation.Dimension;
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.animation.FastOutLinearInInterpolator;
@@ -56,6 +57,7 @@ public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Beha
         return mContext.getResources().getDimension(R.dimen.statusBarHeight_fallback);
     }
 
+    @UiThread
     private void hideAppBar(@NonNull final AppBarLayout child) {
         if (child.getAlpha() < 1f) {
             return;
@@ -74,6 +76,7 @@ public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Beha
         alphaAnimator.start();
     }
 
+    @UiThread
     private void showAppBar(@NonNull final AppBarLayout child) {
         if (child.getVisibility() == View.VISIBLE) {
             return;

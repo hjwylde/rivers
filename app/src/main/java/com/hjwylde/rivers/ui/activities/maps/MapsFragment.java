@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -29,6 +30,7 @@ import java.util.Map;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
+@UiThread
 public final class MapsFragment extends SupportMapFragment implements OnMapReadyCallback, ClusterManager.OnClusterItemClickListener<SectionMarker>, ClusterManager.OnClusterClickListener<SectionMarker> {
     private static final int ACCESS_LOCATION_PERMISSION_REQUEST_CODE = 1;
 
@@ -184,6 +186,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         ActivityCompat.requestPermissions(getActivity(), locationPermissions, ACCESS_LOCATION_PERMISSION_REQUEST_CODE);
     }
 
+    @UiThread
     private class DefaultOnMapClickListener implements GoogleMap.OnMapClickListener {
         @Override
         public void onMapClick(LatLng latLng) {
@@ -191,6 +194,7 @@ public final class MapsFragment extends SupportMapFragment implements OnMapReady
         }
     }
 
+    @UiThread
     private class DefaultOnMarkerClickListener implements GoogleMap.OnMarkerClickListener {
         private boolean mEnabled = true;
 

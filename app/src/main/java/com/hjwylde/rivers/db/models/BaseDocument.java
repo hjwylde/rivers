@@ -1,6 +1,7 @@
 package com.hjwylde.rivers.db.models;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.WorkerThread;
 
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
@@ -74,6 +75,7 @@ abstract public class BaseDocument {
             mProperties.put(PROPERTY_TYPE, type);
         }
 
+        @WorkerThread
         abstract public BaseDocument create() throws CouchbaseLiteException;
 
         public final String id() {
@@ -84,8 +86,10 @@ abstract public class BaseDocument {
             return (String) mProperties.get(PROPERTY_TYPE);
         }
 
+        @WorkerThread
         abstract public BaseDocument update() throws CouchbaseLiteException;
 
+        @WorkerThread
         protected final Document createDocument() throws CouchbaseLiteException {
             requireNull(id());
             validate();
@@ -98,6 +102,7 @@ abstract public class BaseDocument {
             return document;
         }
 
+        @WorkerThread
         protected final Document updateDocument() throws CouchbaseLiteException {
             requireNonNull(id());
             validate();

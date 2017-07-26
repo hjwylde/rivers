@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -42,6 +43,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
+@UiThread
 public final class EditSectionActivity extends BaseActivity {
     public static final String INTENT_SECTION_BUILDER = "sectionBuilder";
 
@@ -244,6 +246,7 @@ public final class EditSectionActivity extends BaseActivity {
         }
     }
 
+    @UiThread
     private final class OnCreateImageObserver extends LifecycleBoundSingleObserver<Image> {
         OnCreateImageObserver() {
             super(EditSectionActivity.this);
@@ -260,6 +263,7 @@ public final class EditSectionActivity extends BaseActivity {
         }
     }
 
+    @UiThread
     private final class OnGetImageObserver extends LifecycleBoundMaybeObserver<Image> {
         OnGetImageObserver() {
             super(EditSectionActivity.this);
@@ -291,6 +295,7 @@ public final class EditSectionActivity extends BaseActivity {
         }
     }
 
+    @UiThread
     private final class OnUpdateSectionObserver extends LifecycleBoundSingleObserver<Section> {
         OnUpdateSectionObserver() {
             super(EditSectionActivity.this);
@@ -319,6 +324,7 @@ public final class EditSectionActivity extends BaseActivity {
         }
     }
 
+    @UiThread
     private final class OnValidationListener implements Validator.ValidationListener {
         @Override
         public void onValidationFailed(@NonNull List<ValidationError> errors) {
