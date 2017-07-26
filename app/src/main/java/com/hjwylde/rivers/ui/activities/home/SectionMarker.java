@@ -1,4 +1,4 @@
-package com.hjwylde.rivers.ui.activities.maps;
+package com.hjwylde.rivers.ui.activities.home;
 
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;

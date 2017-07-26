@@ -1,4 +1,4 @@
-package com.hjwylde.rivers.ui.activities.maps;
+package com.hjwylde.rivers.ui.activities.home;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -211,7 +211,7 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
     private void initMapFragment() {
         mMapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.setOnMapClickListener(position -> clearSelection());
-        mMapFragment.setOnMarkerClickListener(sectionMarker -> {
+        mMapFragment.setOnClusterItemClickListener(sectionMarker -> {
             selectSection(sectionMarker.getId());
             return true;
         });

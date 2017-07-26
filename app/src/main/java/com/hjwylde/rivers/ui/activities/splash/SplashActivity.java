@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.UiThread;
 
 import com.hjwylde.rivers.ui.activities.BaseActivity;
-import com.hjwylde.rivers.ui.activities.maps.HomeActivity;
+import com.hjwylde.rivers.ui.activities.home.HomeActivity;
 
 @UiThread
 public class SplashActivity extends BaseActivity {
