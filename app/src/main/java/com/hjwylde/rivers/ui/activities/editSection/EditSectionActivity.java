@@ -2,6 +2,7 @@ package com.hjwylde.rivers.ui.activities.editSection;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,11 +15,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.couchbase.lite.util.IOUtils;
 import com.hjwylde.reactivex.observers.LifecycleBoundMaybeObserver;
 import com.hjwylde.reactivex.observers.LifecycleBoundSingleObserver;
@@ -71,7 +72,6 @@ public final class EditSectionActivity extends BaseActivity {
     EditText mLengthText;
     @BindView(R.id.duration)
     EditText mDurationText;
-    Animation mFadeImageInAnimation;
 
     private Validator mValidator;
 
@@ -109,7 +109,6 @@ public final class EditSectionActivity extends BaseActivity {
         setContentView(R.layout.activity_edit_section);
 
         ButterKnife.bind(this);
-        mFadeImageInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_image_in);
 
         mValidator = new Validator(this);
         mValidator.setValidationListener(new OnValidationListener());
@@ -187,32 +186,45 @@ public final class EditSectionActivity extends BaseActivity {
         mSectionBuilder.title(text.toString());
     }
 
+    private void onCreateImageFailure(@NonNull Throwable t) {
+        Log.w(TAG, t.getMessage(), t);
+
+        resetImage();
+
+        Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onCreateImage, Snackbar.LENGTH_LONG);
+        snackbar.show();
+    }
+
     private void onImageSelected(@NonNull Uri uri) {
-        try {
-            InputStream in = getContentResolver().openInputStream(uri);
-            byte[] bytes = IOUtils.toByteArray(in);
+        Glide.with(this)
+                .asBitmap()
+                .load(uri)
+                .apply(
+                        RequestOptions
+                                .centerCropTransform()
+                                .placeholder(R.drawable.bm_create_section)
+                ).into(mImageView);
 
-            Image.Builder builder = Image.builder();
-            builder.decodedData(bytes);
+        AsyncTask.execute(() -> {
+            try {
+                InputStream in = getContentResolver().openInputStream(uri);
+                byte[] bytes = IOUtils.toByteArray(in);
 
-            mViewModel.createImage(builder)
-                    .subscribe(new OnCreateImageObserver());
-        } catch (IOException e) {
-            Log.w(TAG, e.getMessage(), e);
+                Image.Builder builder = Image.builder();
+                builder.decodedData(bytes);
 
-            // TODO (hjw)
-        }
+                mViewModel.createImage(builder)
+                        .subscribe(new OnCreateImageObserver());
+            } catch (IOException e) {
+                onCreateImageFailure(e);
+            }
+        });
     }
 
     private void onUpdateSectionClick() {
         SoftInput.hide(this);
 
         mValidator.validate(true);
-    }
-
-    private void refreshImage(@NonNull Image image) {
-        mImageView.setImageBitmap(image.getBitmap());
-        mImageView.startAnimation(mFadeImageInAnimation);
     }
 
     private void refreshSection() {
@@ -223,6 +235,15 @@ public final class EditSectionActivity extends BaseActivity {
         mDurationText.setText(mSectionBuilder.duration());
     }
 
+    private void resetImage() {
+        Glide.with(this).clear(mImageView);
+
+        if (mSectionBuilder.imageId() != null) {
+            mViewModel.getImage(mSectionBuilder.imageId())
+                    .subscribe(new OnGetImageObserver());
+        }
+    }
+
     private final class OnCreateImageObserver extends LifecycleBoundSingleObserver<Image> {
         OnCreateImageObserver() {
             super(EditSectionActivity.this);
@@ -230,17 +251,12 @@ public final class EditSectionActivity extends BaseActivity {
 
         @Override
         public void onError(@NonNull Throwable t) {
-            Log.w(TAG, t.getMessage(), t);
-
-            Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onCreateImage, Snackbar.LENGTH_LONG);
-            snackbar.show();
+            onCreateImageFailure(t);
         }
 
         @Override
         public void onSuccess(@NonNull Image image) {
             mSectionBuilder.imageId(image.getId());
-
-            refreshImage(image);
         }
     }
 
@@ -264,6 +280,14 @@ public final class EditSectionActivity extends BaseActivity {
         @Override
         public void onSuccess(@NonNull Image image) {
             refreshImage(image);
+        }
+
+        private void refreshImage(@NonNull Image image) {
+            Glide.with(EditSectionActivity.this)
+                    .asBitmap()
+                    .load(image.getDecodedData())
+                    .apply(RequestOptions.centerCropTransform())
+                    .into(mImageView);
         }
     }
 

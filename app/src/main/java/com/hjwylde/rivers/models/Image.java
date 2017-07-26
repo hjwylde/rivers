@@ -1,8 +1,7 @@
 package com.hjwylde.rivers.models;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.support.annotation.WorkerThread;
 import android.util.Base64;
 
 import java.io.Serializable;
@@ -14,16 +13,10 @@ public interface Image {
     }
 
     @NonNull
-    default Bitmap getBitmap() {
-        byte[] decodedData = getDecodedData();
-
-        return BitmapFactory.decodeByteArray(decodedData, 0, decodedData.length);
-    }
-
-    @NonNull
     String getData();
 
     @NonNull
+    @WorkerThread
     default byte[] getDecodedData() {
         return Base64.decode(getData(), Base64.DEFAULT);
     }
@@ -38,6 +31,7 @@ public interface Image {
         Builder data(String data);
 
         @NonNull
+        @WorkerThread
         default Builder decodedData(byte[] decodedData) {
             return data(Base64.encodeToString(decodedData, Base64.DEFAULT));
         }

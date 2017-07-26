@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.Dimension;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
@@ -18,11 +19,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.actinarium.aligned.TextView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.hjwylde.reactivex.observers.LifecycleBoundCompletableObserver;
 import com.hjwylde.reactivex.observers.LifecycleBoundMaybeObserver;
 import com.hjwylde.reactivex.observers.LifecycleBoundObserver;
@@ -78,8 +79,8 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
     ViewGroup mDurationGroup;
 
     @BindDimen(R.dimen.imageHeight)
+    @Dimension
     int mImageHeight;
-    Animation mFadeImageInAnimation;
 
     private BottomSheetBehavior<NestedScrollView> mBottomSheetBehavior;
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetCallback;
@@ -113,7 +114,6 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
         View view = inflater.inflate(R.layout.fragment_section, container, false);
 
         ButterKnife.bind(this, view);
-        mFadeImageInAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.fade_image_in);
 
         initToolbar();
 
@@ -298,6 +298,8 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
     }
 
     private final class OnGetImageObserver extends LifecycleBoundMaybeObserver<Image> {
+        private final int mImageWidth = mImageView.getWidth();
+
         OnGetImageObserver() {
             super(SectionFragment.this);
         }
@@ -320,8 +322,14 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
         }
 
         private void refreshImage(@NonNull Image image) {
-            mImageView.setImageBitmap(image.getBitmap());
-            mImageView.startAnimation(mFadeImageInAnimation);
+            Glide.with(SectionFragment.this)
+                    .asBitmap()
+                    .load(image.getDecodedData())
+                    .apply(
+                            RequestOptions
+                                    .centerCropTransform()
+                                    .override(mImageWidth, mImageHeight)
+                    ).into(mImageView);
         }
     }
 

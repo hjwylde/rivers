@@ -3,10 +3,12 @@ package com.hjwylde.rivers.ui.widgets.selectImageDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.WorkerThread;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
@@ -43,7 +45,7 @@ public final class SelectImageDialogFragment extends DialogFragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode != RESULT_OK) {
-            getTakePhotoOption().cleanImageFile();
+            AsyncTask.execute(getTakePhotoOption()::cleanImageFile);
             return;
         }
 
@@ -82,7 +84,7 @@ public final class SelectImageDialogFragment extends DialogFragment {
         dialog.getListView().setOnItemClickListener((parent, view, position, id) -> {
             Option option = mAdapter.getItem(position);
             if (option != null) {
-                option.onClick(view);
+                AsyncTask.execute(() -> option.onClick(view));
             }
         });
 
@@ -149,6 +151,7 @@ public final class SelectImageDialogFragment extends DialogFragment {
             }
         }
 
+        @WorkerThread
         void cleanImageFile() {
             if (mImageFile == null) {
                 return;
@@ -163,6 +166,7 @@ public final class SelectImageDialogFragment extends DialogFragment {
             return FileProvider.getUriForFile(getContext(), FILE_PROVIDER_AUTHORITY, mImageFile);
         }
 
+        @WorkerThread
         private void createImageFile() {
             File dir = new File(getContext().getExternalCacheDir(), Environment.DIRECTORY_PICTURES);
             String prefix = SimpleDateFormat.getDateTimeInstance().format(new Date());
