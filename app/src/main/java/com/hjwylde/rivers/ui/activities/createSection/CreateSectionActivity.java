@@ -188,8 +188,6 @@ public final class CreateSectionActivity extends BaseActivity {
     private void onCreateImageFailure(@NonNull Throwable t) {
         Log.w(TAG, t.getMessage(), t);
 
-        resetImage();
-
         Snackbar snackbar = Snackbar.make(mRootView, R.string.error_onCreateImage, Snackbar.LENGTH_LONG);
         snackbar.show();
     }
@@ -201,15 +199,6 @@ public final class CreateSectionActivity extends BaseActivity {
     }
 
     private void onImageSelected(@NonNull Uri uri) {
-        Glide.with(this)
-                .asBitmap()
-                .load(uri)
-                .apply(
-                        RequestOptions
-                                .centerCropTransform()
-                                .placeholder(R.drawable.bm_create_section)
-                ).into(mImageView);
-
         AsyncTask.execute(() -> {
             try {
                 InputStream in = getContentResolver().openInputStream(uri);
@@ -226,21 +215,20 @@ public final class CreateSectionActivity extends BaseActivity {
         });
     }
 
+    private void refreshImage(@NonNull Image image) {
+        Glide.with(CreateSectionActivity.this)
+                .asBitmap()
+                .load(image.getDecodedData())
+                .apply(RequestOptions.centerCropTransform())
+                .into(mImageView);
+    }
+
     private void refreshSection() {
         mTitleText.setText(mSectionBuilder.title());
         mSubtitleText.setText(mSectionBuilder.subtitle());
         mGradeText.setText(mSectionBuilder.grade());
         mLengthText.setText(mSectionBuilder.length());
         mDurationText.setText(mSectionBuilder.duration());
-    }
-
-    private void resetImage() {
-        Glide.with(this).clear(mImageView);
-
-        if (mSectionBuilder.imageId() != null) {
-            mViewModel.getImage(mSectionBuilder.imageId())
-                    .subscribe(new OnGetImageObserver());
-        }
     }
 
     @UiThread
@@ -257,6 +245,8 @@ public final class CreateSectionActivity extends BaseActivity {
         @Override
         public void onSuccess(@NonNull Image image) {
             mSectionBuilder.imageId(image.getId());
+
+            refreshImage(image);
         }
     }
 
@@ -309,14 +299,6 @@ public final class CreateSectionActivity extends BaseActivity {
         @Override
         public void onSuccess(@NonNull Image image) {
             refreshImage(image);
-        }
-
-        private void refreshImage(@NonNull Image image) {
-            Glide.with(CreateSectionActivity.this)
-                    .asBitmap()
-                    .load(image.getDecodedData())
-                    .apply(RequestOptions.centerCropTransform())
-                    .into(mImageView);
         }
     }
 
