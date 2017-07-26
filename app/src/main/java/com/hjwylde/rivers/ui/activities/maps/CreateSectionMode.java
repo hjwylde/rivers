@@ -72,7 +72,7 @@ public final class CreateSectionMode implements ActionMode.Callback {
         getFloatingActionButton().hide();
         animateCenterMarkerIn();
 
-        mMapFragment.disableOnMarkerClickListener();
+        mMapFragment.disableOnClickEvents();
 
         mActionMode = mode;
 
@@ -86,7 +86,7 @@ public final class CreateSectionMode implements ActionMode.Callback {
         getFloatingActionButton().show();
         animateCenterMarkerOut();
 
-        mMapFragment.enableOnMarkerClickListener();
+        mMapFragment.enableOnClickEvents();
 
         mActionMode = null;
 

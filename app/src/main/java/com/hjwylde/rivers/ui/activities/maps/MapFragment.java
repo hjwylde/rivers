@@ -1,7 +1,9 @@
 package com.hjwylde.rivers.ui.activities.maps;
 
 import android.Manifest;
-import android.app.Activity;
+import android.arch.lifecycle.LifecycleRegistry;
+import android.arch.lifecycle.LifecycleRegistryOwner;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,35 +13,43 @@ import android.support.v4.app.ActivityCompat;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.Marker;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
+import com.hjwylde.reactivex.observers.LifecycleBoundObserver;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.models.Section;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static java.util.Objects.requireNonNull;
 
 @UiThread
-public final class MapFragment extends SupportMapFragment implements OnMapReadyCallback, ClusterManager.OnClusterItemClickListener<SectionMarker>, ClusterManager.OnClusterClickListener<SectionMarker> {
+public final class MapFragment extends SupportMapFragment implements LifecycleRegistryOwner {
     private static final int ACCESS_LOCATION_PERMISSION_REQUEST_CODE = 1;
+
+    private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
 
     private GoogleMap mMap;
     private ClusterManager<SectionMarker> mClusterManager;
-    private DefaultOnMarkerClickListener mOnMarkerClickListener = new DefaultOnMarkerClickListener();
+    private GoogleMap.OnMapClickListener mOnMapClickListener;
+    private GoogleMap.OnMarkerClickListener mOnMarkerClickListener;
+    private ClusterManager.OnClusterItemClickListener<SectionMarker> mOnClusterItemClickListener;
 
-    private HomeContract.View mView;
+    private MapViewModel mViewModel;
 
+    private List<Section> mSections = new ArrayList<>();
     private Map<String, SectionMarker> mSectionMarkers = new HashMap<>();
 
     public void animateCameraToSection(@NonNull String sectionId, @NonNull GoogleMap.CancelableCallback cancelableCallback) {
@@ -50,12 +60,17 @@ public final class MapFragment extends SupportMapFragment implements OnMapReadyC
         mMap.animateCamera(update, 2000, cancelableCallback);
     }
 
-    public void disableOnMarkerClickListener() {
-        mOnMarkerClickListener.disable();
+    public void disableOnClickEvents() {
+        mOnMarkerClickListener = marker -> true;
     }
 
-    public void enableOnMarkerClickListener() {
-        mOnMarkerClickListener.enable();
+    public void enableOnClickEvents() {
+        mOnMarkerClickListener = mClusterManager;
+    }
+
+    @Override
+    public LifecycleRegistry getLifecycle() {
+        return mRegistry;
     }
 
     public GoogleMap getMap() {
@@ -63,71 +78,10 @@ public final class MapFragment extends SupportMapFragment implements OnMapReadyC
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        mView = (HomeContract.View) activity;
-    }
-
-    @Override
-    public boolean onClusterClick(Cluster<SectionMarker> cluster) {
-        LatLngBounds.Builder builder = LatLngBounds.builder();
-        for (ClusterItem item : cluster.getItems()) {
-            builder.include(item.getPosition());
-        }
-        LatLngBounds bounds = builder.build();
-
-        int padding = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? 250 : 100;
-        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
-
-        return true;
-    }
-
-    @Override
-    public boolean onClusterItemClick(SectionMarker sectionMarker) {
-        mView.selectSection(sectionMarker.getId());
-
-        return true;
-    }
-
-    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
 
-        getMapAsync(this);
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_style));
-
-        UiSettings uiSettings = mMap.getUiSettings();
-        uiSettings.setMapToolbarEnabled(false);
-        uiSettings.setMyLocationButtonEnabled(false);
-
-        mClusterManager = new ClusterManager<>(getContext(), mMap);
-        mClusterManager.setOnClusterItemClickListener(this);
-        mClusterManager.setOnClusterClickListener(this);
-
-        final SectionClusterRenderer<SectionMarker> sectionClusterRenderer = new SectionClusterRenderer<>(getContext(), mMap, mClusterManager);
-        sectionClusterRenderer.setMinClusterSize(1);
-        mClusterManager.setRenderer(sectionClusterRenderer);
-
-        mMap.setOnCameraIdleListener(() -> {
-            mClusterManager.onCameraIdle();
-            sectionClusterRenderer.onCameraIdle();
-        });
-        mMap.setOnMarkerClickListener(mOnMarkerClickListener);
-        mMap.setOnMapClickListener(new DefaultOnMapClickListener());
-
-        if (checkAccessLocationPermission()) {
-            mMap.setMyLocationEnabled(true);
-        } else {
-            requestAccessLocationPermissions();
-        }
-
-        mView.refreshMap();
+        mViewModel = ViewModelProviders.of(this).get(MapViewModel.class);
     }
 
     @Override
@@ -142,27 +96,25 @@ public final class MapFragment extends SupportMapFragment implements OnMapReadyC
         super.onResume();
 
         if (mMap == null) {
-            getMapAsync(this);
+            getMapAsync(this::onMapReady);
         }
     }
 
-    public void refreshMap(@NonNull Collection<? extends Section> sections) {
-        if (mMap == null) {
-            return;
-        }
+    @Override
+    public void onStart() {
+        super.onStart();
 
-        mMap.clear();
-        mSectionMarkers.clear();
-        mClusterManager.clearItems();
+        mViewModel.streamSections()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new OnGetSectionsObserver());
+    }
 
-        for (Section section : sections) {
-            SectionMarker marker = new SectionMarker(section.getId(), section.getPutIn(), Section.Grade.from(section.getGrade()));
+    public void setOnMapClickListener(@NonNull GoogleMap.OnMapClickListener listener) {
+        mOnMapClickListener = requireNonNull(listener);
+    }
 
-            mSectionMarkers.put(section.getId(), marker);
-            mClusterManager.addItem(marker);
-        }
-
-        mClusterManager.cluster();
+    public void setOnMarkerClickListener(@NonNull ClusterManager.OnClusterItemClickListener<SectionMarker> listener) {
+        mOnClusterItemClickListener = requireNonNull(listener);
     }
 
     private boolean checkAccessCoarseLocationPermission() {
@@ -177,6 +129,86 @@ public final class MapFragment extends SupportMapFragment implements OnMapReadyC
         return checkAccessCoarseLocationPermission() && checkAccessFineLocationPermission();
     }
 
+    private boolean onClusterClick(Cluster<SectionMarker> cluster) {
+        LatLngBounds.Builder builder = LatLngBounds.builder();
+        for (ClusterItem item : cluster.getItems()) {
+            builder.include(item.getPosition());
+        }
+        LatLngBounds bounds = builder.build();
+
+        int padding = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? 250 : 100;
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
+
+        return true;
+    }
+
+    private void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_style));
+
+        UiSettings uiSettings = mMap.getUiSettings();
+        uiSettings.setMapToolbarEnabled(false);
+        uiSettings.setMyLocationButtonEnabled(false);
+
+        mClusterManager = new ClusterManager<>(getContext(), mMap);
+        mClusterManager.setOnClusterItemClickListener(sectionMarker -> {
+            if (mOnClusterItemClickListener != null) {
+                return mOnClusterItemClickListener.onClusterItemClick(sectionMarker);
+            }
+
+            return false;
+        });
+        mClusterManager.setOnClusterClickListener(this::onClusterClick);
+
+        final SectionClusterRenderer<SectionMarker> sectionClusterRenderer = new SectionClusterRenderer<>(getContext(), mMap, mClusterManager);
+        sectionClusterRenderer.setMinClusterSize(1);
+        mClusterManager.setRenderer(sectionClusterRenderer);
+
+        mMap.setOnCameraIdleListener(() -> {
+            sectionClusterRenderer.onCameraIdle();
+            mClusterManager.onCameraIdle();
+        });
+        mMap.setOnMapClickListener(position -> {
+            if (mOnMapClickListener != null) {
+                mOnMapClickListener.onMapClick(position);
+            }
+        });
+        mMap.setOnMarkerClickListener(marker -> {
+            if (mOnMarkerClickListener != null) {
+                return mOnMarkerClickListener.onMarkerClick(marker);
+            }
+
+            return false;
+        });
+
+        if (checkAccessLocationPermission()) {
+            mMap.setMyLocationEnabled(true);
+        } else {
+            requestAccessLocationPermissions();
+        }
+
+        refreshMap();
+    }
+
+    private void refreshMap() {
+        if (mMap == null) {
+            return;
+        }
+
+        mMap.clear();
+        mSectionMarkers.clear();
+        mClusterManager.clearItems();
+
+        for (Section section : mSections) {
+            SectionMarker marker = new SectionMarker(section.getId(), section.getPutIn(), Section.Grade.from(section.getGrade()));
+
+            mSectionMarkers.put(section.getId(), marker);
+            mClusterManager.addItem(marker);
+        }
+
+        mClusterManager.cluster();
+    }
+
     private void requestAccessLocationPermissions() {
         String[] locationPermissions = new String[]{
                 Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -187,32 +219,28 @@ public final class MapFragment extends SupportMapFragment implements OnMapReadyC
     }
 
     @UiThread
-    private class DefaultOnMapClickListener implements GoogleMap.OnMapClickListener {
-        @Override
-        public void onMapClick(LatLng latLng) {
-            mView.clearSelection();
-        }
-    }
-
-    @UiThread
-    private class DefaultOnMarkerClickListener implements GoogleMap.OnMarkerClickListener {
-        private boolean mEnabled = true;
-
-        public void disable() {
-            mEnabled = false;
-        }
-
-        public void enable() {
-            mEnabled = true;
+    private final class OnGetSectionsObserver extends LifecycleBoundObserver<List<Section>> {
+        OnGetSectionsObserver() {
+            super(MapFragment.this);
         }
 
         @Override
-        public boolean onMarkerClick(Marker marker) {
-            if (mEnabled && mClusterManager != null) {
-                return mClusterManager.onMarkerClick(marker);
-            }
+        public void onComplete() {
+            // Do nothing
+        }
 
-            return true;
+        @Override
+        public void onError(@NonNull Throwable t) {
+            // This should never happen
+            throw new RuntimeException(t);
+        }
+
+        @Override
+        public void onNext(@NonNull List<Section> sections) {
+            mSections.clear();
+            mSections.addAll(sections);
+
+            refreshMap();
         }
     }
 }

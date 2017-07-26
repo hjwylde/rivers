@@ -19,17 +19,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.RiversApplication;
-import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.activities.BaseActivity;
 import com.hjwylde.rivers.ui.activities.createSection.CreateSectionActivity;
 import com.hjwylde.rivers.ui.activities.settings.SettingsActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-
-import static java.util.Objects.requireNonNull;
 
 @UiThread
 public final class HomeActivity extends BaseActivity implements HomeContract.View, View.OnClickListener {
@@ -42,17 +38,11 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
     private static final String STATE_CREATE_SECTION_MODE_ACTIVE = "createSectionModeActive";
 
     private FloatingSearchView mSearchView;
+    private MapFragment mMapFragment;
     private SectionFragment mSectionFragment;
     private CreateSectionMode mCreateSectionMode;
 
     private HomeContract.Presenter mPresenter;
-
-    private List<? extends Section> mSections = new ArrayList<>();
-
-    @Override
-    public void clearSelection() {
-        mSectionFragment.getBottomSheetBehavior().setState(BottomSheetBehavior.STATE_HIDDEN);
-    }
 
     @Override
     public void createSection(@NonNull LatLng putIn) {
@@ -105,12 +95,6 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
     }
 
     @Override
-    public void refreshMap() {
-        MapFragment mapFragment = getMapFragment();
-        mapFragment.refreshMap(mSections);
-    }
-
-    @Override
     public void selectSection(@NonNull String id) {
         mSectionFragment.setSectionId(id);
     }
@@ -118,11 +102,6 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
     @Override
     public void setSectionSuggestions(@NonNull List<SectionSuggestion> sectionSuggestions) {
         mSearchView.swapSuggestions(sectionSuggestions);
-    }
-
-    @Override
-    public void setSections(@NonNull List<? extends Section> sections) {
-        mSections = requireNonNull(sections);
     }
 
     @Override
@@ -162,7 +141,7 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
             public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
                 String sectionId = ((SectionSuggestion) searchSuggestion).getSectionId();
 
-                getMapFragment().animateCameraToSection(sectionId, new GoogleMap.CancelableCallback() {
+                mMapFragment.animateCameraToSection(sectionId, new GoogleMap.CancelableCallback() {
                     @Override
                     public void onCancel() {
                     }
@@ -186,6 +165,8 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
 
         FloatingActionButton fab = findTById(R.id.fab);
         fab.setOnClickListener(this);
+
+        initMapFragment();
 
         initSectionFragment();
 
@@ -214,13 +195,6 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        mPresenter.getSections();
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
@@ -230,9 +204,17 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
         outState.putBoolean(STATE_CREATE_SECTION_MODE_ACTIVE, mCreateSectionMode != null && mCreateSectionMode.isActive());
     }
 
-    @NonNull
-    private MapFragment getMapFragment() {
-        return (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+    private void clearSelection() {
+        mSectionFragment.getBottomSheetBehavior().setState(BottomSheetBehavior.STATE_HIDDEN);
+    }
+
+    private void initMapFragment() {
+        mMapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mMapFragment.setOnMapClickListener(position -> clearSelection());
+        mMapFragment.setOnMarkerClickListener(sectionMarker -> {
+            selectSection(sectionMarker.getId());
+            return true;
+        });
     }
 
     private void initSectionFragment() {
@@ -304,7 +286,7 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
 
     private void startCreateSectionMode() {
         if (mCreateSectionMode == null) {
-            mCreateSectionMode = new CreateSectionMode(this, getMapFragment());
+            mCreateSectionMode = new CreateSectionMode(this, mMapFragment);
         }
 
         startActionMode(mCreateSectionMode);

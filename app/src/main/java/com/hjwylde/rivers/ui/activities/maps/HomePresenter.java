@@ -44,19 +44,6 @@ public final class HomePresenter implements HomeContract.Presenter {
     }
 
     @Override
-    public void getSections() {
-        Disposable disposable = mRepository.getSections()
-                .observeOn(AndroidSchedulers.mainThread())
-                .toList()
-                .subscribe(sections -> {
-                    mView.setSections(sections);
-                    mView.refreshMap();
-                });
-
-        mDisposables.add(disposable);
-    }
-
-    @Override
     public void unsubscribe() {
         mDisposables.clear();
     }
