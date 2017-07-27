@@ -38,7 +38,6 @@ import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import static java.util.Objects.requireNonNull;
 
@@ -158,7 +157,6 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
         super.onStart();
 
         mViewModel.streamSection()
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new OnGetSectionObserver());
 
         if (mSectionId != null) {

@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,8 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static java.util.Objects.requireNonNull;
@@ -107,16 +104,15 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         super.onStart();
 
         mViewModel.streamSections()
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new OnGetSectionsObserver());
-    }
-
-    public void setOnMapClickListener(@NonNull GoogleMap.OnMapClickListener listener) {
-        mOnMapClickListener = requireNonNull(listener);
     }
 
     public void setOnClusterItemClickListener(@NonNull ClusterManager.OnClusterItemClickListener<SectionMarker> listener) {
         mOnClusterItemClickListener = requireNonNull(listener);
+    }
+
+    public void setOnMapClickListener(@NonNull GoogleMap.OnMapClickListener listener) {
+        mOnMapClickListener = requireNonNull(listener);
     }
 
     private boolean checkAccessCoarseLocationPermission() {
