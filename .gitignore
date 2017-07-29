@@ -1,7 +1,9 @@
 .gradle/
 .idea/
 
+*.apk
 *.iml
-google_maps_api.xml
 build/
+google_maps_api.xml
 local.properties
+output.json

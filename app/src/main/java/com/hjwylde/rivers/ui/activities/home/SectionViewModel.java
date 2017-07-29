@@ -46,12 +46,14 @@ public final class SectionViewModel extends ViewModel {
                     );
         }
 
-        return mSectionSubject;
+        return mSectionSubject
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @NonNull
     public Observable<Section> streamSection() {
-        return mSectionSubject;
+        return mSectionSubject
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override

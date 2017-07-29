@@ -54,11 +54,7 @@ public final class SectionSuggestion implements SearchSuggestion {
 
     @Override
     public String getBody() {
-        StringBuilder body = new StringBuilder(mTitle);
-        body.append(", ");
-        body.append(mSubtitle);
-
-        return body.toString();
+        return mTitle + ", " + mSubtitle;
     }
 
     @NonNull

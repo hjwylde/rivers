@@ -11,6 +11,7 @@ import com.hjwylde.rivers.services.Repository;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -32,7 +33,8 @@ public final class MapViewModel extends ViewModel {
                     );
         }
 
-        return mSectionsSubject;
+        return mSectionsSubject
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override

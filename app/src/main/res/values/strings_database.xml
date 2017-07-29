@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="database_name">rivers</string>
-    <string name="database_url">http://45.32.247.9:4984/db</string>
 </resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="database_url">http://tentacool.hjwylde.com:4984/db</string>
+    <string name="database_password"/>
+</resources>

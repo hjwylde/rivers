@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@android:color/white"
@@ -8,14 +9,14 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/imageHeight">
+        android:layout_height="@dimen/imageHeight"
+        android:background="@color/primaryLight">
 
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/bm_create_section"/>
+            android:scaleType="centerCrop"/>
 
         <FrameLayout
             android:layout_width="@dimen/cameraSize"
@@ -94,7 +95,7 @@
                 android:id="@+id/grade_container"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/text_gutter"
+                android:layout_marginEnd="@dimen/text_gutter"
                 android:layout_weight="1"
                 android:baselineAligned="false"
                 android:gravity="center">
@@ -124,7 +125,7 @@
                 android:id="@+id/length_container"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/text_gutter"
+                android:layout_marginEnd="@dimen/text_gutter"
                 android:layout_weight="1"
                 android:gravity="center">
 
@@ -144,7 +145,8 @@
                     android:hint="@string/hint_length"
                     android:inputType="text|textNoSuggestions"
                     android:minEms="2"
-                    android:nextFocusDown="@+id/duration"/>
+                    android:nextFocusDown="@+id/duration"
+                    tools:ignore="TextFields"/>
             </LinearLayout>
 
             <LinearLayout

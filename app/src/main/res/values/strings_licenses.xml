@@ -2,9 +2,7 @@
 <resources>
     <string name="title_activity_licenses">Open source licenses</string>
 
-    <string name="pref_title_android_arch_lifecycle_compiler">Android Architecture Components (Compiler)</string>
-    <string name="pref_title_android_arch_lifecycle_runtime">Android Architecture Components (Runtime)</string>
-    <string name="pref_title_android_arch_lifecycle_extensions">Android Architecture Components (Extensions)</string>
+    <string name="pref_title_android_arch_lifecycle">Android Architecture Components</string>
     <string name="pref_title_com_actinarium_aligned_aligned">Aligned</string>
     <string name="pref_title_com_android_support_appcompat_v7">v7 Support Library (appcompat)</string>
     <string name="pref_title_com_android_support_design">Design Support Library</string>

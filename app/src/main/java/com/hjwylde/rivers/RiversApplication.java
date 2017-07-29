@@ -2,13 +2,14 @@ package com.hjwylde.rivers;
 
 import android.app.Application;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.DatabaseOptions;
 import com.couchbase.lite.Manager;
 import com.couchbase.lite.android.AndroidContext;
+import com.couchbase.lite.auth.Authenticator;
+import com.couchbase.lite.auth.PasswordAuthorizer;
 import com.couchbase.lite.replicator.Replication;
 import com.hjwylde.rivers.db.services.CouchbaseRepository;
 import com.hjwylde.rivers.services.Repository;
@@ -20,8 +21,6 @@ import java.net.URL;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class RiversApplication extends Application {
-    private static final String TAG = RiversApplication.class.getSimpleName();
-
     private static Database mDatabase;
 
     private static Repository mRepository;
@@ -62,10 +61,9 @@ public class RiversApplication extends Application {
 
             mDatabase = manager.openDatabase(name, options);
         } catch (IOException | CouchbaseLiteException e) {
-            Log.e(TAG, e.getMessage(), e);
-
             // TODO (hjw): if this is a permission exception, then an error should be displayed to
             // the user. Otherwise, re-raise the exception.
+            throw new RuntimeException(e);
         }
     }
 
@@ -80,11 +78,18 @@ public class RiversApplication extends Application {
             Replication pull = mDatabase.createPullReplication(url);
             pull.setContinuous(true);
 
+            if (!BuildConfig.DEBUG) {
+                String username = "android-" + BuildConfig.VERSION_NAME;
+                String password = getString(R.string.database_password);
+
+                Authenticator authenticator = new PasswordAuthorizer(username, password);
+                push.setAuthenticator(authenticator);
+                pull.setAuthenticator(authenticator);
+            }
+
             push.start();
             pull.start();
         } catch (MalformedURLException e) {
-            Log.e(TAG, e.getMessage(), e);
-
             throw new RuntimeException(e);
         }
     }
