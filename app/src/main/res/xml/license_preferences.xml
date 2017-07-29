@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <Preference
-        android:title="@string/pref_title_android_arch_lifecycle_compiler">
-    </Preference>
-    <Preference
-        android:title="@string/pref_title_android_arch_lifecycle_runtime">
-    </Preference>
-    <Preference
-        android:title="@string/pref_title_android_arch_lifecycle_extensions">
+        android:title="@string/pref_title_android_arch_lifecycle">
+        <!-- TODO (hjw): confirm this license -->
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="http://www.apache.org/licenses/LICENSE-2.0"/>
     </Preference>
     <Preference
         android:title="@string/pref_title_com_actinarium_aligned_aligned">
@@ -17,9 +15,15 @@
     </Preference>
     <Preference
         android:title="@string/pref_title_com_android_support_appcompat_v7">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="http://www.apache.org/licenses/LICENSE-2.0"/>
     </Preference>
     <Preference
         android:title="@string/pref_title_com_android_support_design">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="http://www.apache.org/licenses/LICENSE-2.0"/>
     </Preference>
     <Preference
         android:title="@string/pref_title_com_couchbase_lite_couchbase_lite_android">
@@ -41,6 +45,9 @@
     </Preference>
     <Preference
         android:title="@string/pref_title_com_google_android_gms_play_services_maps">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://developer.android.com/studio/terms.html"/>
     </Preference>
     <Preference
         android:title="@string/pref_title_com_google_maps_android_android_maps_utils">
