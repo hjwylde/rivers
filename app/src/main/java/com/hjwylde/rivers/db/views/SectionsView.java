@@ -1,7 +1,6 @@
 package com.hjwylde.rivers.db.views;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 
 import com.couchbase.lite.Database;
