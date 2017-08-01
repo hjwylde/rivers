@@ -2,19 +2,35 @@
 <resources>
     <string name="title_activity_licenses">Open source licenses</string>
 
-    <string name="pref_title_android_arch_lifecycle">Android Architecture Components</string>
-    <string name="pref_title_com_actinarium_aligned_aligned">Aligned</string>
-    <string name="pref_title_com_android_support_appcompat_v7">v7 Support Library (appcompat)</string>
-    <string name="pref_title_com_android_support_design">Design Support Library</string>
-    <string name="pref_title_com_couchbase_lite_couchbase_lite_android">Couchbase Lite</string>
-    <string name="pref_title_com_github_arimorty_floatingsearchview">Floating Search View</string>
-    <string name="pref_title_com_github_bumptech_glide_glide">Glide</string>
-    <string name="pref_title_com_google_android_gms_play_services_maps">Google Play Services (maps)</string>
-    <string name="pref_title_com_google_maps_android_android_maps_utils">Google Maps Android Utils</string>
-    <string name="pref_title_com_jakewharton_butterknife_compiler">Butter Knife</string>
-    <string name="pref_title_com_mobsandgeeks_android_saripaar">Android Saripaar v2</string>
-    <string name="pref_title_io_ractivex_rxjava2_rxandroid">RxAndroid</string>
-    <string name="pref_title_io_ractivex_rxjava2_rxjava">RxJava</string>
-    <string name="pref_title_net_ltgt_errorprone">Error Prone</string>
-    <string name="pref_title_uk_co_chrisjenx_calligraphy">Calligraphy</string>
+    <string name="title_android_arch_lifecycle">Android Architecture Components</string>
+    <string name="title_com_actinarium_aligned_aligned">Aligned</string>
+    <string name="title_com_android_support_appcompat_v7">v7 Support Library (appcompat)</string>
+    <string name="title_com_android_support_design">Design Support Library</string>
+    <string name="title_com_couchbase_lite_couchbase_lite_android">Couchbase Lite</string>
+    <string name="title_com_github_arimorty_floatingsearchview">Floating Search View</string>
+    <string name="title_com_github_bumptech_glide_glide">Glide</string>
+    <string name="title_com_google_android_gms_play_services_maps">Google Play Services (maps)</string>
+    <string name="title_com_google_maps_android_android_maps_utils">Google Maps Android Utils</string>
+    <string name="title_com_jakewharton_butterknife_compiler">Butter Knife</string>
+    <string name="title_com_mobsandgeeks_android_saripaar">Android Saripaar v2</string>
+    <string name="title_io_ractivex_rxjava2_rxandroid">RxAndroid</string>
+    <string name="title_io_ractivex_rxjava2_rxjava">RxJava</string>
+    <string name="title_net_ltgt_errorprone">Error Prone</string>
+    <string name="title_uk_co_chrisjenx_calligraphy">Calligraphy</string>
+
+    <string name="url_android_arch_lifecycle">http://www.apache.org/licenses/LICENSE-2.0</string>
+    <string name="url_com_actinarium_aligned_aligned">https://github.com/Actinarium/Aligned/blob/master/LICENSE</string>
+    <string name="url_com_android_support_appcompat_v7">http://www.apache.org/licenses/LICENSE-2.0</string>
+    <string name="url_com_android_support_design">http://www.apache.org/licenses/LICENSE-2.0</string>
+    <string name="url_com_couchbase_lite_couchbase_lite_android">https://github.com/couchbase/couchbase-lite-android/blob/master/LICENSE.TXT</string>
+    <string name="url_com_github_arimorty_floatingsearchview">https://github.com/arimorty/floatingsearchview/blob/master/LICENSE.txt</string>
+    <string name="url_com_github_bumptech_glide_glide">https://github.com/bumptech/glide/blob/master/LICENSE</string>
+    <string name="url_com_google_android_gms_play_services_maps">https://developer.android.com/studio/terms.html</string>
+    <string name="url_com_google_maps_android_android_maps_utils">https://github.com/googlemaps/android-maps-utils/blob/master/LICENSE</string>
+    <string name="url_com_jakewharton_butterknife_compiler">https://github.com/JakeWharton/butterknife/blob/master/LICENSE.txt</string>
+    <string name="url_com_mobsandgeeks_android_saripaar">https://github.com/ragunathjawahar/android-saripaar#license</string>
+    <string name="url_io_ractivex_rxjava2_rxandroid">https://github.com/ReactiveX/RxAndroid/blob/2.x/LICENSE</string>
+    <string name="url_io_ractivex_rxjava2_rxjava">https://github.com/ReactiveX/RxJava/blob/2.x/LICENSE</string>
+    <string name="url_net_ltgt_errorprone">https://github.com/google/error-prone/blob/master/COPYING</string>
+    <string name="url_uk_co_chrisjenx_calligraphy">https://github.com/chrisjenx/Calligraphy/blob/master/LICENSE</string>
 </resources>

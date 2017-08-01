@@ -1,94 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <Preference
-        android:title="@string/pref_title_android_arch_lifecycle">
-        <!-- TODO (hjw): confirm this license -->
+        android:title="@string/title_android_arch_lifecycle">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="http://www.apache.org/licenses/LICENSE-2.0"/>
+            android:data="@string/url_android_arch_lifecycle"/>
     </Preference>
     <Preference
-        android:title="@string/pref_title_com_actinarium_aligned_aligned">
+        android:title="@string/title_com_actinarium_aligned_aligned">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="https://github.com/Actinarium/Aligned/blob/master/LICENSE"/>
+            android:data="@string/url_com_actinarium_aligned_aligned"/>
     </Preference>
     <Preference
-        android:title="@string/pref_title_com_android_support_appcompat_v7">
+        android:title="@string/title_com_android_support_appcompat_v7">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="http://www.apache.org/licenses/LICENSE-2.0"/>
+            android:data="@string/url_com_android_support_appcompat_v7"/>
     </Preference>
     <Preference
-        android:title="@string/pref_title_com_android_support_design">
+        android:title="@string/title_com_android_support_design">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="http://www.apache.org/licenses/LICENSE-2.0"/>
+            android:data="@string/url_com_android_support_design"/>
     </Preference>
     <Preference
-        android:title="@string/pref_title_com_couchbase_lite_couchbase_lite_android">
+        android:title="@string/title_com_couchbase_lite_couchbase_lite_android">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="https://github.com/couchbase/couchbase-lite-android/blob/master/LICENSE.TXT"/>
+            android:data="@string/url_com_couchbase_lite_couchbase_lite_android"/>
     </Preference>
     <Preference
-        android:title="@string/pref_title_com_github_arimorty_floatingsearchview">
+        android:title="@string/title_com_github_arimorty_floatingsearchview">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="https://github.com/arimorty/floatingsearchview/blob/master/LICENSE.txt"/>
+            android:data="@string/url_com_github_arimorty_floatingsearchview"/>
     </Preference>
     <Preference
-        android:title="@string/pref_title_com_github_bumptech_glide_glide">
+        android:title="@string/title_com_github_bumptech_glide_glide">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="https://github.com/bumptech/glide/blob/master/LICENSE"/>
+            android:data="@string/url_com_github_bumptech_glide_glide"/>
     </Preference>
     <Preference
-        android:title="@string/pref_title_com_google_android_gms_play_services_maps">
+        android:title="@string/title_com_google_android_gms_play_services_maps">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="https://developer.android.com/studio/terms.html"/>
+            android:data="@string/url_com_google_android_gms_play_services_maps"/>
     </Preference>
     <Preference
-        android:title="@string/pref_title_com_google_maps_android_android_maps_utils">
+        android:title="@string/title_com_google_maps_android_android_maps_utils">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="https://github.com/googlemaps/android-maps-utils/blob/master/LICENSE"/>
+            android:data="@string/url_com_google_maps_android_android_maps_utils"/>
     </Preference>
     <Preference
-        android:title="@string/pref_title_com_jakewharton_butterknife_compiler">
+        android:title="@string/title_com_jakewharton_butterknife_compiler">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="https://github.com/JakeWharton/butterknife/blob/master/LICENSE.txt"/>
+            android:data="@string/url_com_jakewharton_butterknife_compiler"/>
     </Preference>
     <Preference
-        android:title="@string/pref_title_com_mobsandgeeks_android_saripaar">
+        android:title="@string/title_com_mobsandgeeks_android_saripaar">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="https://github.com/ragunathjawahar/android-saripaar#license"/>
+            android:data="@string/url_com_mobsandgeeks_android_saripaar"/>
     </Preference>
     <Preference
-        android:title="@string/pref_title_io_ractivex_rxjava2_rxandroid">
+        android:title="@string/title_io_ractivex_rxjava2_rxandroid">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="https://github.com/ReactiveX/RxAndroid/blob/2.x/LICENSE"/>
+            android:data="@string/title_io_ractivex_rxjava2_rxandroid"/>
     </Preference>
     <Preference
-        android:title="@string/pref_title_io_ractivex_rxjava2_rxjava">
+        android:title="@string/title_io_ractivex_rxjava2_rxjava">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="https://github.com/ReactiveX/RxJava/blob/2.x/LICENSE"/>
+            android:data="@string/url_io_ractivex_rxjava2_rxjava"/>
     </Preference>
     <Preference
-        android:title="@string/pref_title_net_ltgt_errorprone">
+        android:title="@string/title_net_ltgt_errorprone">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="https://github.com/google/error-prone/blob/master/COPYING"/>
+            android:data="@string/url_net_ltgt_errorprone"/>
     </Preference>
     <Preference
-        android:title="@string/pref_title_uk_co_chrisjenx_calligraphy">
+        android:title="@string/title_uk_co_chrisjenx_calligraphy">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="https://github.com/chrisjenx/Calligraphy/blob/master/LICENSE"/>
+            android:data="@string/url_uk_co_chrisjenx_calligraphy"/>
     </Preference>
 </PreferenceScreen>
