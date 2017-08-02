@@ -13,6 +13,7 @@
     <string name="title_com_google_maps_android_android_maps_utils">Google Maps Android Utils</string>
     <string name="title_com_jakewharton_butterknife_compiler">Butter Knife</string>
     <string name="title_com_mobsandgeeks_android_saripaar">Android Saripaar v2</string>
+    <string name="title_com_tbruyelle_rxpermissions2_rxpermissions">RxPermissions</string>
     <string name="title_io_ractivex_rxjava2_rxandroid">RxAndroid</string>
     <string name="title_io_ractivex_rxjava2_rxjava">RxJava</string>
     <string name="title_net_ltgt_errorprone">Error Prone</string>
@@ -29,6 +30,7 @@
     <string name="url_com_google_maps_android_android_maps_utils">https://github.com/googlemaps/android-maps-utils/blob/master/LICENSE</string>
     <string name="url_com_jakewharton_butterknife_compiler">https://github.com/JakeWharton/butterknife/blob/master/LICENSE.txt</string>
     <string name="url_com_mobsandgeeks_android_saripaar">https://github.com/ragunathjawahar/android-saripaar#license</string>
+    <string name="url_com_tbruyelle_rxpermissions2_rxpermissions">https://github.com/tbruyelle/RxPermissions/blob/master/LICENSE</string>
     <string name="url_io_ractivex_rxjava2_rxandroid">https://github.com/ReactiveX/RxAndroid/blob/2.x/LICENSE</string>
     <string name="url_io_ractivex_rxjava2_rxjava">https://github.com/ReactiveX/RxJava/blob/2.x/LICENSE</string>
     <string name="url_net_ltgt_errorprone">https://github.com/google/error-prone/blob/master/COPYING</string>
