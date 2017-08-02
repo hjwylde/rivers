@@ -7,15 +7,17 @@ import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.Dimension;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
-import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -32,15 +34,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindDimen;
+import butterknife.ButterKnife;
 import io.reactivex.subjects.SingleSubject;
 
 import static java.util.Objects.requireNonNull;
 
 @UiThread
 public final class MapFragment extends SupportMapFragment implements LifecycleRegistryOwner {
-    private static final String TAG = MapFragment.class.getSimpleName();
-
     private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
+
+    @BindDimen(R.dimen.map_paddingTop)
+    @Dimension
+    int mMapPaddingTop;
+    @BindDimen(R.dimen.map_paddingRight)
+    @Dimension
+    int mMapPaddingRight;
+    @BindDimen(R.dimen.map_paddingBottom)
+    @Dimension
+    int mMapPaddingBottom;
+    @BindDimen(R.dimen.map_paddingLeft)
+    @Dimension
+    int mMapPaddingLeft;
 
     private SingleSubject<GoogleMap> mMapSubject = SingleSubject.create();
     private ClusterManager<SectionMarker> mClusterManager;
@@ -91,6 +106,20 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         mViewModel = ViewModelProviders.of(this).get(MapViewModel.class);
 
         getMapAsync(map -> mMapSubject.onSuccess(map));
+
+        RxPermissions permissions = new RxPermissions(getActivity());
+        permissions
+                .request(Manifest.permission.ACCESS_FINE_LOCATION)
+                .delaySubscription(mMapSubject.toObservable())
+                .subscribe(new OnRequestLocationPermissionObserver());
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
+        View view = super.onCreateView(layoutInflater, viewGroup, bundle);
+
+        ButterKnife.bind(this, view);
+
         mMapSubject.subscribe(new LifecycleBoundSingleObserver<GoogleMap>(this) {
             @Override
             public void onError(Throwable t) {
@@ -103,11 +132,7 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
             }
         });
 
-        RxPermissions permissions = new RxPermissions(getActivity());
-        permissions
-                .request(Manifest.permission.ACCESS_FINE_LOCATION)
-                .delaySubscription(mMapSubject.toObservable())
-                .subscribe(new OnRequestLocationPermissionObserver());
+        return view;
     }
 
     @Override
@@ -129,10 +154,7 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
 
     private void initMap(GoogleMap map) {
         map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_style));
-
-        UiSettings uiSettings = map.getUiSettings();
-        uiSettings.setMapToolbarEnabled(false);
-        uiSettings.setMyLocationButtonEnabled(false);
+        map.setPadding(mMapPaddingLeft, mMapPaddingTop, mMapPaddingRight, mMapPaddingBottom);
 
         mClusterManager = new ClusterManager<>(getContext(), map);
         mClusterManager.setOnClusterItemClickListener(sectionMarker -> {
@@ -237,9 +259,8 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         @Override
         public void onNext(@NonNull Boolean granted) {
             if (granted) {
-                mMapSubject.getValue().setMyLocationEnabled(true);
-            } else {
-                Log.i(TAG, "Request for location permission denied");
+                GoogleMap map = mMapSubject.getValue();
+                map.setMyLocationEnabled(true);
             }
         }
     }

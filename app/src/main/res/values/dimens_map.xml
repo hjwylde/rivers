@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="map_paddingTop">88dp</dimen>
+    <dimen name="map_paddingRight">12dp</dimen>
+    <dimen name="map_paddingBottom">0dp</dimen>
+    <dimen name="map_paddingLeft">12dp</dimen>
+</resources>
