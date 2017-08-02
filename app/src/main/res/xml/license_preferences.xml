@@ -67,6 +67,12 @@
             android:data="@string/url_com_mobsandgeeks_android_saripaar"/>
     </Preference>
     <Preference
+        android:title="@string/title_com_tbruyelle_rxpermissions2_rxpermissions">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="@string/url_com_tbruyelle_rxpermissions2_rxpermissions"/>
+    </Preference>
+    <Preference
         android:title="@string/title_io_ractivex_rxjava2_rxandroid">
         <intent
             android:action="android.intent.action.VIEW"

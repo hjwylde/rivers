@@ -1,6 +1,7 @@
 package com.hjwylde.rivers.ui.activities.home;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.arch.lifecycle.ViewModelProviders;
@@ -8,7 +9,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
-import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,41 +23,52 @@ import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
 import com.hjwylde.reactivex.observers.LifecycleBoundObserver;
+import com.hjwylde.reactivex.observers.LifecycleBoundSingleObserver;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.models.Section;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import io.reactivex.subjects.SingleSubject;
+
 import static java.util.Objects.requireNonNull;
 
 @UiThread
 public final class MapFragment extends SupportMapFragment implements LifecycleRegistryOwner {
-    private static final int ACCESS_LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private static final String TAG = MapFragment.class.getSimpleName();
 
     private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
 
-    private GoogleMap mMap;
+    private SingleSubject<GoogleMap> mMapSubject = SingleSubject.create();
     private ClusterManager<SectionMarker> mClusterManager;
     private GoogleMap.OnMapClickListener mOnMapClickListener;
     private ClusterManager.OnClusterItemClickListener<SectionMarker> mOnClusterItemClickListener;
 
     private MapViewModel mViewModel;
 
-    private List<Section> mSections = new ArrayList<>();
     private Map<String, SectionMarker> mSectionMarkers = new HashMap<>();
 
     private boolean mClickEventsEnabled = true;
 
     public void animateCameraToSection(@NonNull String sectionId, @NonNull GoogleMap.CancelableCallback cancelableCallback) {
-        LatLng position = mSectionMarkers.get(sectionId).getPosition();
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(position, SectionClusterRenderer.MAX_MAP_ZOOM);
+        mMapSubject.subscribe(new LifecycleBoundSingleObserver<GoogleMap>(this) {
+            @Override
+            public void onError(Throwable t) {
+                // Do nothing
+            }
 
-        // TODO (hjw): select the duration based on distance from current camera location
-        mMap.animateCamera(update, 2000, cancelableCallback);
+            @Override
+            public void onSuccess(GoogleMap map) {
+                LatLng position = mSectionMarkers.get(sectionId).getPosition();
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(position, SectionClusterRenderer.MAX_MAP_ZOOM);
+
+                // TODO (hjw): select the duration based on distance from current camera location
+                map.animateCamera(update, 2000, cancelableCallback);
+            }
+        });
     }
 
     public void disableOnClickEvents() {
@@ -72,31 +84,30 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         return mRegistry;
     }
 
-    public GoogleMap getMap() {
-        return mMap;
-    }
-
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
 
         mViewModel = ViewModelProviders.of(this).get(MapViewModel.class);
-    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (checkAccessLocationPermission()) {
-            mMap.setMyLocationEnabled(true);
-        }
-    }
+        getMapAsync(map -> mMapSubject.onSuccess(map));
+        mMapSubject.subscribe(new LifecycleBoundSingleObserver<GoogleMap>(this) {
+            @Override
+            public void onError(Throwable t) {
+                // Do nothing
+            }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+            @Override
+            public void onSuccess(GoogleMap map) {
+                initMap(map);
+            }
+        });
 
-        if (mMap == null) {
-            getMapAsync(this::onMapReady);
-        }
+        RxPermissions permissions = new RxPermissions(getActivity());
+        permissions
+                .request(Manifest.permission.ACCESS_FINE_LOCATION)
+                .delaySubscription(mMapSubject.toObservable())
+                .subscribe(new OnRequestLocationPermissionObserver());
     }
 
     @Override
@@ -104,6 +115,7 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         super.onStart();
 
         mViewModel.streamSections()
+                .delaySubscription(mMapSubject.toObservable())
                 .subscribe(new OnGetSectionsObserver());
     }
 
@@ -115,16 +127,43 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         mOnMapClickListener = requireNonNull(listener);
     }
 
-    private boolean checkAccessCoarseLocationPermission() {
-        return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PERMISSION_GRANTED;
-    }
+    private void initMap(GoogleMap map) {
+        map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_style));
 
-    private boolean checkAccessFineLocationPermission() {
-        return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PERMISSION_GRANTED;
-    }
+        UiSettings uiSettings = map.getUiSettings();
+        uiSettings.setMapToolbarEnabled(false);
+        uiSettings.setMyLocationButtonEnabled(false);
 
-    private boolean checkAccessLocationPermission() {
-        return checkAccessCoarseLocationPermission() && checkAccessFineLocationPermission();
+        mClusterManager = new ClusterManager<>(getContext(), map);
+        mClusterManager.setOnClusterItemClickListener(sectionMarker -> {
+            if (mOnClusterItemClickListener != null) {
+                return mOnClusterItemClickListener.onClusterItemClick(sectionMarker);
+            }
+
+            return false;
+        });
+        mClusterManager.setOnClusterClickListener(this::onClusterClick);
+
+        final SectionClusterRenderer<SectionMarker> sectionClusterRenderer = new SectionClusterRenderer<>(getContext(), map, mClusterManager);
+        sectionClusterRenderer.setMinClusterSize(1);
+        mClusterManager.setRenderer(sectionClusterRenderer);
+
+        map.setOnCameraIdleListener(() -> {
+            sectionClusterRenderer.onCameraIdle();
+            mClusterManager.onCameraIdle();
+        });
+        map.setOnMapClickListener(position -> {
+            if (mOnMapClickListener != null) {
+                mOnMapClickListener.onMapClick(position);
+            }
+        });
+        map.setOnMarkerClickListener(marker -> {
+            if (mClickEventsEnabled) {
+                return mClusterManager.onMarkerClick(marker);
+            }
+
+            return true;
+        });
     }
 
     private boolean onClusterClick(Cluster<SectionMarker> cluster) {
@@ -135,85 +174,9 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         LatLngBounds bounds = builder.build();
 
         int padding = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? 250 : 100;
-        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
+        mMapSubject.getValue().animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
 
         return true;
-    }
-
-    private void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_style));
-
-        UiSettings uiSettings = mMap.getUiSettings();
-        uiSettings.setMapToolbarEnabled(false);
-        uiSettings.setMyLocationButtonEnabled(false);
-
-        mClusterManager = new ClusterManager<>(getContext(), mMap);
-        mClusterManager.setOnClusterItemClickListener(sectionMarker -> {
-            if (mOnClusterItemClickListener != null) {
-                return mOnClusterItemClickListener.onClusterItemClick(sectionMarker);
-            }
-
-            return false;
-        });
-        mClusterManager.setOnClusterClickListener(this::onClusterClick);
-
-        final SectionClusterRenderer<SectionMarker> sectionClusterRenderer = new SectionClusterRenderer<>(getContext(), mMap, mClusterManager);
-        sectionClusterRenderer.setMinClusterSize(1);
-        mClusterManager.setRenderer(sectionClusterRenderer);
-
-        mMap.setOnCameraIdleListener(() -> {
-            sectionClusterRenderer.onCameraIdle();
-            mClusterManager.onCameraIdle();
-        });
-        mMap.setOnMapClickListener(position -> {
-            if (mOnMapClickListener != null) {
-                mOnMapClickListener.onMapClick(position);
-            }
-        });
-        mMap.setOnMarkerClickListener(marker -> {
-            if (mClickEventsEnabled) {
-                return mClusterManager.onMarkerClick(marker);
-            }
-
-            return true;
-        });
-
-        if (checkAccessLocationPermission()) {
-            mMap.setMyLocationEnabled(true);
-        } else {
-            requestAccessLocationPermissions();
-        }
-
-        refreshMap();
-    }
-
-    private void refreshMap() {
-        if (mMap == null) {
-            return;
-        }
-
-        mMap.clear();
-        mSectionMarkers.clear();
-        mClusterManager.clearItems();
-
-        for (Section section : mSections) {
-            SectionMarker marker = new SectionMarker(section.getId(), section.getPutIn(), Section.Grade.from(section.getGrade()));
-
-            mSectionMarkers.put(section.getId(), marker);
-            mClusterManager.addItem(marker);
-        }
-
-        mClusterManager.cluster();
-    }
-
-    private void requestAccessLocationPermissions() {
-        String[] locationPermissions = new String[]{
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-        };
-
-        ActivityCompat.requestPermissions(getActivity(), locationPermissions, ACCESS_LOCATION_PERMISSION_REQUEST_CODE);
     }
 
     @UiThread
@@ -235,10 +198,49 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
 
         @Override
         public void onNext(@NonNull List<Section> sections) {
-            mSections.clear();
-            mSections.addAll(sections);
+            refreshMap(sections);
+        }
 
-            refreshMap();
+        private void refreshMap(@NonNull List<Section> sections) {
+            mMapSubject.getValue().clear();
+            mSectionMarkers.clear();
+            mClusterManager.clearItems();
+
+            for (Section section : sections) {
+                SectionMarker marker = new SectionMarker(section.getId(), section.getPutIn(), Section.Grade.from(section.getGrade()));
+
+                mSectionMarkers.put(section.getId(), marker);
+                mClusterManager.addItem(marker);
+            }
+
+            mClusterManager.cluster();
+        }
+    }
+
+    private final class OnRequestLocationPermissionObserver extends LifecycleBoundObserver<Boolean> {
+        OnRequestLocationPermissionObserver() {
+            super(MapFragment.this);
+        }
+
+        @Override
+        public void onComplete() {
+            // Do nothing
+        }
+
+        @Override
+        public void onError(@NonNull Throwable t) {
+            // This should never happen
+            throw new RuntimeException(t);
+        }
+
+        @SuppressLint("MissingPermission")
+        @Override
+        public void onNext(@NonNull Boolean granted) {
+            if (granted) {
+                mMapSubject.getValue().setMyLocationEnabled(true);
+            } else {
+                Log.i(TAG, "Request for location permission denied");
+            }
         }
     }
 }

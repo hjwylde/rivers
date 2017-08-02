@@ -47,11 +47,11 @@ configurations.errorprone {
 }
 
 dependencies {
-    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha5"
+    annotationProcessor 'android.arch.lifecycle:compiler:1.0.0-alpha5'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 
-    compile "android.arch.lifecycle:extensions:1.0.0-alpha5"
-    compile "android.arch.lifecycle:runtime:1.0.0-alpha5"
+    compile 'android.arch.lifecycle:extensions:1.0.0-alpha5'
+    compile 'android.arch.lifecycle:runtime:1.0.0-alpha5'
     compile 'com.actinarium.aligned:aligned:0.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
@@ -62,6 +62,7 @@ dependencies {
     compile 'com.google.maps.android:android-maps-utils:0.4.4'
     compile 'com.jakewharton:butterknife:8.6.0'
     compile 'com.mobsandgeeks:android-saripaar:2.0.3'
+    compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
