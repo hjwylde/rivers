@@ -13,7 +13,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.ui.activities.BaseActivity;
@@ -51,14 +50,13 @@ public final class CreateSectionMode implements ActionMode.Callback {
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.next:
-                GoogleMap map = mMapFragment.getMap();
-
-                if (map != null) {
+                mMapFragment.getMapAsync(map -> {
                     LatLng putIn = map.getCameraPosition().target;
-                    mView.createSection(putIn);
 
-                    return true;
-                }
+                    mView.createSection(putIn);
+                });
+
+                return true;
         }
 
         return false;
