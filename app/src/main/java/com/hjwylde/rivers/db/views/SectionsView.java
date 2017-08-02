@@ -18,18 +18,18 @@ public final class SectionsView {
     @NonNull
     private static final String VERSION = "1";
 
-    private static View mInstance;
+    private static View sInstance;
 
     private SectionsView() {
     }
 
     @NonNull
     public static View getInstance(Database database) {
-        if (mInstance == null) {
-            mInstance = buildView(database);
+        if (sInstance == null) {
+            sInstance = buildView(database);
         }
 
-        return mInstance;
+        return sInstance;
     }
 
     @NonNull

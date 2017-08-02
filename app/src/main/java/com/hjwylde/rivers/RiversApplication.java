@@ -16,13 +16,13 @@ import java.io.IOException;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class RiversApplication extends Application {
-    private static Database mDatabase;
+    private static Database sDatabase;
 
-    private static Repository mRepository;
+    private static Repository sRepository;
 
     @NonNull
     public static Repository getRepository() {
-        return mRepository;
+        return sRepository;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class RiversApplication extends Application {
 
     private void setUpDatabase() {
         try {
-            mDatabase = DatabaseModule.provideDatabase(getApplicationContext());
+            sDatabase = DatabaseModule.provideDatabase(getApplicationContext());
         } catch (IOException | CouchbaseLiteException e) {
             // TODO (hjw): if this is a permission exception, then an error should be displayed to
             // the user. Otherwise, re-raise the exception.
@@ -56,11 +56,11 @@ public class RiversApplication extends Application {
     }
 
     private void setUpDatabaseReplicator() {
-        Replicator replicator = ReplicatorModule.provideReplicator(getApplicationContext(), mDatabase);
+        Replicator replicator = ReplicatorModule.provideReplicator(getApplicationContext(), sDatabase);
         replicator.start();
     }
 
     private void setUpRepository() {
-        mRepository = new CouchbaseRepository.Builder().database(mDatabase).build();
+        sRepository = new CouchbaseRepository.Builder().database(sDatabase).build();
     }
 }
