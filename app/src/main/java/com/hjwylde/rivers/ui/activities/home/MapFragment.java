@@ -60,6 +60,7 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
     private SingleSubject<GoogleMap> mMapSubject = SingleSubject.create();
     private ClusterManager<SectionMarker> mClusterManager;
     private GoogleMap.OnMapClickListener mOnMapClickListener;
+    private GoogleMap.OnMapLongClickListener mOnMapLongClickListener;
     private ClusterManager.OnClusterItemClickListener<SectionMarker> mOnClusterItemClickListener;
 
     private MapViewModel mViewModel;
@@ -152,6 +153,10 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         mOnMapClickListener = requireNonNull(listener);
     }
 
+    public void setOnMapLongClickListener(@NonNull GoogleMap.OnMapLongClickListener listener) {
+        mOnMapLongClickListener = requireNonNull(listener);
+    }
+
     private void initMap(GoogleMap map) {
         map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_style));
         map.setPadding(mMapPaddingLeft, mMapPaddingTop, mMapPaddingRight, mMapPaddingBottom);
@@ -177,6 +182,11 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         map.setOnMapClickListener(position -> {
             if (mOnMapClickListener != null) {
                 mOnMapClickListener.onMapClick(position);
+            }
+        });
+        map.setOnMapLongClickListener(position -> {
+            if (mOnMapLongClickListener != null) {
+                mOnMapLongClickListener.onMapLongClick(position);
             }
         });
         map.setOnMarkerClickListener(marker -> {

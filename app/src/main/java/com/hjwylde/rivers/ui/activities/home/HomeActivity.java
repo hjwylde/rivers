@@ -211,6 +211,7 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
     private void initMapFragment() {
         mMapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.setOnMapClickListener(position -> clearSelection());
+        mMapFragment.setOnMapLongClickListener(position -> startCreateSectionMode());
         mMapFragment.setOnClusterItemClickListener(sectionMarker -> {
             selectSection(sectionMarker.getId());
             return true;
