@@ -20,6 +20,7 @@ import android.support.annotation.UiThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -309,22 +310,22 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         Bitmap bitmap = markerBitmapFactory.fromColor(R.color.grade_unknown);
         Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
 
-        Bitmap target = Bitmap.createBitmap(bitmap.getWidth() * 2, bitmap.getHeight() * 2, Bitmap.Config.ARGB_8888);
+        Bitmap target = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         RectF targetRect = new RectF();
 
         Canvas canvas = new Canvas(target);
 
         ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
         animator.setDuration(195);
-        animator.setInterpolator(new OvershootInterpolator());
+        animator.setInterpolator(new AccelerateInterpolator());
         animator.addUpdateListener(animation -> {
             float scale = (float) animation.getAnimatedValue();
 
             float mid = rect.right / 2;
-            float left = mid * 2 - mid * scale;
-            float top = rect.bottom * 2 - rect.bottom * scale;
-            float right = mid * 2 + mid * scale;
-            float bottom = rect.bottom * 2;
+            float left = mid - mid * scale;
+            float top = rect.bottom - rect.bottom * scale;
+            float right = mid + mid * scale;
+            float bottom = rect.bottom;
             targetRect.set(left, top, right, bottom);
 
             target.eraseColor(Color.TRANSPARENT);
