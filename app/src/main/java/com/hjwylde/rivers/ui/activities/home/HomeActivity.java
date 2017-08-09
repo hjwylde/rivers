@@ -35,7 +35,7 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
     private static final String TAG = HomeActivity.class.getSimpleName();
 
     private static final String STATE_SEARCH_VIEW = "searchView";
-    private static final String STATE_CREATE_SECTION_MODE_ACTIVE = "createSectionModeActive";
+    private static final String STATE_CREATE_SECTION_MODE_POSITION = "createSectionModePosition";
 
     private FloatingSearchView mSearchView;
     private MapFragment mMapFragment;
@@ -188,9 +188,9 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
 
         refreshFloatingActionButton();
 
-        boolean createSectionModeActive = savedInstanceState.getBoolean(STATE_CREATE_SECTION_MODE_ACTIVE);
-        if (createSectionModeActive) {
-            startCreateSectionMode();
+        LatLng position = savedInstanceState.getParcelable(STATE_CREATE_SECTION_MODE_POSITION);
+        if (position != null) {
+            startCreateSectionMode(position);
         }
     }
 
@@ -201,7 +201,9 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
         Parcelable searchViewParcelable = mSearchView.onSaveInstanceState();
         outState.putParcelable(STATE_SEARCH_VIEW, searchViewParcelable);
 
-        outState.putBoolean(STATE_CREATE_SECTION_MODE_ACTIVE, mCreateSectionMode != null && mCreateSectionMode.isActive());
+        if (mCreateSectionMode != null && mCreateSectionMode.isActive()) {
+            outState.putParcelable(STATE_CREATE_SECTION_MODE_POSITION, mCreateSectionMode.getPosition());
+        }
     }
 
     private void clearSelection() {
@@ -211,6 +213,7 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
     private void initMapFragment() {
         mMapFragment = (MapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.setOnMapClickListener(position -> clearSelection());
+        mMapFragment.setOnMapLongClickListener(this::startCreateSectionMode);
         mMapFragment.setOnClusterItemClickListener(sectionMarker -> {
             selectSection(sectionMarker.getId());
             return true;
@@ -256,6 +259,7 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
 
     private void onSectionCreated() {
         mCreateSectionMode.finish();
+        mCreateSectionMode = null;
 
         Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.info_onSectionCreated, Snackbar.LENGTH_LONG);
         snackbar.show();
@@ -285,9 +289,19 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
     }
 
     private void startCreateSectionMode() {
-        if (mCreateSectionMode == null) {
-            mCreateSectionMode = new CreateSectionMode(this, mMapFragment);
+        mMapFragment.getMapAsync(map -> {
+            startCreateSectionMode(map.getCameraPosition().target);
+        });
+    }
+
+    private void startCreateSectionMode(@NonNull LatLng position) {
+        if (mCreateSectionMode != null && mCreateSectionMode.isActive()) {
+            mCreateSectionMode.setPosition(position);
+
+            return;
         }
+
+        mCreateSectionMode = new CreateSectionMode(this, mMapFragment, position);
 
         startActionMode(mCreateSectionMode);
     }
