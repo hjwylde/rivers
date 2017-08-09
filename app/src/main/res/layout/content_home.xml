@@ -1,32 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 android:id="@+id/content_container"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent">
-
-    <fragment
-        android:id="@+id/map"
-        android:name="com.hjwylde.rivers.ui.activities.home.MapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:cameraTargetLat="-41.270634"
-        app:cameraTargetLng="173.283966"
-        app:cameraZoom="5"/>
-
-    <View
-        android:id="@+id/center_marker_anchor"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_gravity="center"/>
-
-    <ImageView
-        android:id="@+id/center_marker"
-        android:layout_width="@dimen/markerSize"
-        android:layout_height="@dimen/markerSize"
-        android:layout_gravity="center|top"
-        android:visibility="invisible"
-        app:layout_anchor="@id/center_marker_anchor"
-        app:layout_anchorGravity="top|center_horizontal"
-        app:srcCompat="@drawable/ic_map_marker"/>
-</android.support.design.widget.CoordinatorLayout>
+<fragment
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/map"
+    android:name="com.hjwylde.rivers.ui.activities.home.MapFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cameraTargetLat="-41.270634"
+    app:cameraTargetLng="173.283966"
+    app:cameraZoom="5"/>

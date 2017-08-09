@@ -1,11 +1,18 @@
 package com.hjwylde.rivers.ui.activities.home;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.annotation.Dimension;
 import android.support.annotation.NonNull;
@@ -13,14 +20,18 @@ import android.support.annotation.UiThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterItem;
 import com.google.maps.android.clustering.ClusterManager;
@@ -38,6 +49,7 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import io.reactivex.subjects.SingleSubject;
 
+import static com.hjwylde.rivers.util.Preconditions.requireTrue;
 import static java.util.Objects.requireNonNull;
 
 @UiThread
@@ -65,6 +77,7 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
 
     private MapViewModel mViewModel;
 
+    private Marker mDraggableMarker;
     private Map<String, SectionMarker> mSectionMarkers = new HashMap<>();
 
     private boolean mClickEventsEnabled = true;
@@ -87,12 +100,34 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         });
     }
 
+    public void disableDraggableMarker() {
+        removeDraggableMarker();
+    }
+
     public void disableOnClickEvents() {
         mClickEventsEnabled = false;
     }
 
+    public void enableDraggableMarker(@NonNull LatLng position) {
+        mMapSubject.subscribe(new LifecycleBoundSingleObserver<GoogleMap>(this) {
+            @Override
+            public void onError(Throwable t) {
+                // Do nothing
+            }
+
+            @Override
+            public void onSuccess(GoogleMap map) {
+                addDraggableMarker(map, position);
+            }
+        });
+    }
+
     public void enableOnClickEvents() {
         mClickEventsEnabled = true;
+    }
+
+    public Marker getDraggableMarker() {
+        return mDraggableMarker;
     }
 
     @Override
@@ -157,7 +192,64 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         mOnMapLongClickListener = requireNonNull(listener);
     }
 
-    private void initMap(GoogleMap map) {
+    private void addDraggableMarker(GoogleMap map, LatLng position) {
+        requireTrue(mDraggableMarker == null);
+
+        MarkerBitmapFactory markerBitmapFactory = new MarkerBitmapFactory(getContext());
+        Bitmap bitmap = markerBitmapFactory.fromColor(R.color.grade_unknown);
+        Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        Bitmap target = Bitmap.createBitmap(bitmap.getWidth() * 2, bitmap.getHeight() * 2, Bitmap.Config.ARGB_8888);
+        RectF targetRect = new RectF();
+
+        Canvas canvas = new Canvas(target);
+
+        ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
+        animator.setDuration(225);
+        animator.setInterpolator(new OvershootInterpolator());
+        animator.addUpdateListener(animation -> {
+            float scale = (float) animation.getAnimatedValue();
+
+            float mid = rect.right / 2;
+            float left = mid * 2 - mid * scale;
+            float top = rect.bottom * 2 - rect.bottom * scale;
+            float right = mid * 2 + mid * scale;
+            float bottom = rect.bottom * 2;
+            targetRect.set(left, top, right, bottom);
+
+            target.eraseColor(Color.TRANSPARENT);
+            canvas.drawBitmap(bitmap, rect, targetRect, null);
+
+            mDraggableMarker.setIcon(BitmapDescriptorFactory.fromBitmap(target));
+        });
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+                MarkerOptions options = new MarkerOptions()
+                        .position(position)
+                        .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+                        .draggable(true);
+
+                mDraggableMarker = map.addMarker(options);
+            }
+        });
+
+        animator.start();
+    }
+
+    private void initMap(@NonNull GoogleMap map) {
         map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_style));
         map.setPadding(mMapPaddingLeft, mMapPaddingTop, mMapPaddingRight, mMapPaddingBottom);
 
@@ -212,6 +304,57 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         return true;
     }
 
+    private void removeDraggableMarker() {
+        MarkerBitmapFactory markerBitmapFactory = new MarkerBitmapFactory(getContext());
+        Bitmap bitmap = markerBitmapFactory.fromColor(R.color.grade_unknown);
+        Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        Bitmap target = Bitmap.createBitmap(bitmap.getWidth() * 2, bitmap.getHeight() * 2, Bitmap.Config.ARGB_8888);
+        RectF targetRect = new RectF();
+
+        Canvas canvas = new Canvas(target);
+
+        ValueAnimator animator = ValueAnimator.ofFloat(1, 0);
+        animator.setDuration(195);
+        animator.setInterpolator(new OvershootInterpolator());
+        animator.addUpdateListener(animation -> {
+            float scale = (float) animation.getAnimatedValue();
+
+            float mid = rect.right / 2;
+            float left = mid * 2 - mid * scale;
+            float top = rect.bottom * 2 - rect.bottom * scale;
+            float right = mid * 2 + mid * scale;
+            float bottom = rect.bottom * 2;
+            targetRect.set(left, top, right, bottom);
+
+            target.eraseColor(Color.TRANSPARENT);
+            canvas.drawBitmap(bitmap, rect, targetRect, null);
+
+            mDraggableMarker.setIcon(BitmapDescriptorFactory.fromBitmap(target));
+        });
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mDraggableMarker.remove();
+                mDraggableMarker = null;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+        });
+
+        animator.start();
+    }
+
     @UiThread
     private final class OnGetSectionsObserver extends LifecycleBoundObserver<List<Section>> {
         OnGetSectionsObserver() {
@@ -235,7 +378,6 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         }
 
         private void refreshMap(@NonNull List<Section> sections) {
-            mMapSubject.getValue().clear();
             mSectionMarkers.clear();
             mClusterManager.clearItems();
 
