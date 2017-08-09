@@ -195,6 +195,7 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         }
         LatLngBounds bounds = builder.build();
 
+        // TODO (hjw): move these constants into the resource file and define them based on metrics/keylines
         int padding = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? 250 : 100;
         mMapSubject.getValue().animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
 
