@@ -7,4 +7,6 @@
     <color name="text_primaryDark">#FFFFFF</color>
     <color name="text_secondaryDark">#B3FFFFFF</color>
     <color name="text_teriaryDark">#80FFFFFF</color>
+
+    <color name="text_error">@color/error</color>
 </resources>

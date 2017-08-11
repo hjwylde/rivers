@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- TODO (hjw): rejig this file -->
 <resources>
     <dimen name="toolbar_elevation">4dp</dimen>
     <dimen name="toolbar_margin">5dp</dimen>
-
-    <dimen name="markerSize">40dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-
-    <dimen name="statusBarHeight_fallback">24dp</dimen>
 </resources>

@@ -60,6 +60,6 @@ public final class MarkerBitmapFactory {
 
     @Dimension
     private float getMarkerSize() {
-        return mContext.getResources().getDimension(R.dimen.markerSize);
+        return mContext.getResources().getDimension(R.dimen.icon_large);
     }
 }

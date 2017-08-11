@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="gutter_large">32dp</dimen>
+    <dimen name="gutter_medium">16dp</dimen>
+    <dimen name="gutter_small">8dp</dimen>
+
+    <dimen name="touchTarget">48dp</dimen>
+
+    <dimen name="icon_large">40dp</dimen>
+    <dimen name="icon_medium">24dp</dimen>
+
+    <dimen name="statusBar_height">24dp</dimen>
+
+    <dimen name="screen_paddingHorizontal">@dimen/gutter_medium</dimen>
+    <dimen name="screen_paddingVertical">@dimen/gutter_medium</dimen>
+</resources>

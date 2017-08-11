@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- TODO (hjw): rejig this file dimens -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical"
-              android:padding="@dimen/content_padding">
+              android:padding="@dimen/gutter_large">
 
     <com.actinarium.aligned.TextView
         android:id="@+id/title"
@@ -19,15 +20,13 @@
         style="@style/TextAppearance.Rivers.Subheading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/text_gutter"
+        android:layout_marginBottom="@dimen/gutter_medium"
         android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="@color/text_primaryLight"/>
+        android:maxLines="1"/>
 
     <com.actinarium.aligned.TextView
         android:id="@+id/description"
         style="@style/TextAppearance.Rivers.Body"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/text_primaryLight"/>
+        android:layout_height="wrap_content"/>
 </LinearLayout>

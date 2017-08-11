@@ -3,8 +3,9 @@
 
     <style name="TextAppearance.Rivers.Headline" parent="TextAppearance.AppCompat.Headline">
         <item name="android:textColor">@color/text_primaryLight</item>
+        <item name="android:textSize">@dimen/text_xxlarge</item>
         <item name="fontPath">fonts/Raleway-Regular.ttf</item>
-        <item name="leading">32dp</item>
+        <item name="leading">@dimen/text_xxlarge_leading</item>
     </style>
 
     <style name="TextAppearance.Rivers.Headline.Medium">
@@ -13,14 +14,16 @@
 
     <style name="TextAppearance.Rivers.Subheading" parent="TextAppearance.AppCompat.Subhead">
         <item name="android:textColor">@color/text_primaryLight</item>
+        <item name="android:textSize">@dimen/text_large</item>
         <item name="fontPath">fonts/OpenSans-Regular.ttf</item>
-        <item name="leading">24dp</item>
+        <item name="leading">@dimen/text_large_leading</item>
     </style>
 
     <style name="TextAppearance.Rivers.Body" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textColor">@color/text_primaryLight</item>
+        <item name="android:textSize">@dimen/text_medium</item>
         <item name="fontPath">fonts/OpenSans-Regular.ttf</item>
-        <item name="leading">20dp</item>
+        <item name="leading">@dimen/text_medium_leading</item>
     </style>
 
     <style name="TextAppearance.Rivers.Body.Medium">
@@ -28,8 +31,9 @@
     </style>
 
     <style name="TextAppearance.Rivers.Error" parent="TextAppearance.AppCompat.Caption">
-        <item name="android:textColor">@color/error</item>
+        <item name="android:textColor">@color/text_error</item>
+        <item name="android:textSize">@dimen/text_small</item>
         <item name="fontPath">fonts/Raleway-Regular.ttf</item>
-        <item name="leading">16dp</item>
+        <item name="leading">@dimen/text_small_leading</item>
     </style>
 </resources>

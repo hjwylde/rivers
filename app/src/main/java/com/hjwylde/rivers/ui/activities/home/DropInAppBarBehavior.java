@@ -54,7 +54,7 @@ public class DropInAppBarBehavior<V extends View> extends CoordinatorLayout.Beha
 
         Log.w(TAG, "Unable to accurately determine the status bar height");
 
-        return mContext.getResources().getDimension(R.dimen.statusBarHeight_fallback);
+        return mContext.getResources().getDimension(R.dimen.statusBar_height);
     }
 
     @UiThread

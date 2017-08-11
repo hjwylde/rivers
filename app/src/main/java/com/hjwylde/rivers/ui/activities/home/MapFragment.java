@@ -197,7 +197,7 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         requireTrue(mDraggableMarker == null);
 
         MarkerBitmapFactory markerBitmapFactory = new MarkerBitmapFactory(getContext());
-        Bitmap bitmap = markerBitmapFactory.fromColor(R.color.grade_unknown);
+        Bitmap bitmap = markerBitmapFactory.fromColor(R.color.marker_grade_unknown);
         Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
 
         Bitmap target = Bitmap.createBitmap(bitmap.getWidth() * 2, bitmap.getHeight() * 2, Bitmap.Config.ARGB_8888);
@@ -307,7 +307,7 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
 
     private void removeDraggableMarker() {
         MarkerBitmapFactory markerBitmapFactory = new MarkerBitmapFactory(getContext());
-        Bitmap bitmap = markerBitmapFactory.fromColor(R.color.grade_unknown);
+        Bitmap bitmap = markerBitmapFactory.fromColor(R.color.marker_grade_unknown);
         Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
 
         Bitmap target = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);

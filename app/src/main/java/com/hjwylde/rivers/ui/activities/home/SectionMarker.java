@@ -28,17 +28,17 @@ public final class SectionMarker implements ClusterItem {
     public int getColorResource() {
         switch (mGrade) {
             case I:
-                return R.color.grade_1;
+                return R.color.marker_grade_1;
             case II:
-                return R.color.grade_2;
+                return R.color.marker_grade_2;
             case III:
-                return R.color.grade_3;
+                return R.color.marker_grade_3;
             case IV:
-                return R.color.grade_4;
+                return R.color.marker_grade_4;
             case V:
-                return R.color.grade_5;
+                return R.color.marker_grade_5;
             default:
-                return R.color.grade_unknown;
+                return R.color.marker_grade_unknown;
         }
     }
 

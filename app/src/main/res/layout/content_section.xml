@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- TODO (hjw): rejig this file dimens -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
@@ -26,16 +27,16 @@
                   android:layout_height="wrap_content"
                   android:background="@android:color/white"
                   android:orientation="vertical"
-                  android:paddingLeft="@dimen/text_marginHorizontal"
-                  android:paddingRight="@dimen/text_marginHorizontal">
+                  android:paddingLeft="@dimen/screen_paddingHorizontal"
+                  android:paddingRight="@dimen/screen_paddingHorizontal">
 
         <LinearLayout
             android:id="@+id/title_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/text_marginVertical"
-            android:paddingTop="@dimen/text_marginVertical">
+            android:paddingBottom="@dimen/screen_paddingVertical"
+            android:paddingTop="@dimen/screen_paddingVertical">
 
             <com.actinarium.aligned.TextView
                 android:id="@+id/title"
@@ -76,8 +77,8 @@
                 style="@style/TextAppearance.Rivers.Body.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/text_marginVertical"
-                android:paddingTop="@dimen/text_marginVertical"
+                android:paddingBottom="@dimen/screen_paddingVertical"
+                android:paddingTop="@dimen/screen_paddingVertical"
                 android:text="@string/action_readMore"
                 android:textAlignment="center"
                 android:textAllCaps="true"
@@ -103,10 +104,9 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:layout_width="@dimen/iconSize"
-                    android:layout_height="@dimen/iconSize"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/iconMargin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/gutter_small"
                     android:src="@drawable/ic_shield_outline"
                     android:tint="@color/text_primaryLight"/>
 
@@ -127,12 +127,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:baselineAligned="false"
                 android:gravity="center">
 
                 <ImageView
-                    android:layout_width="@dimen/iconSize"
-                    android:layout_height="@dimen/iconSize"
-                    android:layout_marginEnd="@dimen/iconMargin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/gutter_small"
                     android:src="@drawable/ic_ruler"
                     android:tint="@color/text_primaryLight"/>
 
@@ -152,12 +153,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:baselineAligned="false"
                 android:gravity="center">
 
                 <ImageView
-                    android:layout_width="@dimen/iconSize"
-                    android:layout_height="@dimen/iconSize"
-                    android:layout_marginEnd="@dimen/iconMargin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/gutter_small"
                     android:src="@drawable/ic_timer"
                     android:tint="@color/text_primaryLight"/>
 

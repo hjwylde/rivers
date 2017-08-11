@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- TODO (hjw): rejig this file -->
 <resources>
+    <!-- TODO (hjw): don't hard-code this, it should be based on the ratio of the screen size (can be done with a constraint layout) -->
     <dimen name="imageHeight">240dp</dimen>
 
     <dimen name="infoContainerMargin">20dp</dimen>
-    <dimen name="iconSize">24dp</dimen>
-    <dimen name="iconMargin">12dp</dimen>
 </resources>
