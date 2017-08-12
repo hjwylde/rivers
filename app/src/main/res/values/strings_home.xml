@@ -2,6 +2,7 @@
 <resources>
     <string name="title_activity_maps">Rivers</string>
 
+    <string name="action_selectMapType">Map type</string>
     <string name="action_openSettings">Settings</string>
     <string name="action_sendFeedback">Send feedback</string>
     <string name="action_next">NEXT</string>
