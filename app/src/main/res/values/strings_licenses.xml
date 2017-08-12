@@ -6,6 +6,7 @@
     <string name="title_com_actinarium_aligned_aligned">Aligned</string>
     <string name="title_com_android_support_appcompat_v7">v7 Support Library (appcompat)</string>
     <string name="title_com_android_support_design">Design Support Library</string>
+    <string name="title_com_android_support_constraint_constraint_layout">Constraint Layout</string>
     <string name="title_com_couchbase_lite_couchbase_lite_android">Couchbase Lite</string>
     <string name="title_com_github_arimorty_floatingsearchview">Floating Search View</string>
     <string name="title_com_github_bumptech_glide_glide">Glide</string>
@@ -23,6 +24,7 @@
     <string name="url_com_actinarium_aligned_aligned">https://github.com/Actinarium/Aligned/blob/master/LICENSE</string>
     <string name="url_com_android_support_appcompat_v7">http://www.apache.org/licenses/LICENSE-2.0</string>
     <string name="url_com_android_support_design">http://www.apache.org/licenses/LICENSE-2.0</string>
+    <string name="url_com_android_support_constraint_constraint_layout">http://www.apache.org/licenses/LICENSE-2.0</string>
     <string name="url_com_couchbase_lite_couchbase_lite_android">https://github.com/couchbase/couchbase-lite-android/blob/master/LICENSE.TXT</string>
     <string name="url_com_github_arimorty_floatingsearchview">https://github.com/arimorty/floatingsearchview/blob/master/LICENSE.txt</string>
     <string name="url_com_github_bumptech_glide_glide">https://github.com/bumptech/glide/blob/master/LICENSE</string>

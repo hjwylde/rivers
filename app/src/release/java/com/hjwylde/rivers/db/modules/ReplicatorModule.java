@@ -18,7 +18,7 @@ public final class ReplicatorModule {
 
     @NonNull
     public static Replicator provideReplicator(@NonNull Context context, @NonNull Database database) {
-        return new CouchbaseReplicator(context, database, provideUrl(context), provideUsername(), providePassword(context));
+        return new CouchbaseReplicator(database, provideUrl(context), provideUsername(), providePassword(context));
     }
 
     @NonNull

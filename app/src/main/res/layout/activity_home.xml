@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- TODO (hjw): rejig this file dimens -->
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                                  xmlns:app="http://schemas.android.com/apk/res-auto"
                                                  xmlns:tools="http://schemas.android.com/tools"
@@ -18,12 +17,12 @@
         app:floatingSearch_close_search_on_keyboard_dismiss="true"
         app:floatingSearch_leftActionMode="showSearch"
         app:floatingSearch_menu="@menu/menu_home"
-        app:floatingSearch_searchBarMarginLeft="@dimen/toolbar_margin"
-        app:floatingSearch_searchBarMarginRight="@dimen/toolbar_margin"
-        app:floatingSearch_searchBarMarginTop="@dimen/toolbar_margin"
+        app:floatingSearch_searchBarMarginLeft="4dp"
+        app:floatingSearch_searchBarMarginRight="4dp"
+        app:floatingSearch_searchBarMarginTop="4dp"
         app:floatingSearch_searchHint="@string/label_search"
         app:floatingSearch_showSearchKey="false"
-        app:floatingSearch_suggestionsListAnimDuration="250"
+        app:floatingSearch_suggestionsListAnimDuration="225"
         app:theme="@style/Theme.Rivers.Light.PopupOverlay"/>
 
     <fragment

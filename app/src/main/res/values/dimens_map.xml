@@ -2,7 +2,6 @@
 <resources>
     <dimen name="map_paddingTop">88dp</dimen>
     <dimen name="map_paddingRight">12dp</dimen>
-    <!-- TODO (hjw): set this to the same as the bottom sheet height -->
     <dimen name="map_paddingBottom">0dp</dimen>
     <dimen name="map_paddingLeft">12dp</dimen>
 </resources>

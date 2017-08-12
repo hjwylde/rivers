@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- TODO (hjw): rejig this file -->
 <resources>
+    <!-- TODO (hjw): remove this when the toolbar animates away -->
     <dimen name="toolbar_elevation">4dp</dimen>
-    <dimen name="toolbar_margin">5dp</dimen>
 </resources>

@@ -1,184 +1,221 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- TODO (hjw): rejig this file dimens -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="@android:color/white"
-              android:elevation="1dp"
-              android:orientation="vertical">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="wrap_content"
+                                             android:background="@android:color/white"
+                                             android:elevation="1dp">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/primaryLight"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="3:2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/imageHeight"
-        android:background="@color/primaryLight">
+        android:id="@+id/camera"
+        android:layout_width="@dimen/touchTarget"
+        android:layout_height="@dimen/touchTarget"
+        android:layout_margin="@dimen/gutter_medium"
+        app:layout_constraintBottom_toBottomOf="@+id/image"
+        app:layout_constraintEnd_toEndOf="@+id/image">
 
         <ImageView
-            android:id="@+id/image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"/>
+            android:layout_width="@dimen/icon_large"
+            android:layout_height="@dimen/icon_large"
+            android:layout_gravity="center"
+            android:src="@drawable/scrim_circle"/>
 
-        <FrameLayout
-            android:layout_width="@dimen/touchTarget"
-            android:layout_height="@dimen/touchTarget"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/gutter_medium">
-
-            <ImageView
-                android:id="@+id/camera"
-                android:layout_width="@dimen/icon_large"
-                android:layout_height="@dimen/icon_large"
-                android:layout_gravity="center"
-                android:src="@drawable/scrim_circle"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_camera"/>
-        </FrameLayout>
-
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_camera"/>
     </FrameLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/title_layout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/screen_paddingHorizontal"
-        android:layout_marginRight="@dimen/screen_paddingHorizontal"
-        android:orientation="vertical">
+        android:layout_marginEnd="@dimen/screen_paddingHorizontal"
+        android:layout_marginStart="@dimen/screen_paddingHorizontal"
+        android:layout_marginTop="@dimen/gutter_medium"
+        app:errorTextAppearance="@style/TextAppearance.Rivers.Error"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/title_layout"
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/title"
+            style="@style/TextAppearance.Rivers.Headline.Medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/gutter_medium"
-            app:errorTextAppearance="@style/TextAppearance.Rivers.Error"
-            app:hintEnabled="false">
+            android:hint="@string/hint_title"
+            android:inputType="text|textCapWords"
+            android:textColor="@color/text_secondaryLight"/>
+    </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/title"
-                style="@style/TextAppearance.Rivers.Headline.Medium"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_title"
-                android:inputType="text|textCapWords"
-                android:nextFocusForward="@+id/subtitle"
-                android:textColor="@color/text_secondaryLight">
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/subtitle_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/screen_paddingHorizontal"
+        android:layout_marginStart="@dimen/screen_paddingHorizontal"
+        app:errorTextAppearance="@style/TextAppearance.Rivers.Error"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_layout">
 
-                <requestFocus/>
-            </android.support.design.widget.TextInputEditText>
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/subtitle_layout"
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/subtitle"
+            style="@style/TextAppearance.Rivers.Subheading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/gutter_medium"
-            app:errorTextAppearance="@style/TextAppearance.Rivers.Error"
-            app:hintEnabled="false">
+            android:hint="@string/hint_subtitle"
+            android:inputType="text|textCapSentences"
+            android:nextFocusDown="@+id/grade"/>
+    </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/subtitle"
-                style="@style/TextAppearance.Rivers.Subheading"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_subtitle"
-                android:inputType="text|textCapSentences"/>
-        </android.support.design.widget.TextInputLayout>
+    <include
+        android:id="@+id/divider"
+        layout="@layout/divider"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/gutter_small"
+        android:layout_marginEnd="@dimen/screen_paddingHorizontal"
+        android:layout_marginStart="@dimen/screen_paddingHorizontal"
+        android:layout_marginTop="@dimen/gutter_medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subtitle_layout"/>
 
-        <include layout="@layout/divider"/>
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/grade_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/gutter_medium"
+        android:layout_marginTop="@dimen/gutter_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/length_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/grade_icon"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/gutter_medium"
-            android:paddingTop="@dimen/gutter_small">
+            android:src="@drawable/ic_shield_outline"
+            android:tint="@color/text_primaryLight"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/grade"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-            <LinearLayout
-                android:id="@+id/grade_container"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/gutter_medium"
-                android:layout_weight="1"
-                android:baselineAligned="false"
-                android:gravity="center">
+        <EditText
+            android:id="@+id/grade"
+            style="@style/TextAppearance.Rivers.Body.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/gutter_small"
+            android:layout_marginStart="@dimen/gutter_small"
+            android:gravity="center"
+            android:hint="@string/hint_grade"
+            android:inputType="text|textNoSuggestions"
+            android:minEms="2"
+            android:nextFocusDown="@+id/length"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/grade_icon"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/gutter_small"
-                    android:src="@drawable/ic_shield_outline"
-                    android:tint="@color/text_primaryLight"/>
+    </android.support.constraint.ConstraintLayout>
 
-                <EditText
-                    android:id="@+id/grade"
-                    style="@style/TextAppearance.Rivers.Body.Medium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="@string/hint_grade"
-                    android:inputType="text|textNoSuggestions"
-                    android:minEms="2"
-                    android:nextFocusDown="@+id/length"/>
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/length_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/gutter_medium"
+        android:layout_marginTop="@dimen/gutter_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/duration_container"
+        app:layout_constraintStart_toEndOf="@+id/grade_container"
+        app:layout_constraintTop_toBottomOf="@+id/divider">
 
-            </LinearLayout>
+        <ImageView
+            android:id="@+id/length_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_ruler"
+            android:tint="@color/text_primaryLight"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/length"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-            <LinearLayout
-                android:id="@+id/length_container"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/gutter_medium"
-                android:layout_weight="1"
-                android:baselineAligned="false"
-                android:gravity="center">
+        <EditText
+            android:id="@+id/length"
+            style="@style/TextAppearance.Rivers.Body.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/gutter_small"
+            android:layout_marginStart="@dimen/gutter_small"
+            android:gravity="center"
+            android:hint="@string/hint_length"
+            android:inputType="text|textNoSuggestions"
+            android:minEms="2"
+            android:nextFocusDown="@+id/duration"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/length_icon"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/gutter_small"
-                    android:src="@drawable/ic_ruler"
-                    android:tint="@color/text_primaryLight"/>
+    </android.support.constraint.ConstraintLayout>
 
-                <EditText
-                    android:id="@+id/length"
-                    style="@style/TextAppearance.Rivers.Body.Medium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="@string/hint_length"
-                    android:inputType="text|textNoSuggestions"
-                    android:minEms="2"
-                    android:nextFocusDown="@+id/duration"
-                    tools:ignore="TextFields"/>
-            </LinearLayout>
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/duration_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/gutter_medium"
+        android:layout_marginTop="@dimen/gutter_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/length_container"
+        app:layout_constraintTop_toBottomOf="@+id/divider">
 
-            <LinearLayout
-                android:id="@+id/duration_container"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:baselineAligned="false"
-                android:gravity="center">
+        <ImageView
+            android:id="@+id/duration_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_timer"
+            android:tint="@color/text_primaryLight"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/duration"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/gutter_small"
-                    android:src="@drawable/ic_timer"
-                    android:tint="@color/text_primaryLight"/>
-
-                <EditText
-                    android:id="@+id/duration"
-                    style="@style/TextAppearance.Rivers.Body.Medium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:hint="@string/hint_duration"
-                    android:inputType="text|textNoSuggestions"
-                    android:minEms="2"/>
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-</LinearLayout>
+        <EditText
+            android:id="@+id/duration"
+            style="@style/TextAppearance.Rivers.Body.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/gutter_small"
+            android:layout_marginStart="@dimen/gutter_small"
+            android:gravity="center"
+            android:hint="@string/hint_length"
+            android:inputType="text|textNoSuggestions"
+            android:minEms="2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/duration_icon"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>

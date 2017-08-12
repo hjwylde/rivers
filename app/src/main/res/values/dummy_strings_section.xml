@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dummy_section_title">Kaituna</string>
+    <string name="dummy_section_subtitle">Okere falls</string>
+    <string name="dummy_section_description">
+        A long time classic in the Central North Island the Kaituna is famous for its waterfalls, park \'n\' play spot and its magical deep green gorge.
+        It really is the epitome of \'sport boating\' with easy access, short run, low commitment and close to a large population base.
+        The Kaituna has been popular since 1992 when commercial rafting got things humming in the river community.
+        Since then it has become one of the most used runs in the country and is an incredibly valuable resource.
+        The lower sections of river in Awesome and Gnarly Gorges have come under pressure from hydro interests as of 2005.
+        Both are threatened by flooding and could be lost forever.
+
+        \n\nThe run starts at the slalom course below the control gates and winds its way into a bush-fringed gorge.
+        At the concrete portal (remains of an old power station) the river splits, most take the right over the 2.5-meter Okere Falls and through the Weir.
+
+        \n\nTutea Falls, when you get to it, is obvious. From the cliff bound eddy above the horizon drops away, but a well-timed launch hard right gives a clean landing and almost dry face.
+        Many, however, crash down the middle and take whatever happens. It is worth taking this waterfall seriously (at least the landing part).
+        Plenty of people carry scars from being pushed onto the bottom of the river, grazing faces, breaking noses and paddles.
+
+        \n\nThere are seven more class III drops below the falls (it is possible to carry your boat down Hinemoa's steps and put in below the falls if you wish) including Skateboard Ramp, Boiling Pot, and The Abyss.
+        The final drop at the take out is the well known "Bottom Hole" and is a true park ‘n' play heaven and during the summer locals have a once a week session with sound system and BBQ.
+        Many international paddlers use it as an off-season training spot. Below the play hole is Trout Pool Falls.
+        This has claimed a couple of lives and broken ankles, but has also been run on occasions - be warned.
+
+        \n\nAccess is a constantly changing issue. Please check in with local operators if you are unsure of any changes to access points.
+        Don't go off the trails and use amenities for toileting.\n\nFlows are read off the control gates at the put-in.
+        Each of the gates is numbered in divisions of 100 (equal to 3 cumecs) therefore 3 gates at 300 equals 27 cumecs.
+        Rafting companies operate between 200-500. Below 200 kayaks can hit the bottom of the falls hard.
+        Above 500 is good and anything above 1000 is fast and pushy. It has been kayaked with fully open gates above 1300.
+        Check with Sunspots Kayak Shop (07) 3624222 during business hours for flows, as it is not automated.
+    </string>
+    <string name="dummy_section_grade">3+</string>
+    <string name="dummy_section_length">1.1 km</string>
+    <string name="dummy_section_duration">30&#8211;60 mins</string>
+</resources>

@@ -7,7 +7,6 @@ import android.annotation.SuppressLint;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -298,9 +297,7 @@ public final class MapFragment extends SupportMapFragment implements LifecycleRe
         }
         LatLngBounds bounds = builder.build();
 
-        // TODO (hjw): move these constants into the resource file and define them based on metrics/keylines
-        int padding = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? 250 : 100;
-        mMapSubject.getValue().animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
+        mMapSubject.getValue().animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
 
         return true;
     }

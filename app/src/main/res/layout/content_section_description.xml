@@ -1,32 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- TODO (hjw): rejig this file dimens -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical"
-              android:padding="@dimen/gutter_large">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="wrap_content">
 
     <com.actinarium.aligned.TextView
         android:id="@+id/title"
         style="@style/TextAppearance.Rivers.Headline.Medium"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/gutter_large"
+        android:layout_marginStart="@dimen/gutter_large"
+        android:layout_marginTop="@dimen/gutter_large"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/text_secondaryLight"/>
+        android:textColor="@color/text_secondaryLight"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/dummy_section_title"/>
 
     <com.actinarium.aligned.TextView
         android:id="@+id/subtitle"
         style="@style/TextAppearance.Rivers.Subheading"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/gutter_medium"
+        android:layout_marginEnd="@dimen/gutter_large"
+        android:layout_marginStart="@dimen/gutter_large"
         android:ellipsize="end"
-        android:maxLines="1"/>
+        android:maxLines="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        tools:text="@string/dummy_section_subtitle"/>
 
     <com.actinarium.aligned.TextView
         android:id="@+id/description"
         style="@style/TextAppearance.Rivers.Body"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/gutter_large"
+        android:layout_marginEnd="@dimen/gutter_large"
+        android:layout_marginStart="@dimen/gutter_large"
+        android:layout_marginTop="@dimen/gutter_medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subtitle"
+        tools:text="@string/dummy_section_description"/>
+</android.support.constraint.ConstraintLayout>

@@ -34,7 +34,6 @@ import com.hjwylde.rivers.models.Section;
 import com.hjwylde.rivers.ui.activities.editSection.EditSectionActivity;
 import com.hjwylde.rivers.ui.activities.sectionDescription.SectionDescriptionActivity;
 
-import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -54,8 +53,6 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
     NestedScrollView mBottomSheet;
     @BindView(R.id.image)
     ImageView mImageView;
-    @BindView(R.id.image_container)
-    ViewGroup mImageGroup;
     @BindView(R.id.title)
     TextView mTitleView;
     @BindView(R.id.title_container)
@@ -81,7 +78,6 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
     @BindView(R.id.duration_container)
     ViewGroup mDurationGroup;
 
-    @BindDimen(R.dimen.imageHeight)
     @Dimension
     int mImageHeight;
 
@@ -115,12 +111,15 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
         View view = inflater.inflate(R.layout.fragment_section, container, false);
 
         ButterKnife.bind(this, view);
+        mImageView.post(() -> {
+            mImageHeight = mImageView.getWidth() / 3 * 2;
+
+            refreshImageContainer();
+        });
 
         initToolbar();
 
         initBottomSheet(savedInstanceState);
-
-        refreshImageContainer();
 
         return view;
     }
@@ -211,8 +210,8 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
                 float collapsedY = bottomSheet.getHeight() - mBottomSheetBehavior.getPeekHeight();
                 float expandedRatio = (collapsedY - bottomSheet.getY()) / collapsedY;
 
-                mImageGroup.getLayoutParams().height = (int) Math.max(mImageHeight * expandedRatio, 0);
-                mImageGroup.requestLayout();
+                mImageView.getLayoutParams().height = (int) Math.max(mImageHeight * expandedRatio, 0);
+                mImageView.requestLayout();
 
                 if (mBottomSheetCallback != null) {
                     mBottomSheetCallback.onSlide(bottomSheet, slideOffset);
@@ -263,8 +262,8 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
             return;
         }
 
-        mImageGroup.getLayoutParams().height = mImageHeight;
-        mImageGroup.requestLayout();
+        mImageView.getLayoutParams().height = mImageHeight;
+        mImageView.requestLayout();
     }
 
     @UiThread
