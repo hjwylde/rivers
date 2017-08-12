@@ -12,5 +12,4 @@
     <dimen name="statusBar_height">24dp</dimen>
 
     <dimen name="screen_paddingHorizontal">@dimen/gutter_medium</dimen>
-    <dimen name="screen_paddingVertical">@dimen/gutter_medium</dimen>
 </resources>

@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/primaryLight"
+        android:elevation="1dp"
         tools:ignore="Suspicious0dp">
 
         <ImageView
@@ -26,17 +27,18 @@
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:background="@android:color/white"
-                  android:orientation="vertical"
-                  android:paddingLeft="@dimen/screen_paddingHorizontal"
-                  android:paddingRight="@dimen/screen_paddingHorizontal">
+                  android:elevation="1dp"
+                  android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/title_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/screen_paddingVertical"
-            android:paddingTop="@dimen/screen_paddingVertical">
+            android:paddingBottom="@dimen/gutter_medium"
+            android:paddingLeft="@dimen/screen_paddingHorizontal"
+            android:paddingRight="@dimen/screen_paddingHorizontal"
+            android:paddingTop="@dimen/gutter_medium">
 
             <com.actinarium.aligned.TextView
                 android:id="@+id/title"
@@ -62,7 +64,9 @@
             android:id="@+id/description_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/screen_paddingHorizontal"
+            android:paddingRight="@dimen/screen_paddingHorizontal">
 
             <com.actinarium.aligned.TextView
                 android:id="@+id/description"
@@ -76,9 +80,8 @@
             <com.actinarium.aligned.TextView
                 style="@style/TextAppearance.Rivers.Body.Medium"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/screen_paddingVertical"
-                android:paddingTop="@dimen/screen_paddingVertical"
+                android:layout_height="@dimen/touchTarget"
+                android:layout_gravity="center"
                 android:text="@string/action_readMore"
                 android:textAlignment="center"
                 android:textAllCaps="true"
@@ -86,92 +89,102 @@
                 app:leading="0dp"/>
         </LinearLayout>
 
-        <include layout="@layout/divider"/>
-
         <LinearLayout
+            android:id="@+id/info_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:paddingBottom="@dimen/infoContainerMargin"
-            android:paddingTop="@dimen/infoContainerMargin">
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/screen_paddingHorizontal"
+            android:paddingRight="@dimen/screen_paddingHorizontal">
+
+            <include layout="@layout/divider"/>
 
             <LinearLayout
-                android:id="@+id/grade_container"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:baselineAligned="false"
-                android:gravity="center">
+                android:paddingBottom="@dimen/gutter_medium"
+                android:paddingTop="@dimen/gutter_small">
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/grade_container"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/gutter_small"
-                    android:src="@drawable/ic_shield_outline"
-                    android:tint="@color/text_primaryLight"/>
+                    android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/gutter_medium"
+                    android:baselineAligned="false"
+                    android:gravity="center">
 
-                <com.actinarium.aligned.TextView
-                    android:id="@+id/grade"
-                    style="@style/TextAppearance.Rivers.Body.Medium"
-                    android:layout_width="wrap_content"
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/gutter_small"
+                        android:src="@drawable/ic_shield_outline"
+                        android:tint="@color/text_primaryLight"/>
+
+                    <com.actinarium.aligned.TextView
+                        android:id="@+id/grade"
+                        style="@style/TextAppearance.Rivers.Body.Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/text_primaryLight"
+                        app:leading="0dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/length_container"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textColor="@color/text_primaryLight"
-                    app:leading="0dp"/>
+                    android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/gutter_medium"
+                    android:baselineAligned="false"
+                    android:gravity="center">
 
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/gutter_small"
+                        android:src="@drawable/ic_ruler"
+                        android:tint="@color/text_primaryLight"/>
 
-            <LinearLayout
-                android:id="@+id/length_container"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:baselineAligned="false"
-                android:gravity="center">
+                    <com.actinarium.aligned.TextView
+                        android:id="@+id/length"
+                        style="@style/TextAppearance.Rivers.Body.Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/text_primaryLight"
+                        app:leading="0dp"/>
+                </LinearLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/duration_container"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/gutter_small"
-                    android:src="@drawable/ic_ruler"
-                    android:tint="@color/text_primaryLight"/>
+                    android:layout_weight="1"
+                    android:baselineAligned="false"
+                    android:gravity="center">
 
-                <com.actinarium.aligned.TextView
-                    android:id="@+id/length"
-                    style="@style/TextAppearance.Rivers.Body.Medium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textColor="@color/text_primaryLight"
-                    app:leading="0dp"/>
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/gutter_small"
+                        android:src="@drawable/ic_timer"
+                        android:tint="@color/text_primaryLight"/>
 
-            <LinearLayout
-                android:id="@+id/duration_container"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:baselineAligned="false"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/gutter_small"
-                    android:src="@drawable/ic_timer"
-                    android:tint="@color/text_primaryLight"/>
-
-                <com.actinarium.aligned.TextView
-                    android:id="@+id/duration"
-                    style="@style/TextAppearance.Rivers.Body.Medium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textColor="@color/text_primaryLight"
-                    app:leading="0dp"/>
+                    <com.actinarium.aligned.TextView
+                        android:id="@+id/duration"
+                        style="@style/TextAppearance.Rivers.Body.Medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/text_primaryLight"
+                        app:leading="0dp"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -3,6 +3,4 @@
 <resources>
     <!-- TODO (hjw): don't hard-code this, it should be based on the ratio of the screen size (can be done with a constraint layout) -->
     <dimen name="imageHeight">240dp</dimen>
-
-    <dimen name="infoContainerMargin">20dp</dimen>
 </resources>
