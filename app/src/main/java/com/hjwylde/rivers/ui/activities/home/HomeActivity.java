@@ -34,10 +34,10 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
     static final int REQUEST_CODE_SECTION_EDITED = 1;
 
     private static final String TAG = HomeActivity.class.getSimpleName();
-    private static final String TAG_SELECT_MAP_TYPE_DIALOG = "selectMapTypeDialog";
+    private static final String TAG_SELECT_MAP_TYPE_DIALOG = "TAG_SELECT_MAP_TYPE_DIALOG";
 
-    private static final String STATE_SEARCH_VIEW = "searchView";
-    private static final String STATE_CREATE_SECTION_MODE_POSITION = "createSectionModePosition";
+    private static final String STATE_SEARCH_VIEW = "STATE_SEARCH_VIEW";
+    private static final String STATE_CREATE_SECTION_MODE_POSITION = "STATE_CREATE_SECTION_MODE_POSITION";
 
     private FloatingSearchView mSearchView;
     private MapFragment mMapFragment;

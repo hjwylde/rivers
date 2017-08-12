@@ -45,12 +45,12 @@ import butterknife.OnTextChanged;
 
 @UiThread
 public final class CreateSectionActivity extends BaseActivity {
-    public static final String INTENT_PUT_IN = "putIn";
+    public static final String INTENT_PUT_IN = "INTENT_PUT_IN";
 
     private static final String TAG = CreateSectionActivity.class.getSimpleName();
-    private static final String TAG_SELECT_IMAGE_DIALOG = "selectImageDialog";
+    private static final String TAG_SELECT_IMAGE_DIALOG = "TAG_SELECT_IMAGE_DIALOG";
 
-    private static final String STATE_SECTION_BUILDER = "sectionBuilder";
+    private static final String STATE_SECTION_BUILDER = "STATE_SECTION_BUILDER";
 
     @BindView(R.id.root_container)
     View mRootView;

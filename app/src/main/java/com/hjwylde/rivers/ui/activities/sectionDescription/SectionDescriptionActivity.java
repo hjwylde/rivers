@@ -19,11 +19,9 @@ import static java.util.Objects.requireNonNull;
 
 @UiThread
 public final class SectionDescriptionActivity extends BaseActivity {
-    public static final String INTENT_SECTION_ID = "sectionId";
+    public static final String INTENT_SECTION_ID = "INTENT_SECTION_ID";
 
-    private static final String TAG = SectionDescriptionActivity.class.getSimpleName();
-
-    private static final String STATE_SECTION_ID = "sectionId";
+    private static final String STATE_SECTION_ID = "STATE_SECTION_ID";
 
     @BindView(R.id.title)
     TextView mTitleView;

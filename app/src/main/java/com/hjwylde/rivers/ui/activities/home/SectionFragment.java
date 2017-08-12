@@ -45,8 +45,8 @@ import static java.util.Objects.requireNonNull;
 public final class SectionFragment extends LifecycleFragment implements Toolbar.OnMenuItemClickListener {
     private static final String TAG = SectionFragment.class.getSimpleName();
 
-    private static final String STATE_SECTION_ID = "sectionId";
-    private static final String STATE_BOTTOM_SHEET_BEHAVIOR = "bottomSheet";
+    private static final String STATE_SECTION_ID = "STATE_SECTION_ID";
+    private static final String STATE_BOTTOM_SHEET_BEHAVIOR = "STATE_BOTTOM_SHEET_BEHAVIOR";
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
