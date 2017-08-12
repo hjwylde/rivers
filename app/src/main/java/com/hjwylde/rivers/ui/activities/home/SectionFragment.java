@@ -91,8 +91,6 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
     private SectionViewModel mViewModel;
 
     private String mSectionId;
-    // TODO (hjw): get rid of this, need to update the services to just take an id and not a full document
-    private Section mSection;
 
     @NonNull
     public BottomSheetBehavior<NestedScrollView> getBottomSheetBehavior() {
@@ -249,13 +247,13 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
     }
 
     private void onDeleteSectionClick() {
-        mViewModel.deleteSection(mSection)
+        mViewModel.deleteSection(mSectionId)
                 .subscribe(new OnDeleteSectionObserver());
     }
 
     private void onEditSectionClick() {
         Intent intent = new Intent(getContext(), EditSectionActivity.class);
-        intent.putExtra(EditSectionActivity.INTENT_SECTION_BUILDER, Section.builder().copy(mSection));
+        intent.putExtra(EditSectionActivity.INTENT_SECTION_ID, mSectionId);
 
         startActivityForResult(intent, HomeActivity.REQUEST_CODE_SECTION_EDITED);
     }
@@ -356,8 +354,6 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
 
         @Override
         public void onNext(@NonNull Section section) {
-            mSection = requireNonNull(section);
-
             refreshSection(section);
 
             if (section.getImageId() != null) {

@@ -28,6 +28,12 @@ public final class EditSectionViewModel extends ViewModel {
     }
 
     @NonNull
+    public Maybe<Section> getSection(@NonNull String id) {
+        return mRepository.getSection(id)
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @NonNull
     public Single<Section> updateSection(@NonNull Section.Builder builder) {
         return mRepository.updateSection(builder)
                 .observeOn(AndroidSchedulers.mainThread());

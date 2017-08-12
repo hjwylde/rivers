@@ -21,7 +21,7 @@ public interface Repository {
     Single<Section> createSection(@NonNull Section.Builder builder);
 
     @NonNull
-    Completable deleteSection(@NonNull Section section);
+    Completable deleteSection(@NonNull String id);
 
     @NonNull
     Maybe<Image> getImage(@NonNull String id);

@@ -45,11 +45,12 @@ import butterknife.OnTextChanged;
 
 @UiThread
 public final class EditSectionActivity extends BaseActivity {
-    public static final String INTENT_SECTION_BUILDER = "sectionBuilder";
+    public static final String INTENT_SECTION_ID = "sectionId";
 
     private static final String TAG = EditSectionActivity.class.getSimpleName();
     private static final String TAG_SELECT_IMAGE_DIALOG = "selectImageDialog";
 
+    private static final String STATE_SECTION_ID = "sectionId";
     private static final String STATE_SECTION_BUILDER = "sectionBuilder";
 
     @BindView(R.id.root_container)
@@ -79,7 +80,8 @@ public final class EditSectionActivity extends BaseActivity {
 
     private EditSectionViewModel mViewModel;
 
-    private Section.DefaultBuilder mSectionBuilder;
+    private String mSectionId;
+    private Section.DefaultBuilder mSectionBuilder = Section.builder();
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -120,22 +122,19 @@ public final class EditSectionActivity extends BaseActivity {
 
         mViewModel = ViewModelProviders.of(this).get(EditSectionViewModel.class);
 
-        mSectionBuilder = (Section.DefaultBuilder) getIntent().getSerializableExtra(INTENT_SECTION_BUILDER);
-        refreshSection();
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        mSectionBuilder = (Section.DefaultBuilder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
-        refreshSection();
+        if (savedInstanceState != null) {
+            mSectionId = savedInstanceState.getString(STATE_SECTION_ID);
+            mSectionBuilder = (Section.DefaultBuilder) savedInstanceState.getSerializable(STATE_SECTION_BUILDER);
+        } else {
+            mSectionId = getIntent().getStringExtra(INTENT_SECTION_ID);
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
+        outState.putString(STATE_SECTION_ID, mSectionId);
         outState.putSerializable(STATE_SECTION_BUILDER, mSectionBuilder);
     }
 
@@ -143,9 +142,16 @@ public final class EditSectionActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
 
-        if (mSectionBuilder.imageId() != null) {
-            mViewModel.getImage(mSectionBuilder.imageId())
-                    .subscribe(new OnGetImageObserver());
+        if (mSectionBuilder.id() == null) {
+            mViewModel.getSection(mSectionId)
+                    .subscribe(new OnGetSectionObserver());
+        } else {
+            refreshSection();
+
+            if (mSectionBuilder.imageId() != null) {
+                mViewModel.getImage(mSectionBuilder.imageId())
+                        .subscribe(new OnGetImageObserver());
+            }
         }
     }
 
@@ -274,6 +280,37 @@ public final class EditSectionActivity extends BaseActivity {
         @Override
         public void onSuccess(@NonNull Image image) {
             refreshImage(image);
+        }
+    }
+
+    @UiThread
+    private final class OnGetSectionObserver extends LifecycleBoundMaybeObserver<Section> {
+        OnGetSectionObserver() {
+            super(EditSectionActivity.this);
+        }
+
+        @Override
+        public void onComplete() {
+            // TODO (hjw): close the activity
+        }
+
+        @Override
+        public void onError(@NonNull Throwable t) {
+            Log.w(TAG, t.getMessage(), t);
+
+            // TODO (hjw): display a warning to the user and close the activity
+        }
+
+        @Override
+        public void onSuccess(@NonNull Section section) {
+            mSectionBuilder.copy(section);
+
+            refreshSection();
+
+            if (section.getImageId() != null) {
+                mViewModel.getImage(section.getImageId())
+                        .subscribe(new OnGetImageObserver());
+            }
         }
     }
 

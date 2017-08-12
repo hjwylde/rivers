@@ -28,6 +28,7 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.hjwylde.rivers.util.Preconditions.requireTrue;
 import static com.hjwylde.rivers.util.Preconditions.requireWorkerThread;
 import static java.util.Objects.requireNonNull;
 
@@ -77,14 +78,16 @@ public final class CouchbaseRepository implements Repository {
 
     @NonNull
     @Override
-    public Completable deleteSection(@NonNull Section section) {
+    public Completable deleteSection(@NonNull String id) {
         return Completable.create(emitter -> {
             requireWorkerThread();
 
-            Document document = mDatabase.getExistingDocument(section.getId());
+            Document document = mDatabase.getExistingDocument(id);
 
             try {
                 if (document != null) {
+                    requireTrue(document.getProperty(SectionDocument.PROPERTY_TYPE).equals(SectionDocument.TYPE));
+
                     document.delete();
                 }
 

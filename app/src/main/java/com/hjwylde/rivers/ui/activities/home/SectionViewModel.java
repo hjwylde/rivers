@@ -23,8 +23,8 @@ public final class SectionViewModel extends ViewModel {
     private Disposable mSectionDisposable = DisposableObserverDecorator.decorate(mSectionSubject);
 
     @NonNull
-    public Completable deleteSection(@NonNull Section section) {
-        return mRepository.deleteSection(section)
+    public Completable deleteSection(@NonNull String id) {
+        return mRepository.deleteSection(id)
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
