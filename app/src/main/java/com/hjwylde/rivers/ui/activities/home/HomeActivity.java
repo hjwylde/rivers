@@ -22,6 +22,7 @@ import com.hjwylde.rivers.RiversApplication;
 import com.hjwylde.rivers.ui.activities.BaseActivity;
 import com.hjwylde.rivers.ui.activities.createSection.CreateSectionActivity;
 import com.hjwylde.rivers.ui.activities.settings.SettingsActivity;
+import com.hjwylde.rivers.ui.widgets.selectMapTypeDialog.SelectMapTypeDialogFragment;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
     static final int REQUEST_CODE_SECTION_EDITED = 1;
 
     private static final String TAG = HomeActivity.class.getSimpleName();
+    private static final String TAG_SELECT_MAP_TYPE_DIALOG = "selectMapTypeDialog";
 
     private static final String STATE_SEARCH_VIEW = "searchView";
     private static final String STATE_CREATE_SECTION_MODE_POSITION = "createSectionModePosition";
@@ -155,6 +157,9 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
         });
         mSearchView.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
+                case R.id.selectMapType:
+                    onSelectMapTypeClick();
+                    break;
                 case R.id.openSettings:
                     onOpenSettingsClick();
                     break;
@@ -251,6 +256,12 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
         });
     }
 
+    private void onMapTypeSelected(int mapType) {
+        mMapFragment.getMapAsync(map -> {
+            map.setMapType(mapType);
+        });
+    }
+
     private void onOpenSettingsClick() {
         Intent intent = new Intent(this, SettingsActivity.class);
 
@@ -268,6 +279,13 @@ public final class HomeActivity extends BaseActivity implements HomeContract.Vie
     private void onSectionEdited() {
         Snackbar snackbar = Snackbar.make(findViewById(R.id.root_container), R.string.info_onSectionEdited, Snackbar.LENGTH_LONG);
         snackbar.show();
+    }
+
+    private void onSelectMapTypeClick() {
+        SelectMapTypeDialogFragment dialog = new SelectMapTypeDialogFragment();
+        dialog.setOnMapTypeSelectedListener(this::onMapTypeSelected);
+
+        dialog.show(getSupportFragmentManager(), TAG_SELECT_MAP_TYPE_DIALOG);
     }
 
     private void onSendFeedbackClick() {
