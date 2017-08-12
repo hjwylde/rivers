@@ -66,6 +66,8 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
     TextView mDescriptionView;
     @BindView(R.id.description_container)
     ViewGroup mDescriptionGroup;
+    @BindView(R.id.info_container)
+    ViewGroup mInfoGroup;
     @BindView(R.id.grade)
     TextView mGradeView;
     @BindView(R.id.grade_container)
@@ -381,19 +383,26 @@ public final class SectionFragment extends LifecycleFragment implements Toolbar.
                 mDescriptionGroup.setVisibility(View.GONE);
             }
 
+            mInfoGroup.setVisibility(View.GONE);
             if (section.getGrade() != null && !section.getGrade().isEmpty()) {
+                mInfoGroup.setVisibility(View.VISIBLE);
+
                 mGradeView.setText(section.getGrade());
                 mGradeGroup.setVisibility(View.VISIBLE);
             } else {
                 mGradeGroup.setVisibility(View.GONE);
             }
             if (section.getLength() != null && !section.getLength().isEmpty()) {
+                mInfoGroup.setVisibility(View.VISIBLE);
+
                 mLengthView.setText(section.getLength());
                 mLengthGroup.setVisibility(View.VISIBLE);
             } else {
                 mLengthGroup.setVisibility(View.GONE);
             }
             if (section.getDuration() != null && !section.getDuration().isEmpty()) {
+                mInfoGroup.setVisibility(View.VISIBLE);
+
                 mDurationView.setText(section.getDuration());
                 mDurationGroup.setVisibility(View.VISIBLE);
             } else {

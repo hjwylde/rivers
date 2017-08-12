@@ -6,6 +6,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@android:color/white"
+              android:elevation="1dp"
               android:orientation="vertical">
 
     <FrameLayout
@@ -52,7 +53,7 @@
             android:id="@+id/title_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/screen_paddingVertical"
+            android:layout_marginTop="@dimen/gutter_medium"
             app:errorTextAppearance="@style/TextAppearance.Rivers.Error"
             app:hintEnabled="false">
 
@@ -70,7 +71,7 @@
             android:id="@+id/subtitle_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/screen_paddingVertical"
+            android:layout_marginBottom="@dimen/gutter_medium"
             app:errorTextAppearance="@style/TextAppearance.Rivers.Error"
             app:hintEnabled="false">
 
@@ -89,9 +90,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:paddingBottom="@dimen/infoContainerMargin"
-            android:paddingTop="@dimen/infoContainerMargin">
+            android:paddingBottom="@dimen/gutter_medium"
+            android:paddingTop="@dimen/gutter_small">
 
             <LinearLayout
                 android:id="@+id/grade_container"
