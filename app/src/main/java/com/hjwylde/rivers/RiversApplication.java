@@ -1,6 +1,8 @@
 package com.hjwylde.rivers;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
 import com.couchbase.lite.CouchbaseLiteException;
@@ -10,6 +12,9 @@ import com.hjwylde.rivers.db.modules.ReplicatorModule;
 import com.hjwylde.rivers.db.services.CouchbaseRepository;
 import com.hjwylde.rivers.db.services.Replicator;
 import com.hjwylde.rivers.services.Repository;
+import com.hjwylde.rivers.user.models.User;
+import com.hjwylde.rivers.user.modules.UserModule;
+import com.hjwylde.rivers.user.services.AuthenticatedRepositoryDecorator;
 
 import java.io.IOException;
 
@@ -19,10 +24,11 @@ public class RiversApplication extends Application {
     private static Database sDatabase;
 
     private static Repository sRepository;
+    private static User sUser;
 
     @NonNull
     public static Repository getRepository() {
-        return sRepository;
+        return AuthenticatedRepositoryDecorator.decorate(sRepository, sUser);
     }
 
     @Override
@@ -35,6 +41,7 @@ public class RiversApplication extends Application {
         setUpDatabaseReplicator();
 
         setUpRepository();
+        setUpUser();
     }
 
     private void setUpCalligraphy() {
@@ -62,5 +69,16 @@ public class RiversApplication extends Application {
 
     private void setUpRepository() {
         sRepository = new CouchbaseRepository.Builder().database(sDatabase).build();
+    }
+
+    private void setUpUser() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        sharedPreferences.registerOnSharedPreferenceChangeListener((preferences, key) -> {
+            if (key.equals(getString(R.string.pref_key_google_account_email))) {
+                sUser = UserModule.provideUser(getApplicationContext());
+            }
+        });
+
+        sUser = UserModule.provideUser(getApplicationContext());
     }
 }
