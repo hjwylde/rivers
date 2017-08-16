@@ -2,8 +2,12 @@
 <resources>
     <string name="title_activity_settings">Settings</string>
 
+    <string name="pref_header_account">Account</string>
     <string name="pref_header_about">About Rivers</string>
 
+    <string name="pref_title_account_not_signed_in">Not signed in</string>
     <string name="pref_title_version">Build version</string>
     <string name="pref_title_licenses">Open source licenses</string>
+
+    <string name="dummy_pref_key_licenses">pref_key_licenses</string>
 </resources>

@@ -30,10 +30,18 @@
         <item name="fontPath">fonts/OpenSans-SemiBold.ttf</item>
     </style>
 
-    <style name="TextAppearance.Rivers.Error" parent="TextAppearance.AppCompat.Caption">
-        <item name="android:textColor">@color/text_error</item>
+    <style name="TextAppearance.Rivers.Button" parent="TextAppearance.Rivers.Body.Medium">
+        <item name="android:textAllCaps">true</item>
+        <item name="leading">0dp</item>
+    </style>
+
+    <style name="TextAppearance.Rivers.Caption" parent="TextAppearance.AppCompat.Caption">
         <item name="android:textSize">@dimen/text_small</item>
         <item name="fontPath">fonts/Raleway-Regular.ttf</item>
         <item name="leading">@dimen/text_small_leading</item>
+    </style>
+
+    <style name="TextAppearance.Rivers.Error" parent="TextAppearance.Rivers.Caption">
+        <item name="android:textColor">@color/text_error</item>
     </style>
 </resources>

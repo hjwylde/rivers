@@ -10,7 +10,7 @@
     <string name="title_com_couchbase_lite_couchbase_lite_android">Couchbase Lite</string>
     <string name="title_com_github_arimorty_floatingsearchview">Floating Search View</string>
     <string name="title_com_github_bumptech_glide_glide">Glide</string>
-    <string name="title_com_google_android_gms_play_services_maps">Google Play Services (maps)</string>
+    <string name="title_com_google_android_gms_play_services">Google Play Services</string>
     <string name="title_com_google_maps_android_android_maps_utils">Google Maps Android Utils</string>
     <string name="title_com_jakewharton_butterknife_compiler">Butter Knife</string>
     <string name="title_com_mobsandgeeks_android_saripaar">Android Saripaar v2</string>
@@ -28,7 +28,7 @@
     <string name="url_com_couchbase_lite_couchbase_lite_android">https://github.com/couchbase/couchbase-lite-android/blob/master/LICENSE.TXT</string>
     <string name="url_com_github_arimorty_floatingsearchview">https://github.com/arimorty/floatingsearchview/blob/master/LICENSE.txt</string>
     <string name="url_com_github_bumptech_glide_glide">https://github.com/bumptech/glide/blob/master/LICENSE</string>
-    <string name="url_com_google_android_gms_play_services_maps">https://developer.android.com/studio/terms.html</string>
+    <string name="url_com_google_android_gms_play_services">https://developer.android.com/studio/terms.html</string>
     <string name="url_com_google_maps_android_android_maps_utils">https://github.com/googlemaps/android-maps-utils/blob/master/LICENSE</string>
     <string name="url_com_jakewharton_butterknife_compiler">https://github.com/JakeWharton/butterknife/blob/master/LICENSE.txt</string>
     <string name="url_com_mobsandgeeks_android_saripaar">https://github.com/ragunathjawahar/android-saripaar#license</string>

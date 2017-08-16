@@ -5,5 +5,5 @@
     <color name="marker_grade_3">#FFAB40</color>
     <color name="marker_grade_4">#FF6E40</color>
     <color name="marker_grade_5">#FF5252</color>
-    <color name="marker_grade_unknown">#FFFFFF</color>
+    <color name="marker_grade_unknown">@android:color/white</color>
 </resources>

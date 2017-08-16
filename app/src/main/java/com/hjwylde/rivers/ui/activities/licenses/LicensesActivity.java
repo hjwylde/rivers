@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 
+import com.hjwylde.rivers.R;
 import com.hjwylde.rivers.ui.activities.BaseActivity;
 
 @UiThread
@@ -12,9 +13,6 @@ public class LicensesActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getFragmentManager()
-                .beginTransaction()
-                .replace(android.R.id.content, new LicensesFragment())
-                .commit();
+        setContentView(R.layout.activity_licenses);
     }
 }

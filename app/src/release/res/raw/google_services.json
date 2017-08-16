@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "17900658166",
+    "project_id": "rivers-144904"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17900658166:android:2170a0229543ffa0",
+        "android_client_info": {
+          "package_name": "com.hjwylde.rivers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "17900658166-nsk6vb7fd6uci50g3g37f1q0nen7b0r3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hjwylde.rivers",
+            "certificate_hash": "beb83535ac37a75a298a02c74abc405c1c6e16d9"
+          }
+        },
+        {
+          "client_id": "17900658166-0dg4sjk2d65gbula5hpl5qco7d1l0bon.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkUZ9EY6DGNgA2_CRKwtMQECYi6Bci79s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

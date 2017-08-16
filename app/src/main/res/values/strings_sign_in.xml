@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_skip">SKIP</string>
+
+    <string name="error_onSignIn">Could not sign in, please try later within Settings</string>
+    <string name="error_onGoogleApiConnectClient">Could not connect, please try later within Settings</string>
+
+    <string name="label_signIn_title">Become an explorer</string>
+    <string name="label_signIn_description">Contribute and share the whitewater rivers you discover with others</string>
+</resources>

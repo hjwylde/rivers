@@ -8,4 +8,16 @@
     <color name="secondaryAccentLight">#80D8FF</color>
 
     <color name="error">#D32F2F</color>
+
+    <color name="background">#EEEEEE</color>
+
+    <color name="black10">#1A000000</color>
+    <color name="black12">#1E000000</color>
+    <color name="black38">#61000000</color>
+    <color name="black40">#66000000</color>
+    <color name="black54">#8A000000</color>
+    <color name="black87">#DE000000</color>
+    <color name="white10">#1AFFFFFF</color>
+    <color name="white50">#80FFFFFF</color>
+    <color name="white70">#B3FFFFFF</color>
 </resources>

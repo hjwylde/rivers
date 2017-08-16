@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="text_primaryLight">#DE000000</color>
-    <color name="text_secondaryLight">#8A000000</color>
-    <color name="text_teriaryLight">#61000000</color>
+    <color name="text_primaryLight">@color/black87</color>
+    <color name="text_secondaryLight">@color/black54</color>
+    <color name="text_teriaryLight">@color/black38</color>
 
-    <color name="text_primaryDark">#FFFFFF</color>
-    <color name="text_secondaryDark">#B3FFFFFF</color>
-    <color name="text_teriaryDark">#80FFFFFF</color>
+    <color name="text_primaryDark">@android:color/white</color>
+    <color name="text_secondaryDark">@color/white70</color>
+    <color name="text_teriaryDark">@color/white50</color>
 
     <color name="text_error">@color/error</color>
 </resources>
