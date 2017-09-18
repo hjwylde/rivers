@@ -1,0 +1,68 @@
+{
+	"log": ["*"],
+		"databases": {
+			"vulpix": {
+				"server": "http://localhost:8091",
+				"bucket": "rivers",
+				"users": {
+					"android-0.1.0": {
+						"password": "q*k=wsawmzfG2bU_DQnXqhjxKsLZ$=Xr1j|TY*f-SYzo5ZnNu!9L0WVoy4e-=_kh0ZbMBV2@WP|t9w4c",
+						"admin_channels": ["image", "section"]
+					}
+				},
+				"sync": `
+					function sync(doc, oldDoc) {
+						if (!doc.type) {
+							throw({ forbidden: "Missing 'type' field on document." });
+						}
+
+						if (oldDoc && oldDoc.type !== doc.type) {
+							throw({ forbidden: "Mismatched 'type' field between revisions." });
+						}
+
+						requireAccess(doc.type);
+
+						switch (doc.type) {
+							case "image":
+								if (doc._deleted) {
+									throw({ forbidden: "Cannot delete image documents" });
+								} else if (oldDoc) {
+									if (oldDoc.data !== doc.data) {
+										throw({ forbidden: "Mismatched 'data' field between revisions." });
+									}
+								} else {
+									if (!doc.data) {
+										throw({ forbidden: "Missing 'data' field on image document." });
+									}
+								}
+								break;
+
+							case "section":
+								if (!doc._deleted) {
+									if (!doc.title) {
+										throw({ forbidden: "Missing 'title' field on section document." });
+									}
+									if (!doc.subtitle) {
+										throw({ forbidden: "Missing 'subtitle' field on section document." });
+									}
+									if (!doc.putIn) {
+										throw({ forbidden: "Missing 'putIn' field on section document." });
+									} else {
+										if (!doc.putIn.latitude) {
+											throw({ forbidden: "Missing 'putIn.latitude' field on section document." });
+										}
+										if (!doc.putIn.longitude) {
+											throw({ forbidden: "Missing 'putIn.longitude' field on section document." });
+										}
+									}
+								}
+								break;
+						}
+
+						channel(doc.type);
+						channel("!");
+					}
+				`
+			}
+		}
+}
