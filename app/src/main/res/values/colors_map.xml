@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="marker_grade_1">#FFFF00</color>
+    <color name="map_markerGrade1">#FFFF00</color>
     <color name="marker_grade_2">#FFD740</color>
     <color name="marker_grade_3">#FFAB40</color>
     <color name="marker_grade_4">#FF6E40</color>

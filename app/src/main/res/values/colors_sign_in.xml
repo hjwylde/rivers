@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="sign_in_background">#FFC107</color>
+    <color name="signIn_background">#FFC107</color>
 </resources>

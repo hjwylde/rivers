@@ -28,7 +28,7 @@ public final class SectionMarker implements ClusterItem {
     public int getColorResource() {
         switch (mGrade) {
             case I:
-                return R.color.marker_grade_1;
+                return R.color.map_markerGrade1;
             case II:
                 return R.color.marker_grade_2;
             case III:
